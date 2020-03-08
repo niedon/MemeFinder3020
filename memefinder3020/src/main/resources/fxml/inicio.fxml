@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.bcadaval.memefinder3020.controlador.InicioControlador">
+  <children>
+    <VBox layoutX="0.0" layoutY="0.0" prefHeight="768.0" prefWidth="1024.0">
+      <children>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+          <children>
+            <TextField fx:id="tfBusqueda" prefWidth="200.0">
+              <HBox.margin>
+                <Insets right="15.0" />
+              </HBox.margin>
+            </TextField>
+            <Button fx:id="btBuscar" mnemonicParsing="false" onAction="#btBuscar_click" prefHeight="50.0" prefWidth="50.0" text="lupa" textAlignment="LEFT" />
+          </children>
+        </HBox>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+          <children>
+            <Button mnemonicParsing="false" text="Añadir imagen" onAction="#btAnadir_click" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

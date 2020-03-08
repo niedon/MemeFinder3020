@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.bcadaval.memefinder3020.controlador.AnadirImagenControlador">
+  <children>
+    <HBox layoutX="0.0" layoutY="0.0" prefHeight="768.0" prefWidth="1024.0">
+      <children>
+        <VBox prefHeight="768.0" prefWidth="512.0">
+          <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+              <children>
+                <TextField fx:id="tfDireccion" prefWidth="200.0">
+                  <HBox.margin>
+                    <Insets right="15.0" />
+                  </HBox.margin>
+                </TextField>
+                <Button mnemonicParsing="false" text="Examinar" />
+              </children>
+            </HBox>
+            <AnchorPane prefHeight="620.0" prefWidth="512.0" />
+            <HBox alignment="CENTER" prefHeight="47.0" prefWidth="512.0">
+              <children>
+                <Button mnemonicParsing="false" text="Button">
+                  <HBox.margin>
+                    <Insets right="10.0" fx:id="x1" />
+                  </HBox.margin>
+                </Button>
+                <Label text="Label">
+                  <HBox.margin>
+                    <Insets right="10.0" fx:id="x1" />
+                  </HBox.margin>
+                </Label>
+                <Button mnemonicParsing="false" text="Button" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        <VBox prefHeight="768.0000999999975" prefWidth="512.0">
+          <children>
+            <HBox prefHeight="180.0" prefWidth="512.0">
+              <children>
+                <VBox prefHeight="-1.0" prefWidth="100.0" />
+                <VBox prefHeight="-1.0" prefWidth="412.0">
+                  <children>
+                    <HBox alignment="CENTER" prefHeight="60.0" prefWidth="412.0">
+                      <children>
+                        <Label text="Etiquetas:" HBox.margin="$x1" />
+                        <TextField prefWidth="200.0" HBox.margin="$x1" />
+                        <Button mnemonicParsing="false" text="Añadir" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
+                      <children>
+                        <Label text="Nombre:" HBox.margin="$x1" />
+                        <TextField prefWidth="200.0" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
+                      <children>
+                        <Button mnemonicParsing="false" text="Coincidencias" HBox.margin="$x1" />
+                        <Label text="Coincidencias label" />
+                      </children>
+                    </HBox>
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+            <TitledPane animated="false" prefHeight="-1.0" prefWidth="-1.0" text="Etiquetas">
+              <content>
+                <FlowPane prefHeight="520.9998779296875" prefWidth="508.0" />
+              </content>
+            </TitledPane>
+            <HBox alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="512.0">
+              <children>
+                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Volver">
+                  <HBox.margin>
+                    <Insets right="20.0" />
+                  </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Eliminar">
+                  <HBox.margin>
+                    <Insets right="20.0" />
+                  </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Guardar">
+                  <HBox.margin>
+                    <Insets right="30.0" />
+                  </HBox.margin>
+                </Button>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>
