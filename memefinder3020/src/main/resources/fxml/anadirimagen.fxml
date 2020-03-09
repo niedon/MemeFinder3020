@@ -4,6 +4,7 @@
 <?import java.util.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
@@ -15,28 +16,32 @@
           <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
               <children>
-                <TextField fx:id="tfDireccion" prefWidth="200.0">
+                <TextField fx:id="tfDireccion" editable="false" prefWidth="336.0">
                   <HBox.margin>
                     <Insets right="15.0" />
                   </HBox.margin>
                 </TextField>
-                <Button mnemonicParsing="false" text="Examinar" />
+                <Button id="btExaminar" mnemonicParsing="false" onAction="#btExaminar_click" text="Examinar" />
               </children>
             </HBox>
-            <AnchorPane prefHeight="620.0" prefWidth="512.0" />
+            <BorderPane prefHeight="620.0" prefWidth="512.0">
+              <center>
+                <ImageView fx:id="ivImagen" fitHeight="622.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
             <HBox alignment="CENTER" prefHeight="47.0" prefWidth="512.0">
               <children>
-                <Button mnemonicParsing="false" text="Button">
+                <Button fx:id="btAnterior" mnemonicParsing="false" onAction="#btAnterior_click" text="&lt;&lt;">
                   <HBox.margin>
                     <Insets right="10.0" fx:id="x1" />
                   </HBox.margin>
                 </Button>
-                <Label text="Label">
+                <Label fx:id="lbNumero" text="Label">
                   <HBox.margin>
                     <Insets right="10.0" fx:id="x1" />
                   </HBox.margin>
                 </Label>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" text="&gt;&gt;" />
               </children>
             </HBox>
           </children>
@@ -51,44 +56,44 @@
                     <HBox alignment="CENTER" prefHeight="60.0" prefWidth="412.0">
                       <children>
                         <Label text="Etiquetas:" HBox.margin="$x1" />
-                        <TextField prefWidth="200.0" HBox.margin="$x1" />
-                        <Button mnemonicParsing="false" text="Añadir" />
+                        <TextField fx:id="tfEtiqueta" onKeyPressed="#tfEtiqueta_keyPressed" prefWidth="200.0" HBox.margin="$x1" />
+                        <Button fx:id="btAnadir" mnemonicParsing="false" onAction="#btAnadir_click" text="Añadir" />
                       </children>
                     </HBox>
                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
                       <children>
                         <Label text="Nombre:" HBox.margin="$x1" />
-                        <TextField prefWidth="200.0" />
+                        <TextField fx:id="tfNombre" prefWidth="200.0" />
                       </children>
                     </HBox>
                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
                       <children>
-                        <Button mnemonicParsing="false" text="Coincidencias" HBox.margin="$x1" />
-                        <Label text="Coincidencias label" />
+                        <Button fx:id="btCoincidencias" mnemonicParsing="false" text="Coincidencias" HBox.margin="$x1" />
+                        <Label fx:id="lbCoincidencias" text="Coincidencias label" />
                       </children>
                     </HBox>
                   </children>
                 </VBox>
               </children>
             </HBox>
-            <TitledPane animated="false" prefHeight="-1.0" prefWidth="-1.0" text="Etiquetas">
+            <TitledPane fx:id="tpEtiquetas" animated="false" prefHeight="-1.0" prefWidth="-1.0" text="Etiquetas">
               <content>
-                <FlowPane prefHeight="520.9998779296875" prefWidth="508.0" />
+                <FlowPane fx:id="flowEtiquetas" prefHeight="520.9998779296875" prefWidth="508.0" />
               </content>
             </TitledPane>
             <HBox alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="512.0">
               <children>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Volver">
+                <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_clic" prefHeight="35.0" prefWidth="100.0" text="Volver">
                   <HBox.margin>
                     <Insets right="20.0" />
                   </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Eliminar">
+                <Button fx:id="btEliminar" mnemonicParsing="false" onAction="#btEliminiar_click" prefHeight="35.0" prefWidth="100.0" text="Eliminar">
                   <HBox.margin>
                     <Insets right="20.0" />
                   </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Guardar">
+                <Button fx:id="btGuardar" mnemonicParsing="false" onAction="#btGuardar_click" prefHeight="35.0" prefWidth="100.0" text="Guardar">
                   <HBox.margin>
                     <Insets right="30.0" />
                   </HBox.margin>

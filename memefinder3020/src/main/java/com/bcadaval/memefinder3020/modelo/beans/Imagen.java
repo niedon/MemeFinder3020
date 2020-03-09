@@ -33,6 +33,10 @@ public class Imagen {
 			nullable = false)
 	private String nombre;
 	
+	@Column(name="EXTENSION",
+			nullable=false)
+	private String extension;
+	
 	@Column(name="CATEGORIA")
 	private String categoria;
 
@@ -61,6 +65,14 @@ public class Imagen {
 		this.nombre = nombre;
 	}
 
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
 	public String getCategoria() {
 		return categoria;
 	}
@@ -76,8 +88,5 @@ public class Imagen {
 	public void setEtiquetas(Set<Etiqueta> etiquetas) {
 		this.etiquetas = etiquetas;
 	}
-	
-	
-	
 	
 }
