@@ -6,7 +6,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.bcadaval.memefinder3020.controlador.Controlador;
 import com.bcadaval.memefinder3020.utils.Constantes;
 
 import javafx.fxml.FXMLLoader;

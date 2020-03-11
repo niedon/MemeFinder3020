@@ -1,21 +1,20 @@
 package com.bcadaval.memefinder3020.principal;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-
-import com.bcadaval.memefinder3020.controlador.AnadirImagenControlador;
-import com.bcadaval.memefinder3020.controlador.Controlador;
-import com.bcadaval.memefinder3020.controlador.InicioControlador;
 
 import javafx.scene.Scene;
 
 @Component
-public class GestorDeVentanas{
+public class GestorDeVentanas implements ApplicationContextAware{
+	
+	private ApplicationContext ctx;
 	
 	private Scene escena;
 	
-	@Autowired InicioControlador inicioControlador;
-	@Autowired AnadirImagenControlador anadirImagenControlador;
+	private Controlador ultimaClase;
 
 	public void setEscena(Scene escena) {
 		this.escena = escena;
@@ -23,24 +22,21 @@ public class GestorDeVentanas{
 	
 	public void cambiarEscena(Vistas v) {
 		
-		Controlador c = null;
-		
-		switch(v) {
-		case INICIO:
-			c = inicioControlador;
-			break;
-		case ANADIR_IMAGEN:
-			c = anadirImagenControlador;
-			break;
-		default:
-			throw new RuntimeException("Pantalla no encontrada");
-		}
+		Controlador c = ctx.getBean(v.getClaseControlador());
 		
 		escena.setRoot(c.getVista());
 		
+		if(ultimaClase != null) c.anadirClaseAMapa(ultimaClase.getClass());
+		ultimaClase = c;
+		
 		c.initVisionado();
 		c.initFoco();
-		
+		c.limpiarMapa();
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		ctx = applicationContext;
 		
 	}
 

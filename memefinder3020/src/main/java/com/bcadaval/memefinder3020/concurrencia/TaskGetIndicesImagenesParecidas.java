@@ -1,4 +1,4 @@
-package com.bcadaval.memefinder3020.utils;
+package com.bcadaval.memefinder3020.concurrencia;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,19 +6,20 @@ import java.util.List;
 
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
+import com.bcadaval.memefinder3020.utils.Constantes;
 import com.github.kilianB.hash.Hash;
 import com.github.kilianB.hashAlgorithms.HashingAlgorithm;
 import com.github.kilianB.hashAlgorithms.PerceptiveHash;
 
 import javafx.concurrent.Task;
 
-public class TareaComparaImagenes extends Task<List<Integer>> {
+public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 
 	private ServicioImagen servicioImagen;
 	
 	private File original;
 	
-	public TareaComparaImagenes(File original, ServicioImagen servicioImagen) {
+	public TaskGetIndicesImagenesParecidas(File original, ServicioImagen servicioImagen) {
 		this.original = original;
 		this.servicioImagen = servicioImagen;
 	}
@@ -41,7 +42,8 @@ public class TareaComparaImagenes extends Task<List<Integer>> {
 		Hash imgOriginal = hasher.hash(original);
 		
 		for(Imagen img : imagenesBD) {
-			Hash otraImagen = hasher.hash(new File(Constantes.RUTA_IMAGENES + "\\" + img.getId() + '.' + img.getExtension()));
+			
+			Hash otraImagen = hasher.hash(new File(Constantes.RUTA_IMAGENES + "\\" + img.getId() + '.' + img.getExtension()));//TODO cambiar por miscutils
 			if(imgOriginal.normalizedHammingDistanceFast(otraImagen) < .2) {
 				retorna.add(img.getId());
 			}

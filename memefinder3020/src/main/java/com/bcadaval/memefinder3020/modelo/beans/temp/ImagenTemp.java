@@ -12,6 +12,7 @@ public class ImagenTemp {
 
 	private File imagen;
 	private String nombre;
+	private String categoria;
 	private List<HBoxEtiqueta> etiquetas = new ArrayList<HBoxEtiqueta>();
 	private Task<List<Integer>> coincidencias;
 	
@@ -38,6 +39,12 @@ public class ImagenTemp {
 	}
 	public void setCoincidencias(Task<List<Integer>> coincidencias) {
 		this.coincidencias = coincidencias;
+	}
+	public String getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 	
 	

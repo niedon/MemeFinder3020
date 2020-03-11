@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.bcadaval.memefinder3020.controlador.CoincidenciasControlador">
+  <children>
+    <HBox layoutX="0.0" layoutY="0.0" prefHeight="768.0" prefWidth="1024.0">
+      <children>
+        <VBox prefHeight="768.0" prefWidth="512.0" HBox.hgrow="ALWAYS">
+          <children>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+              <children>
+                <Label text="Nueva" />
+              </children>
+            </HBox>
+            <BorderPane prefHeight="370.0" prefWidth="512.0">
+              <center>
+                <ImageView fx:id="ivNueva" fitHeight="370.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="false" />
+              </center>
+            </BorderPane>
+            <TitledPane fx:id="tpNueva" animated="false" prefHeight="142.0" prefWidth="512.0" text="Etiquetas">
+              <content>
+                <FlowPane fx:id="flowNueva" prefHeight="200.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+            <HBox fillHeight="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+              <children>
+                <GridPane prefHeight="148.0" prefWidth="512.0">
+                  <children>
+                    <Label text="Nombre:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                    <Label text="Extensión:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                    <Label text="Resolución: " GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                    <Label text="Categoría:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                    <Label text="Fecha:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                    <Label text="Similitud:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="BOTTOM" />
+                    <Label text="Nueva" underline="false" wrapText="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                    <Label text="Original" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbNombreNueva" alignment="CENTER" prefWidth="180.0" text="Label" textAlignment="LEFT" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbExtensionNueva" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbResolucionNueva" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbCategoriaNueva" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbFechaNueva" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbNombreOriginal" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbExtensionOriginal" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbResolucionOriginal" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbCategoriaOriginal" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbFechaOriginal" alignment="CENTER" prefWidth="180.0" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                    <Label fx:id="lbPorcentajeParecido" alignment="CENTER" prefWidth="50.0" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="118.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="394.0" minWidth="10.0" prefWidth="197.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="0.0" prefWidth="197.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+              </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="512.0" />
+          </children>
+        </VBox>
+        <VBox prefHeight="768.0" prefWidth="512.0">
+          <children>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+              <children>
+                <Label text="Original" />
+              </children>
+            </HBox>
+            <BorderPane prefHeight="370.0" prefWidth="512.0">
+              <center>
+                <ImageView fx:id="ivOriginal" fitHeight="370.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
+            <TitledPane fx:id="tpOriginal" animated="false" prefHeight="142.0" prefWidth="512.0" text="Etiquetas">
+              <content>
+                <FlowPane fx:id="flowOriginal" prefHeight="200.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="512.0">
+              <children>
+                <Button fx:id="btAnterior" mnemonicParsing="false" onAction="#btAnterior_click" prefHeight="30.0" prefWidth="50.0" text="Button" />
+                <Label fx:id="lbMarcador" alignment="CENTER" contentDisplay="LEFT" prefWidth="50.0" text="Label" />
+                <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" prefHeight="30.0" prefWidth="50.0" text="Button" />
+              </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="58.0" prefWidth="512.0">
+              <children>
+                <Button mnemonicParsing="false" onAction="#btVolver_click" prefHeight="30.0" prefWidth="140.0" text="Volver" />
+                <Button fx:id="btAnadirEtiquetas" mnemonicParsing="false" onAction="#btAnadirEtiquetas_click" prefHeight="30.0" prefWidth="140.0" text="Añadir etiquetas" />
+                <Button mnemonicParsing="false" onAction="#btSobreescribirImagen_click" prefHeight="30.0" prefWidth="140.0" text="Sobreescribir imagen" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>

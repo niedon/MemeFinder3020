@@ -1,5 +1,6 @@
 package com.bcadaval.memefinder3020.modelo.beans;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,6 +41,9 @@ public class Imagen {
 	@Column(name="CATEGORIA")
 	private String categoria;
 
+	@Column(name="FECHA")
+	private LocalDateTime fecha;
+	
 	@ManyToMany(cascade = CascadeType.ALL,
 			fetch = FetchType.EAGER)
 	@JoinTable(
@@ -79,6 +83,14 @@ public class Imagen {
 
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
+	}
+
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
 	}
 
 	public Set<Etiqueta> getEtiquetas() {

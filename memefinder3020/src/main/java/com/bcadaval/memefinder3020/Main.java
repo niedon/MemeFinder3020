@@ -24,6 +24,7 @@ public class Main extends Application {
     	try {
     		launch(args);
 		} catch (Exception e) {
+			e.printStackTrace();
 			Throwable t = e;
 			while(true) {
 				System.out.println(e.getCause());

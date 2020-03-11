@@ -3,6 +3,8 @@ package com.bcadaval.memefinder3020.controlador;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.bcadaval.memefinder3020.principal.Controlador;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;

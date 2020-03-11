@@ -14,7 +14,7 @@
       <children>
         <VBox prefHeight="768.0" prefWidth="512.0">
           <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="512.0">
               <children>
                 <TextField fx:id="tfDireccion" editable="false" prefWidth="336.0">
                   <HBox.margin>
@@ -24,7 +24,7 @@
                 <Button id="btExaminar" mnemonicParsing="false" onAction="#btExaminar_click" text="Examinar" />
               </children>
             </HBox>
-            <BorderPane prefHeight="620.0" prefWidth="512.0">
+            <BorderPane maxHeight="620.0" prefHeight="620.0" prefWidth="512.0">
               <center>
                 <ImageView fx:id="ivImagen" fitHeight="622.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" />
               </center>
@@ -68,7 +68,7 @@
                     </HBox>
                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
                       <children>
-                        <Button fx:id="btCoincidencias" mnemonicParsing="false" text="Coincidencias" HBox.margin="$x1" />
+                        <Button fx:id="btCoincidencias" mnemonicParsing="false" onAction="#btCoincidencias_click" text="Coincidencias" HBox.margin="$x1" />
                         <Label fx:id="lbCoincidencias" text="Coincidencias label" />
                       </children>
                     </HBox>

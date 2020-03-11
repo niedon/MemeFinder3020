@@ -8,9 +8,10 @@ import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Controller;
 
+import com.bcadaval.memefinder3020.concurrencia.TaskGetIndicesImagenesParecidas;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
+import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
-import com.bcadaval.memefinder3020.utils.TareaComparaImagenes;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.concurrent.Task;
@@ -33,6 +34,9 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 @Controller
 public class AnadirImagenControlador extends Controlador {
+	
+	static final String DATOS_IMAGEN_TEMP = "imagenTemp";
+	static final String DATOS_LISTA_NUM_IMG = "listaNumImg";
 
 	private List<ImagenTemp> imagenes;
 	private int marcador;
@@ -139,7 +143,7 @@ public class AnadirImagenControlador extends Controlador {
 			imgTemp.setImagen(f);
 			imgTemp.setNombre(f.getName().substring(0,f.getName().lastIndexOf('.')));
 			
-			Task<List<Integer>> coincidencias = new TareaComparaImagenes(f,servicioImagen);
+			Task<List<Integer>> coincidencias = new TaskGetIndicesImagenesParecidas(f,servicioImagen);
 			coincidencias.setOnSucceeded(e -> activarBotonCoincidenciasSiProcede(coincidencias));
 			imgTemp.setCoincidencias(coincidencias);
 			
@@ -192,6 +196,12 @@ public class AnadirImagenControlador extends Controlador {
 		flowEtiquetas.getChildren().add(ve);
 		seleccionada.getEtiquetas().add(ve);
 		
+	}
+	
+	@FXML
+	private void btCoincidencias_click(ActionEvent event) {
+		datos.put(DATOS_IMAGEN_TEMP, imagenes.get(marcador));
+		gestorDeVentanas.cambiarEscena(Vistas.COINCIDENCIAS);
 	}
 
 	@FXML

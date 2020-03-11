@@ -46,6 +46,10 @@ public class HBoxEtiqueta extends HBox {
 		labelContador.setText("("+num+")");
 	}
 	
+	public int getNumVeces() {
+		return numVeces;
+	}
+	
 	public String getNombre() {
 		return etiqueta;
 	}

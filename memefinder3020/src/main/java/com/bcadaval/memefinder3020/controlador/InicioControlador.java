@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Controller;
 
+import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 
 import javafx.event.ActionEvent;

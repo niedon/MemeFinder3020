@@ -2,6 +2,7 @@ package com.bcadaval.memefinder3020.modelo.servicios;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -27,15 +28,21 @@ public class ServicioImagen {
 		return repo.findAll();
 	}
 	
+	public List<Imagen> getAllPorId(Iterable<Integer> listaId){
+		return repo.findAllById(listaId);
+	}
+	
 	@Transactional(rollbackOn = Exception.class)
 	public void anadirImagen(ImagenTemp iTemp) {
 		
 		File archivoImagen = iTemp.getImagen();
 		
 		Imagen img = new Imagen();
-		img.setNombre(iTemp.getNombre());
+		String nombre = iTemp.getNombre();
+		img.setNombre(nombre.length()>64 ? nombre.substring(0,64) : nombre);
 		img.setExtension(archivoImagen.getName().substring(archivoImagen.getName().lastIndexOf('.')+1));
 		//TODO img.setCategoria(categoria);
+		img.setFecha(LocalDateTime.now());
 		
 		Imagen imgInsertada = repo.save(img);
 		
@@ -53,11 +60,9 @@ public class ServicioImagen {
 			
 			if(et==null) {
 				Etiqueta et1 = servicioEtiqueta.anadir(e.getNombre());
-				System.out.println("id etiqueta nueva: " + et1.getId());
 				imgInsertada.getEtiquetas().add(et1);
 			}else {
 				Etiqueta et2 = servicioEtiqueta.getPorNombre(e.getNombre());
-				System.out.println("id etiqueta repe: " + et2.getId());
 				imgInsertada.getEtiquetas().add(et2);
 			}
 		});
