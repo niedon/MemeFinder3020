@@ -88,8 +88,6 @@ public class CoincidenciasControlador extends Controlador {
 			flowNueva.getChildren().clear();
 			
 			imgNueva = (ImagenTemp) datos.get(AnadirImagenControlador.DATOS_IMAGEN_TEMP);
-			//@SuppressWarnings("unchecked")
-			//List<Integer> listaNum = (List<Integer>) datos.get(AnadirImagenControlador.DATOS_LISTA_NUM_IMG);
 			listaImgCoincidencias = servicioImagen.getAllPorId(imgNueva.getCoincidencias().getValue());
 			marcador = 0;
 			
@@ -123,19 +121,19 @@ public class CoincidenciasControlador extends Controlador {
 				listaPorcentajeCoincidencias = task.getValue();
 				refrescarInterfaz();
 			});
-
+			task.setOnCancelled(e -> {
+				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+			});
 			task.setOnFailed(e -> {
 				new Alert(AlertType.ERROR, "Ha habido un error calculando el parecido de la imagen", ButtonType.OK).showAndWait();
 				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
 			});
-			//TODO setCargando(true)
-			new Thread(task).start();
+			
+			comenzarTarea(task, 10);
 			
 			
 			
 			
-		}else {
-			System.out.println("extrafaillllllllllllllllllllllllllllllllllll");
 		}
 		
 	}

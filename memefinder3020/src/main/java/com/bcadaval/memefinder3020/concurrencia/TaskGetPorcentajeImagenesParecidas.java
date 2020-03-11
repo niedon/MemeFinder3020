@@ -38,8 +38,15 @@ public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 				
 				Hash otraImagen = hasher.hash(MiscUtils.getFileDeImagen(listaImagenes.get(i)));
 				retorna.add(i, imgOriginal.normalizedHammingDistance(otraImagen));
-				//TODO eliminar al acabar testeos
-				Thread.sleep(1000);
+				
+				//TODO quitar al acabar testeos
+				if(isCancelled())break;
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					if(isCancelled())break;
+				}
+				
 				updateProgress(i, listaImagenes.size());
 			}
 			

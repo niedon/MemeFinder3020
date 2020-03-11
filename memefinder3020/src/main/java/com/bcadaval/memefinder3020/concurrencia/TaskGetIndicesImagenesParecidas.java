@@ -48,8 +48,13 @@ public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 				retorna.add(img.getId());
 			}
 			
-			//TODO eliminar al acabar testeos
-			Thread.sleep(1000);
+			//TODO quitar al acabar testeos
+			if(isCancelled())break;
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				if(isCancelled())break;
+			}
 			
 			updateProgress(imagenesBD.indexOf(img), imagenesBD.size());
 			updateMessage((int)(((float)imagenesBD.indexOf(img)/(float)imagenesBD.size())*100) + " %");

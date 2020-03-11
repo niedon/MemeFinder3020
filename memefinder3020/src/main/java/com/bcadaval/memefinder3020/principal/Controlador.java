@@ -11,7 +11,6 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.stage.Stage;
 
 public abstract class Controlador implements Initializable{
 	
@@ -23,7 +22,6 @@ public abstract class Controlador implements Initializable{
 	@Autowired protected ServicioImagen servicioImagen;
 	@Autowired protected ServicioEtiqueta servicioEtiqueta;
 	
-	private Stage stage;
 	private Parent vista;
 	
 	public abstract void initComponentes();
@@ -37,12 +35,6 @@ public abstract class Controlador implements Initializable{
 	void setVista(Parent vista) {
 		this.vista = vista;
 	}
-	protected Stage getStage() {
-		return stage;
-	}
-	void setStage(Stage stage) {
-		this.stage = stage;
-	}
 	
 	void limpiarMapa() {
 		datos.clear();
@@ -54,9 +46,29 @@ public abstract class Controlador implements Initializable{
 	
 	//--------------Concurrencia--------------
 	
-	protected void setCargando(Task t) {
+	protected void comenzarTarea(Task<?> t, int segundos) {
 		
-		//TODO
+		t.stateProperty().addListener((obs, viejo, nuevo) -> {
+			
+			switch(nuevo) {
+			case RUNNING:
+				gestorDeVentanas.setCargando(t, segundos);
+				break;
+				
+			case SUCCEEDED:
+			case FAILED:
+			case CANCELLED:
+				gestorDeVentanas.quitarCargando();
+				break;
+			
+			default:
+				break;
+				
+			}
+			
+		});
+		
+		new Thread(t).start();
 		
 	}
 

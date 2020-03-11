@@ -10,7 +10,6 @@ import com.bcadaval.memefinder3020.utils.Constantes;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.stage.Stage;
 
 public class SpringFxmlLoader implements ApplicationContextAware{
 	
@@ -21,15 +20,20 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 		ctx=applicationContext;
 	}
 	
-	public void cargaVistas(Stage stage) throws IOException{
+	public void cargaVistas() throws IOException{
 		
+		//Carga de vistas "accesibles"
 		for(Vistas v : Vistas.values()) {
 			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, v.getNombre())));
 			load.setControllerFactory(ctx::getBean);
 			Parent p = load.load();
 			((Controlador)load.getController()).setVista(p);
-			((Controlador)load.getController()).setStage(stage);
 		}
+		
+		//Carga de pantalla de carga
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, Constantes.NOMBRE_PANTALLA_CARGA)));
+		load.setController(ctx.getBean(GestorDeVentanas.class));
+		load.load();
 		
 	}
 

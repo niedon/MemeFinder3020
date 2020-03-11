@@ -128,7 +128,7 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btExaminar_click(ActionEvent event) {
 
-		File f = fileChooser.showOpenDialog(getStage());
+		File f = fileChooser.showOpenDialog(gestorDeVentanas.getStage());
 		
 		if(f!=null && f.exists()) {
 			
@@ -145,12 +145,17 @@ public class AnadirImagenControlador extends Controlador {
 			
 			Task<List<Integer>> coincidencias = new TaskGetIndicesImagenesParecidas(f,servicioImagen);
 			coincidencias.setOnSucceeded(e -> activarBotonCoincidenciasSiProcede(coincidencias));
+			coincidencias.setOnCancelled(e -> btEliminiar_click(null));
+			coincidencias.setOnFailed(e -> {
+				new Alert(AlertType.ERROR, "No se ha podido cargar la imagen", ButtonType.OK).showAndWait();
+				btEliminiar_click(null);
+			});
 			imgTemp.setCoincidencias(coincidencias);
 			
 			imagenes.add(imgTemp);
 			marcador = imagenes.size()-1;
 			
-			new Thread(coincidencias).start();
+			comenzarTarea(coincidencias, 10);
 			
 			refrescarInterfaz();
 		}
