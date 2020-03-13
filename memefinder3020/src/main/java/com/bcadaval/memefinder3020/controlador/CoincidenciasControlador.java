@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
-import com.bcadaval.memefinder3020.utils.MiscUtils;
+import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.event.ActionEvent;
@@ -31,6 +32,8 @@ import javafx.scene.layout.FlowPane;
 
 @Controller
 public class CoincidenciasControlador extends Controlador {
+	
+	public static final String BORRAR_IMAGEN = "borrarImagen";
 	
 	private ImagenTemp imgNueva;
 	private List<Imagen> listaImgCoincidencias;
@@ -58,7 +61,6 @@ public class CoincidenciasControlador extends Controlador {
 	@FXML private Label lbFechaOriginal;
 	@FXML private Label lbPorcentajeParecido;
 	
-	@FXML private Button btAnadirEtiquetas;
 	@FXML private Button btAnterior;
 	@FXML private Label lbMarcador;
 	@FXML private Button btSiguiente;
@@ -81,10 +83,8 @@ public class CoincidenciasControlador extends Controlador {
 	@Override
 	public void initVisionado() {
 		
-		Class<?> c = (Class<?>) datos.get(CLASE_ORIGEN);
-		
-		if(c == AnadirImagenControlador.class) {
-			
+		switch(getVistaOrigen()) {
+		case ANADIR_IMAGEN:
 			flowNueva.getChildren().clear();
 			
 			imgNueva = (ImagenTemp) datos.get(AnadirImagenControlador.DATOS_IMAGEN_TEMP);
@@ -101,7 +101,7 @@ public class CoincidenciasControlador extends Controlador {
 			lbExtensionNueva.setText(nombreImagenNueva.substring(nombreImagenNueva.lastIndexOf('.')));
 			
 			try {
-				Dimension d = MiscUtils.getImageDimension(imgNueva.getImagen());
+				Dimension d = IOUtils.getImageDimension(imgNueva.getImagen());
 				lbResolucionNueva.setText(d.width + " x " + d.height);
 			} catch (IOException e) {
 				//TODO log
@@ -131,10 +131,13 @@ public class CoincidenciasControlador extends Controlador {
 			
 			comenzarTarea(task, 10);
 			
+			break;
 			
-			
-			
+		default:
+			throw new UnsupportedOperationException("Se ha accedido desde una vista no soportada");
 		}
+		
+		
 		
 	}
 
@@ -150,12 +153,28 @@ public class CoincidenciasControlador extends Controlador {
 	}
 	
 	@FXML
-	private void btAnadirEtiquetas_click(ActionEvent event) {
-		
-	}
-	
-	@FXML
 	private void btSobreescribirImagen_click(ActionEvent event) {
+		
+		Optional<ButtonType> respuesta = new Alert(
+				AlertType.CONFIRMATION,
+				"Se sustituirá el archivo de imagen original por la nueva (conservando todos los atributos).\n¿Confirmar?",
+				ButtonType.OK,ButtonType.CANCEL
+				).showAndWait();
+		
+		if(respuesta.get() == ButtonType.OK) {
+			try {
+				
+				datos.put(BORRAR_IMAGEN, true);
+				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+				servicioImagen.sustituirImagen(imgNueva.getImagen(), listaImgCoincidencias.get(marcador));
+				new Alert(AlertType.INFORMATION, "La imagen se ha sustituido",ButtonType.OK).showAndWait();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				new Alert(AlertType.ERROR, "No se ha podido sustituir la imagen",ButtonType.OK).showAndWait();
+			}
+		}
+		
 		
 	}
 	
@@ -180,7 +199,8 @@ public class CoincidenciasControlador extends Controlador {
 		}
 		Imagen elegida = listaImgCoincidencias.get(marcador);
 		
-		ivOriginal.setImage(new Image(MiscUtils.getStringRutaImagen(elegida)));
+		ivOriginal.setImage(new Image(IOUtils.getURLDeImagen(elegida)));
+		
 		elegida.getEtiquetas().forEach( el -> {
 			flowOriginal.getChildren().add(new HBoxEtiqueta(el.getImagenes().size(), el.getNombre()));
 		});
@@ -192,14 +212,7 @@ public class CoincidenciasControlador extends Controlador {
 		}
 		
 		lbExtensionOriginal.setText(elegida.getExtension());
-		
-		try {
-			Dimension d = MiscUtils.getImageDimension(MiscUtils.getFileDeImagen(elegida));
-			lbResolucionOriginal.setText(d.width + " x " + d.height);
-		} catch (IOException e) {
-			//TODO log
-			lbResolucionOriginal.setText("No disponible");
-		}
+		lbResolucionOriginal.setText((int)ivOriginal.getImage().getWidth() + " x " + (int)ivOriginal.getImage().getHeight());
 		
 		if(elegida.getCategoria() == null || elegida.getCategoria().isEmpty()) {
 			lbCategoriaOriginal.setText("[Sin categoría]");

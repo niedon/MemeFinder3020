@@ -72,7 +72,7 @@
             <HBox prefHeight="40.0" prefWidth="512.0" />
           </children>
         </VBox>
-        <VBox prefHeight="768.0" prefWidth="512.0">
+        <VBox prefHeight="768.0" prefWidth="512.0" HBox.hgrow="ALWAYS">
           <children>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
               <children>
@@ -96,13 +96,16 @@
                 <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" prefHeight="30.0" prefWidth="50.0" text="Button" />
               </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="58.0" prefWidth="512.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
               <children>
-                <Button mnemonicParsing="false" onAction="#btVolver_click" prefHeight="30.0" prefWidth="140.0" text="Volver" />
-                <Button fx:id="btAnadirEtiquetas" mnemonicParsing="false" onAction="#btAnadirEtiquetas_click" prefHeight="30.0" prefWidth="140.0" text="Añadir etiquetas" />
-                <Button mnemonicParsing="false" onAction="#btSobreescribirImagen_click" prefHeight="30.0" prefWidth="140.0" text="Sobreescribir imagen" />
+                <HBox alignment="CENTER" prefHeight="-1.0" prefWidth="512.0">
+                  <children>
+                    <Button mnemonicParsing="false" onAction="#btVolver_click" prefHeight="30.0" prefWidth="140.0" text="Volver" />
+                    <Button mnemonicParsing="false" onAction="#btSobreescribirImagen_click" prefHeight="30.0" prefWidth="140.0" text="Sobreescribir imagen" />
+                  </children>
+                </HBox>
               </children>
-            </HBox>
+            </VBox>
           </children>
         </VBox>
       </children>

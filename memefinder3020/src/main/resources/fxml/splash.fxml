@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="800.0" style="&#10;    -fx-stroke-dash-offset: 6;&#10;    -fx-stroke-line-cap: butt" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <StackPane layoutX="0.0" layoutY="0.0" prefHeight="494.0" prefWidth="800.0" style="">
+      <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="">
+          <children>
+            <ImageView fx:id="ivPrincipal" fitHeight="494.0" fitWidth="800.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="false" smooth="true" style="" />
+          </children>
+        </AnchorPane>
+        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-width: 3;&#10;-fx-border-color: black;">
+          <children>
+            <Label fx:id="lbTexto" alignment="CENTER" contentDisplay="LEFT" prefWidth="800.0" text="Label" textFill="BLACK" wrapText="false">
+              <effect>
+                <DropShadow color="WHITE" />
+              </effect>
+              <font>
+                <Font size="25.0" />
+              </font>
+            </Label>
+            <ProgressBar fx:id="pbCarga" prefHeight="20.0" prefWidth="800.0" progress="0.0" />
+          </children>
+        </VBox>
+      </children>
+    </StackPane>
+  </children>
+</AnchorPane>

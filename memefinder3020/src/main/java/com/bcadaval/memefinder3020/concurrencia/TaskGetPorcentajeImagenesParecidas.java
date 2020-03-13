@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
-import com.bcadaval.memefinder3020.utils.MiscUtils;
+import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.github.kilianB.hash.Hash;
 import com.github.kilianB.hashAlgorithms.HashingAlgorithm;
 import com.github.kilianB.hashAlgorithms.PerceptiveHash;
@@ -36,16 +36,16 @@ public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 			
 			for(int i=0; i<listaImagenes.size(); i++) {
 				
-				Hash otraImagen = hasher.hash(MiscUtils.getFileDeImagen(listaImagenes.get(i)));
+				Hash otraImagen = hasher.hash(IOUtils.getFileDeImagen(listaImagenes.get(i)));
 				retorna.add(i, imgOriginal.normalizedHammingDistance(otraImagen));
 				
-				//TODO quitar al acabar testeos
-				if(isCancelled())break;
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					if(isCancelled())break;
-				}
+//				//TODO quitar al acabar testeos
+//				if(isCancelled())break;
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					if(isCancelled())break;
+//				}
 				
 				updateProgress(i, listaImagenes.size());
 			}

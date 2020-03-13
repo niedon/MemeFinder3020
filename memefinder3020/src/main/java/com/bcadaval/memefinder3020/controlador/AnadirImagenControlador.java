@@ -113,7 +113,23 @@ public class AnadirImagenControlador extends Controlador {
 
 	@Override
 	public void initVisionado() {
-		refrescarInterfaz();
+		
+		switch(getVistaOrigen()) {
+		case INICIO:
+			refrescarInterfaz();
+			break;
+			
+		case COINCIDENCIAS:
+			Object o = datos.get(CoincidenciasControlador.BORRAR_IMAGEN); 
+			if(o!=null && (boolean)o) {
+				btEliminiar_click(null);
+			}
+			break;
+			
+		default:
+			throw new UnsupportedOperationException("Se ha accedido desde una vista no soportada");
+		}
+		
 
 	}
 

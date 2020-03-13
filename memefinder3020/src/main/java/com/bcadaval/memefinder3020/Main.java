@@ -1,21 +1,17 @@
 package com.bcadaval.memefinder3020;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-
-import com.bcadaval.memefinder3020.principal.GestorDeVentanas;
-import com.bcadaval.memefinder3020.principal.SpringFxmlLoader;
-
+import com.bcadaval.memefinder3020.concurrencia.TaskSplash;
+import com.bcadaval.memefinder3020.controlador.SplashControlador;
+import com.bcadaval.memefinder3020.utils.Constantes;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 @SpringBootApplication
 public class Main extends Application {
-	
-	@Autowired
-	private ApplicationContext ctx;
 	
     public static void main(String[] args) {
     	try {
@@ -35,22 +31,20 @@ public class Main extends Application {
         
     }
     
-    
-
-	@Override
-	public void init() throws Exception {
-		ctx = SpringApplication.run(Main.class);
-	}
-
-
-
 	@Override
 	public void start(Stage stage) throws Exception {
-
-		ctx.getBean(SpringFxmlLoader.class).cargaVistas();
-		ctx.getBean(GestorDeVentanas.class).iniciar(stage);
 		
-		stage.show();
+		Stage carga = new Stage(StageStyle.UNDECORATED);
+		
+		TaskSplash ts = new TaskSplash(stage, carga);
+		SplashControlador con = new SplashControlador();
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, Constantes.NOMBRE_PANTALLA_SPLASH)));
+		load.setController(con);
+		carga.setScene(new Scene(load.load()));
+		carga.show();
+		con.asignarBindings(ts.messageProperty(),ts.progressProperty());
+		
+		new Thread(ts).start();
 		
 	}
 	

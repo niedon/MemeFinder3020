@@ -5,14 +5,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.bcadaval.memefinder3020.controlador.InicioControlador;
-
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -27,7 +26,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	private Stage stage;
 	private StackPane panePrincipal;
 	
-	private Controlador ultimaClase;
+	private Vistas ultimaVista;
 
 	public Stage getStage() {
 		return stage;
@@ -38,9 +37,9 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		Controlador c = ctx.getBean(v.getClaseControlador());
 		
 		panePrincipal.getChildren().set(0, c.getVista());
-		
-		if(ultimaClase != null) c.anadirClaseAMapa(ultimaClase.getClass());
-		ultimaClase = c;
+		//TODO embutir vista de pantalla de carga para la primera pantalla que aparezca
+		if(ultimaVista != null) c.anadirVistaAMapa(ultimaVista);
+		ultimaVista = v;
 		
 		c.initVisionado();
 		c.initFoco();
@@ -52,9 +51,10 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		
 		panePrincipal = new StackPane();
 		panePrincipal.setPrefSize(1024, 768);
-		panePrincipal.getChildren().add(0,ctx.getBean(InicioControlador.class).getVista());
+		panePrincipal.getChildren().add(0,new Pane());
 		panePrincipal.getChildren().add(1, nodoPrincipalPantallaCarga);
 		stage.setScene(new Scene(panePrincipal));
+		cambiarEscena(Vistas.INICIO);
 		quitarCargando();
 		
 		

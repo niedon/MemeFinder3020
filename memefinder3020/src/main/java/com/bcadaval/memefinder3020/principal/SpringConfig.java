@@ -14,6 +14,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.bcadaval.memefinder3020.utils.Constantes;
+
 @Configuration
 @EnableTransactionManagement
 public class SpringConfig {
@@ -35,13 +37,11 @@ public class SpringConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
 		
-		String ruta = System.getProperty("user.home") + "\\memefinder3020\\db\\db";
-		String url = "jdbc:hsqldb:file:" + ruta;
+		String url = "jdbc:hsqldb:file:" + Constantes.RUTA_BD;
 		dataSource.setUrl(url);
 		
 		dataSource.setUsername("SA");
 		dataSource.setPassword("");
-		
 		return dataSource;
 		
 	}
@@ -50,15 +50,6 @@ public class SpringConfig {
 	@Bean
 	public EntityManager entityManager() {
 		return entityManagerFactory().createEntityManager();
-	}
-	
-	@Bean
-	public Properties hibernateProperties() {
-		Properties hibernateProperties = new Properties();
-		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "validate");
-		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-		
-		return hibernateProperties;
 	}
 	
 	@Bean

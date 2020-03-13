@@ -31,17 +31,21 @@ public class Imagen {
 	private Integer id;
 	
 	@Column(name="NOMBRE",
-			nullable = false)
+			nullable = false,
+			length = 64)
 	private String nombre;
 	
 	@Column(name="EXTENSION",
-			nullable=false)
+			nullable=false,
+			length = 16)
 	private String extension;
 	
-	@Column(name="CATEGORIA")
+	@Column(name="CATEGORIA",
+			length = 32)
 	private String categoria;
 
-	@Column(name="FECHA")
+	@Column(name="FECHA",
+			nullable = false)
 	private LocalDateTime fecha;
 	
 	@ManyToMany(cascade = CascadeType.ALL,

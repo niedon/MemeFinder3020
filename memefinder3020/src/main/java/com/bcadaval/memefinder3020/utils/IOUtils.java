@@ -3,6 +3,8 @@ package com.bcadaval.memefinder3020.utils;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -12,7 +14,7 @@ import javax.imageio.stream.ImageInputStream;
 
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 
-public class MiscUtils {
+public class IOUtils {
 	
 	/**
 	 * 
@@ -45,20 +47,20 @@ public class MiscUtils {
 		  throw new IOException("Not a known image file: " + imgFile.getAbsolutePath());
 		}
 	
-	public static String getStringRutaImagen(String id, String extension) {
-		return getStringRutaImagen(id+'.'+extension);
+	public static File getFileRutaImagen(String id, String extension) {
+		return getFileRutaImagen(id+'.'+extension);
 	}
-	
-	public static String getStringRutaImagen(String idYExtension) {
-		return new File(Constantes.RUTA_IMAGENES + "\\" + idYExtension).toURI().toString();
+
+	public static File getFileRutaImagen(String idYExtension) {
+		return Constantes.fs.getPath(Constantes.RUTA_IMAGENES.toString(), idYExtension).toFile();
 	}
-	
-	public static String getStringRutaImagen(Imagen imagen) {
-		return getStringRutaImagen(imagen.getId()+"", imagen.getExtension());
-	}
-	
+
 	public static File getFileDeImagen(Imagen imagen) {
-		return new File(Constantes.RUTA_IMAGENES + "\\" + imagen.getId() + '.' + imagen.getExtension());
+		return getFileRutaImagen(imagen.getId() + "." + imagen.getExtension());
+	}
+	
+	public static String getURLDeImagen(Imagen imagen) {
+		return getFileDeImagen(imagen).toURI().toString();
 	}
 
 }

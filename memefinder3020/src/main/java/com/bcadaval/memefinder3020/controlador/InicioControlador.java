@@ -40,8 +40,7 @@ public class InicioControlador extends Controlador {
 
 	@Override
 	public void initFoco() {
-		// TODO Auto-generated method stub
-		
+		tfBusqueda.requestFocus();
 	}
 
 	//----------------

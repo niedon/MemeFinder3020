@@ -2,6 +2,9 @@ package com.bcadaval.memefinder3020.modelo.servicios;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.modelo.dao.RepositorioImagen;
 import com.bcadaval.memefinder3020.utils.Constantes;
+import com.bcadaval.memefinder3020.utils.IOUtils;
 
 @Service
 public class ServicioImagen {
@@ -46,8 +50,7 @@ public class ServicioImagen {
 		
 		Imagen imgInsertada = repo.save(img);
 		
-		File copiada = new File(Constantes.RUTA_IMAGENES + "\\" + imgInsertada.getId() + '.' + imgInsertada.getExtension());
-		
+		File copiada = IOUtils.getFileDeImagen(imgInsertada);
 		try {
 			copiada.getParentFile().mkdirs();
 			FileSystemUtils.copyRecursively(archivoImagen, copiada);
@@ -70,4 +73,13 @@ public class ServicioImagen {
 		repo.saveAndFlush(imgInsertada);
 		
 	}
+	
+	public void sustituirImagen(File fNueva, Imagen imgOriginal) throws IOException {
+		Files.copy(fNueva.toPath(), FileSystems.getDefault().getPath(
+				Constantes.RUTA_IMAGENES.toString(),
+				String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension())),
+				StandardCopyOption.REPLACE_EXISTING);
+		
+	}
+	
 }

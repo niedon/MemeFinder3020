@@ -37,9 +37,11 @@ public class HBoxEtiqueta extends HBox {
 		hijos.add(labelContador);
 		hijos.add(new Label(etiqueta));
 		
-		Button b = new Button("X");
-		b.setOnAction(eventoDelBoton);
-		hijos.add(b);
+		if(eliminable && eventoDelBoton!=null) {
+			Button b = new Button("X");
+			b.setOnAction(eventoDelBoton);
+			hijos.add(b);
+		}
 	}
 	
 	public void cambiaNum(int num) {

@@ -15,7 +15,7 @@ import javafx.scene.Parent;
 public abstract class Controlador implements Initializable{
 	
 	protected static final Map<String,Object> datos = new HashMap<String,Object>();
-	protected static final String CLASE_ORIGEN = "claseOrigen";
+	static final String VISTA_ORIGEN = "vistaOrigen";
 	
 	@Autowired protected GestorDeVentanas gestorDeVentanas;
 	
@@ -40,8 +40,12 @@ public abstract class Controlador implements Initializable{
 		datos.clear();
 	}
 	
-	void anadirClaseAMapa(Class c) {
-		datos.put(CLASE_ORIGEN,c);
+	void anadirVistaAMapa(Vistas v) {
+		datos.put(VISTA_ORIGEN, v);
+	}
+	
+	protected Vistas getVistaOrigen() {
+		return (Vistas) datos.get(VISTA_ORIGEN);
 	}
 	
 	//--------------Concurrencia--------------
@@ -63,7 +67,6 @@ public abstract class Controlador implements Initializable{
 			
 			default:
 				break;
-				
 			}
 			
 		});
