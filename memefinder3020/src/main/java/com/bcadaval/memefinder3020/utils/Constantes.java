@@ -11,11 +11,16 @@ public class Constantes {
 	public static final Path DIRECTORIO_BASE = fs.getPath(System.getProperty("user.home"), "memefinder3020");
 	
 	public static final String RUTA_FXML = "/fxml/%s.fxml";
+	public static final String RUTA_COMPONENTE_FXML = "/fxml/componentes/%s.fxml";
 	public static final String RUTA_IMG = "/img/%s";
 	public static final String NOMBRE_PANTALLA_CARGA = "pantallaCargando";
 	public static final String NOMBRE_PANTALLA_SPLASH = "splash";
+	public static final String NOMBRE_PANEETIQUETAS = "paneEtiquetas";
+	public static final String NOMBRE_PANERESULTADO = "paneResultado";
 	
 	public static final Path RUTA_IMAGENES = fs.getPath(DIRECTORIO_BASE.toString(), "img");
 	public static final Path RUTA_BD = fs.getPath(DIRECTORIO_BASE.toString(), "db", "db");
+	
+	public static final String FORMAT_DDMMYYHHMM = "dd/MM/yy HH:mm";
 
 }

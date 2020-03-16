@@ -1,6 +1,9 @@
 package com.bcadaval.memefinder3020.modelo.servicios;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +20,7 @@ public class ServicioEtiqueta {
 
 	@Autowired RepositorioEtiqueta repo;
 	
+	@Transactional
 	public List<Etiqueta> getAll(){
 		return repo.findAll();
 	}
@@ -28,16 +32,32 @@ public class ServicioEtiqueta {
 		return repo.saveAndFlush(nueva);
 	}
 	
+	@Transactional
+	public int countUsosDeEtiqueta(Etiqueta et) {
+		return repo.countUsosDeEtiqueta(et.getId());
+	}
+	
+	@Transactional
 	public int countUsosDeEtiqueta(String nombreEtiqueta) {
 		
 		Etiqueta et = getPorNombre(nombreEtiqueta);
 		return et==null ? 0 : repo.countUsosDeEtiqueta(et.getId());
 	}
 	
+	@Transactional
+	public Map<Integer, Integer> countUsosDeEtiquetas(Collection<Etiqueta> etiquetas){
+		Map<Integer,Integer> retorna = new HashMap<Integer,Integer>();
+		for(Etiqueta et : etiquetas) {
+			retorna.put(et.getId(), countUsosDeEtiqueta(et));
+		}
+		return retorna;
+	}
+	
+	@Transactional
 	public Etiqueta getPorNombre(String nombreEtiqueta) {
 		
 		Etiqueta etParaEjemplo = new Etiqueta();
-		etParaEjemplo.setNombre(nombreEtiqueta);
+		etParaEjemplo.setNombre(nombreEtiqueta.toUpperCase());
 		Example<Etiqueta> ejemplo = Example.of(etParaEjemplo,ExampleMatcher.matchingAll());
 		List<Etiqueta> resultado = repo.findAll(ejemplo);
 		return resultado.isEmpty() ? null : resultado.get(0);

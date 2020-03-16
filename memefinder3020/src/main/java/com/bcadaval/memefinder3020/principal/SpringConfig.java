@@ -1,7 +1,5 @@
 package com.bcadaval.memefinder3020.principal;
 
-import java.util.Properties;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;

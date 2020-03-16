@@ -16,6 +16,8 @@ import javafx.scene.control.TextField;
 @Controller
 public class InicioControlador extends Controlador {
 	
+	static final String DATOS_TF_BUSQUEDA = "valorTfBusqueda";
+	
 	@FXML private TextField tfBusqueda;
 	@FXML private Button btBuscar;
 
@@ -49,7 +51,8 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btBuscar_click(ActionEvent event) {
-
+		datos.put(DATOS_TF_BUSQUEDA, tfBusqueda.getText());
+		gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
 	}
 	
 

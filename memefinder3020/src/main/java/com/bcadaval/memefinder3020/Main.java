@@ -1,9 +1,11 @@
 package com.bcadaval.memefinder3020;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.bcadaval.memefinder3020.concurrencia.TaskSplash;
 import com.bcadaval.memefinder3020.controlador.SplashControlador;
 import com.bcadaval.memefinder3020.utils.Constantes;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

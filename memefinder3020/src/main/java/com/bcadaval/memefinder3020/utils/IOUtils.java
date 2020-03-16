@@ -3,8 +3,6 @@ package com.bcadaval.memefinder3020.utils;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Path;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;

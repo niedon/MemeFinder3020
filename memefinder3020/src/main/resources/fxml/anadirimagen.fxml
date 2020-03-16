@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -48,42 +49,44 @@
         </VBox>
         <VBox prefHeight="768.0000999999975" prefWidth="512.0">
           <children>
-            <HBox prefHeight="180.0" prefWidth="512.0">
+            <HBox prefHeight="16.0" prefWidth="512.0" />
+            <GridPane>
               <children>
-                <VBox prefHeight="-1.0" prefWidth="100.0" />
-                <VBox prefHeight="-1.0" prefWidth="412.0">
-                  <children>
-                    <HBox alignment="CENTER" prefHeight="60.0" prefWidth="412.0">
-                      <children>
-                        <Label text="Etiquetas:" HBox.margin="$x1" />
-                        <TextField fx:id="tfEtiqueta" onKeyPressed="#tfEtiqueta_keyPressed" prefWidth="200.0" HBox.margin="$x1" />
-                        <Button fx:id="btAnadir" mnemonicParsing="false" onAction="#btAnadir_click" text="Añadir" />
-                      </children>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
-                      <children>
-                        <Label text="Nombre:" HBox.margin="$x1" />
-                        <TextField fx:id="tfNombre" prefWidth="200.0" />
-                      </children>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="412.0">
-                      <children>
-                        <Button fx:id="btCoincidencias" mnemonicParsing="false" onAction="#btCoincidencias_click" text="Coincidencias" HBox.margin="$x1" />
-                        <Label fx:id="lbCoincidencias" text="Coincidencias label" />
-                      </children>
-                    </HBox>
-                  </children>
-                </VBox>
+                <Label text="Etiquetas:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <Label text="Nombre:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                <TextField fx:id="tfEtiqueta" onKeyPressed="#tfEtiqueta_keyPressed" prefWidth="233.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Button fx:id="btAnadir" mnemonicParsing="false" onAction="#btAnadir_click" text="Añadir" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <TextField fx:id="tfNombre" prefWidth="246.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="btCoincidencias" mnemonicParsing="false" onAction="#btCoincidencias_click" text="Coincidencias" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Label fx:id="lbCoincidencias" prefWidth="311.0" text="Coincidencias label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Label text="Categoría:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                <ComboBox fx:id="cbCategoria" editable="true" prefHeight="21.0" prefWidth="261.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ComboBox>
               </children>
-            </HBox>
-            <TitledPane fx:id="tpEtiquetas" animated="false" prefHeight="-1.0" prefWidth="-1.0" text="Etiquetas">
-              <content>
-                <FlowPane fx:id="flowEtiquetas" prefHeight="520.9998779296875" prefWidth="508.0" />
-              </content>
-            </TitledPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="171.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="261.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="80.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+            <HBox prefHeight="16.0" prefWidth="512.0" />
+            <AnchorPane fx:id="apEtiquetas" prefHeight="547.0" prefWidth="512.0" />
             <HBox alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="512.0">
               <children>
-                <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_clic" prefHeight="35.0" prefWidth="100.0" text="Volver">
+                <Button mnemonicParsing="false" onAction="#btVolver_clic" prefHeight="35.0" prefWidth="100.0" text="Volver">
                   <HBox.margin>
                     <Insets right="20.0" />
                   </HBox.margin>

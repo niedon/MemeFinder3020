@@ -9,11 +9,14 @@ import java.util.ResourceBundle;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.concurrencia.TaskGetIndicesImagenesParecidas;
+import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,14 +24,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -39,6 +42,7 @@ public class AnadirImagenControlador extends Controlador {
 	static final String DATOS_LISTA_NUM_IMG = "listaNumImg";
 
 	private List<ImagenTemp> imagenes;
+	private ObservableList<String> listaCategorias;
 	private int marcador;
 	
 	private FileChooser fileChooser;
@@ -62,13 +66,14 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private TextField tfNombre;
 	@FXML
+	private ComboBox<String> cbCategoria;
+	@FXML
 	private Button btCoincidencias;
 	@FXML
 	private Label lbCoincidencias;
 	@FXML
-	private TitledPane tpEtiquetas;
-	@FXML
-	private FlowPane flowEtiquetas;
+	private AnchorPane apEtiquetas;
+	private PaneEtiquetas paneEtiquetas;
 
 	@FXML
 	private Button btEliminar;
@@ -81,6 +86,7 @@ public class AnadirImagenControlador extends Controlador {
 		//Instanciación de elementos necesarios
 		
 		imagenes = new ArrayList<ImagenTemp>();
+		listaCategorias = FXCollections.observableArrayList();
 		
 		fileChooser = new FileChooser();
 		fileChooser.setTitle("Elige la imagen");
@@ -94,14 +100,15 @@ public class AnadirImagenControlador extends Controlador {
 		
 		//Opciones que no pueden configurarse en SceneBuilder
 		
-		tpEtiquetas.setCollapsible(false);
+		cbCategoria.setItems(listaCategorias);
 		
-		tfNombre.focusedProperty().addListener((obs, viejo, nuevo) -> {
-			
-			if( ! nuevo && ! imagenes.isEmpty()) {
-				imagenes.get(marcador).setNombre(tfNombre.getText());
-			}
-		});
+		paneEtiquetas = new PaneEtiquetas();
+		paneEtiquetas.setEventoEtiquetas(this::eliminarEtiqueta);
+		apEtiquetas.getChildren().add(paneEtiquetas);
+		AnchorPane.setTopAnchor(paneEtiquetas, .0);
+		AnchorPane.setRightAnchor(paneEtiquetas, .0);
+		AnchorPane.setBottomAnchor(paneEtiquetas, .0);
+		AnchorPane.setLeftAnchor(paneEtiquetas, .0);
 		
 	}
 
@@ -180,13 +187,13 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btAnterior_click(ActionEvent event) {
 		marcador--;
-		refrescarInterfaz();
+		cargarDatosYRefrescarInterfaz();
 	}
 
 	@FXML
 	private void btSiguiente_click(ActionEvent event) {
 		marcador++;
-		refrescarInterfaz();
+		cargarDatosYRefrescarInterfaz();
 	}
 
 	@FXML
@@ -200,7 +207,7 @@ public class AnadirImagenControlador extends Controlador {
 		String texto = tfEtiqueta.getText().toUpperCase().trim();
 		
 		tfEtiqueta.clear();
-		if(texto.isEmpty()) {
+		if(imagenes.isEmpty() || texto.isEmpty()) {
 			return;
 		}
 		
@@ -214,7 +221,7 @@ public class AnadirImagenControlador extends Controlador {
 			return;
 		}
 		
-		flowEtiquetas.getChildren().add(ve);
+		paneEtiquetas.anadirEtiqueta(ve);
 		seleccionada.getEtiquetas().add(ve);
 		
 	}
@@ -239,6 +246,10 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btGuardar_click(ActionEvent event) {
 		
+		imagenes.get(marcador).setNombre(tfNombre.getText().trim());
+		if(cbCategoria.getValue()!=null) {
+			imagenes.get(marcador).setCategoria(cbCategoria.getValue().trim().toUpperCase());
+		}
 		servicioImagen.anadirImagen(imagenes.get(marcador));
 		imagenes.remove(marcador);
 		//TODO actualizar contador etiquetas
@@ -248,22 +259,33 @@ public class AnadirImagenControlador extends Controlador {
 	
 	//-------------------------------------
 	
+	private void cargarDatosYRefrescarInterfaz() {
+		
+		if(!imagenes.isEmpty()) {
+			imagenes.get(marcador).setNombre(tfNombre.getText().trim());
+			imagenes.get(marcador).setCategoria(cbCategoria.getValue().trim().toUpperCase());
+		}
+		refrescarInterfaz();
+	}
+	
 	private void refrescarInterfaz() {
 		
 		if(marcador >= imagenes.size()) {
 			marcador = imagenes.size()-1;
 		}
-		flowEtiquetas.getChildren().clear();
+		listaCategorias.clear();
+		cbCategoria.setValue(null);
+		paneEtiquetas.borrarEtiquetas();
 		btCoincidencias.disableProperty().unbind();
 		lbCoincidencias.textProperty().unbind();
 		btGuardar.disableProperty().unbind();
-		
 		
 		if(imagenes.isEmpty()) {
 			
 			tfDireccion.clear();
 			ivImagen.setImage(null);
 			tfNombre.clear();
+			cbCategoria.setDisable(true);
 			
 			lbNumero.setText("0/0");
 			btCoincidencias.setDisable(true);
@@ -277,7 +299,9 @@ public class AnadirImagenControlador extends Controlador {
 			tfDireccion.setText(seleccionada.getImagen().getAbsolutePath());
 			ivImagen.setImage(new Image(seleccionada.getImagen().toURI().toString()));
 			tfNombre.setText(seleccionada.getNombre());
-			flowEtiquetas.getChildren().addAll(seleccionada.getEtiquetas());
+			cbCategoria.setDisable(false);
+			servicioCategoria.getAll().forEach(el -> listaCategorias.add(el.getNombre()));
+			seleccionada.getEtiquetas().forEach(el -> paneEtiquetas.anadirEtiqueta(el));
 			
 			lbNumero.setText((marcador+1)+"/"+imagenes.size());
 			
@@ -300,7 +324,7 @@ public class AnadirImagenControlador extends Controlador {
 	
 	private void eliminarEtiqueta(ActionEvent ev) {
 		HBoxEtiqueta origen = (HBoxEtiqueta) ((Button)ev.getSource()).getParent();
-		flowEtiquetas.getChildren().remove(origen);
+		paneEtiquetas.borrarEtiqueta(origen);
 		imagenes.get(marcador).getEtiquetas().remove(origen);
 	}
 	

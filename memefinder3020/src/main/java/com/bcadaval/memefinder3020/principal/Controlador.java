@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 
@@ -21,6 +22,7 @@ public abstract class Controlador implements Initializable{
 	
 	@Autowired protected ServicioImagen servicioImagen;
 	@Autowired protected ServicioEtiqueta servicioEtiqueta;
+	@Autowired protected ServicioCategoria servicioCategoria;
 	
 	private Parent vista;
 	

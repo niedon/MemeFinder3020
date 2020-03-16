@@ -1,6 +1,5 @@
 package com.bcadaval.memefinder3020.concurrencia;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
@@ -11,8 +10,8 @@ import com.bcadaval.memefinder3020.principal.SpringFxmlLoader;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 public class TaskSplash extends Task<Void> {
@@ -52,6 +51,7 @@ public class TaskSplash extends Task<Void> {
 		super.failed();
 		Platform.runLater(() -> {
 			new Alert(AlertType.ERROR, "Ha habido un error en la carga del programa", ButtonType.CLOSE).showAndWait();
+			exceptionProperty().getValue().printStackTrace();
 			stagePrograma.close();
 			stageSplash.close();
 		});
@@ -65,7 +65,5 @@ public class TaskSplash extends Task<Void> {
 			stageSplash.close();
 		});
 	}
-	
-	
 
 }

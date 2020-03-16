@@ -3,12 +3,14 @@ package com.bcadaval.memefinder3020.principal;
 import com.bcadaval.memefinder3020.controlador.AnadirImagenControlador;
 import com.bcadaval.memefinder3020.controlador.CoincidenciasControlador;
 import com.bcadaval.memefinder3020.controlador.InicioControlador;
+import com.bcadaval.memefinder3020.controlador.ResultadosControlador;
 
 public enum Vistas {
 	
 	INICIO("inicio", InicioControlador.class),
 	ANADIR_IMAGEN("anadirimagen", AnadirImagenControlador.class),
-	COINCIDENCIAS("coincidencias", CoincidenciasControlador.class);
+	COINCIDENCIAS("coincidencias", CoincidenciasControlador.class),
+	RESULTADOS("resultados", ResultadosControlador.class);
 	
 	String nombre;
 	Class<? extends Controlador> claseControlador;

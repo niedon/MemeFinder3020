@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -40,9 +41,9 @@ public class Imagen {
 			length = 16)
 	private String extension;
 	
-	@Column(name="CATEGORIA",
-			length = 32)
-	private String categoria;
+	@ManyToOne
+	@JoinColumn(name = "categoria")
+	private Categoria categoria;
 
 	@Column(name="FECHA",
 			nullable = false)
@@ -81,11 +82,11 @@ public class Imagen {
 		this.extension = extension;
 	}
 
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
 

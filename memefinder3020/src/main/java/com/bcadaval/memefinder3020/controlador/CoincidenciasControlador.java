@@ -15,6 +15,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
+import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
@@ -33,7 +34,7 @@ import javafx.scene.layout.FlowPane;
 @Controller
 public class CoincidenciasControlador extends Controlador {
 	
-	public static final String BORRAR_IMAGEN = "borrarImagen";
+	static final String BORRAR_IMAGEN = "borrarImagen";
 	
 	private ImagenTemp imgNueva;
 	private List<Imagen> listaImgCoincidencias;
@@ -214,13 +215,13 @@ public class CoincidenciasControlador extends Controlador {
 		lbExtensionOriginal.setText(elegida.getExtension());
 		lbResolucionOriginal.setText((int)ivOriginal.getImage().getWidth() + " x " + (int)ivOriginal.getImage().getHeight());
 		
-		if(elegida.getCategoria() == null || elegida.getCategoria().isEmpty()) {
+		if(elegida.getCategoria() == null) {
 			lbCategoriaOriginal.setText("[Sin categoría]");
 		}else {
-			lbCategoriaOriginal.setText(elegida.getCategoria());
+			lbCategoriaOriginal.setText(elegida.getCategoria().getNombre());
 		}
 		
-		lbFechaOriginal.setText(elegida.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm")));
+		lbFechaOriginal.setText(elegida.getFecha().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
 		
 		lbPorcentajeParecido.setText(String.format("%.2f %%", 100*(1-listaPorcentajeCoincidencias.get(marcador))));
 		
