@@ -53,6 +53,20 @@ public class ServicioImagen {
 		return repo.findById(id).get();
 	}
 	
+	public List<Imagen> getUltimas(int num){
+		
+		if(num<1) {
+			throw new RuntimeException("No se permiten valores menores que 1");
+		}
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
+		Root<Imagen> root = cq.from(Imagen.class);
+		cq.orderBy(cb.desc(root.get("fecha")));
+		
+		return em.createQuery(cq).setMaxResults(num).getResultList();
+	}
+	
 	@Transactional(rollbackOn = Exception.class)
 	public Imagen save(Imagen imagen) {
 		return repo.saveAndFlush(imagen);

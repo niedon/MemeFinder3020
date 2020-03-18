@@ -64,6 +64,7 @@ public class CoincidenciasControlador extends Controlador {
 	@FXML private Button btAnterior;
 	@FXML private Label lbMarcador;
 	@FXML private Button btSiguiente;
+	@FXML private Button btVolver;
 	
 	
 	
@@ -76,8 +77,9 @@ public class CoincidenciasControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		// TODO Auto-generated method stub
-		
+		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
+		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
+		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
 	}
 
 	@Override

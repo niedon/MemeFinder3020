@@ -4,6 +4,7 @@
 <?import java.util.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
@@ -13,17 +14,52 @@
       <children>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
           <children>
-            <TextField fx:id="tfBusqueda" prefWidth="200.0">
+            <TextField fx:id="tfBusqueda" onKeyPressed="#tfBusqueda_keyPressed" prefWidth="200.0" promptText="Buscar...">
               <HBox.margin>
                 <Insets right="15.0" />
               </HBox.margin>
             </TextField>
-            <Button fx:id="btBuscar" mnemonicParsing="false" onAction="#btBuscar_click" prefHeight="50.0" prefWidth="50.0" text="lupa" textAlignment="LEFT" />
+            <Button fx:id="btBuscar" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btBuscar_click" prefHeight="50.0" prefWidth="50.0" text="lupa" textAlignment="LEFT" />
           </children>
         </HBox>
-        <HBox prefHeight="100.0" prefWidth="200.0">
+        <HBox alignment="CENTER" prefHeight="170.0" prefWidth="200.0" spacing="30.0">
           <children>
-            <Button mnemonicParsing="false" text="Añadir imagen" onAction="#btAnadir_click" />
+            <Button fx:id="btAnadirImagen" contentDisplay="TOP" graphicTextGap="4.0" mnemonicParsing="false" onAction="#btAnadirImagen_click" prefHeight="130.0" prefWidth="100.0" text="Añadir" />
+            <Button fx:id="btCategorias" contentDisplay="TOP" mnemonicParsing="false" onAction="#btCategorias_click" prefHeight="130.0" prefWidth="100.0" text="Categorías" />
+            <Button fx:id="btEtiquetas" contentDisplay="TOP" maxWidth="-1.0" mnemonicParsing="false" onAction="#btEtiquetas_click" prefHeight="130.0" prefWidth="100.0" text="Etiquetas" />
+            <Button fx:id="btAjustes" contentDisplay="TOP" mnemonicParsing="false" onAction="#btAjustes_click" prefHeight="130.0" prefWidth="100.0" text="Ajustes" />
+          </children>
+          <padding>
+            <Insets bottom="20.0" top="20.0" fx:id="x1" />
+          </padding>
+        </HBox>
+        <HBox alignment="BOTTOM_CENTER" prefHeight="50.0" prefWidth="200.0">
+          <children>
+            <Label styleClass="labelTitulo" text="Últimas imágenes" />
+          </children>
+        </HBox>
+        <HBox alignment="CENTER" padding="$x1" prefHeight="240.0" prefWidth="200.0" spacing="30.0">
+          <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="paneBordeGrueso">
+              <center>
+                <ImageView fx:id="ivUltimas1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="paneBordeGrueso">
+              <center>
+                <ImageView fx:id="ivUltimas2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="paneBordeGrueso">
+              <center>
+                <ImageView fx:id="ivUltimas3" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="paneBordeGrueso">
+              <center>
+                <ImageView fx:id="ivUltimas4" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+              </center>
+            </BorderPane>
           </children>
         </HBox>
       </children>

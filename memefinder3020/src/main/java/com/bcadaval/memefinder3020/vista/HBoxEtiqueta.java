@@ -27,6 +27,7 @@ public class HBoxEtiqueta extends HBox {
 	
 	private HBoxEtiqueta(int numVeces, @NonNull String etiqueta, boolean eliminable, EventHandler<ActionEvent> eventoDelBoton) {
 		super();
+		this.getStyleClass().add("hboxEtiqueta");
 		this.numVeces = numVeces;
 		this.etiqueta = etiqueta;
 		
@@ -39,6 +40,7 @@ public class HBoxEtiqueta extends HBox {
 		
 		if(eliminable && eventoDelBoton!=null) {
 			Button b = new Button("X");
+			b.setPrefSize(10, 10);
 			b.setOnAction(eventoDelBoton);
 			hijos.add(b);
 		}

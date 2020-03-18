@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.bcadaval.memefinder3020.utils.Constantes;
+
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -40,7 +42,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		//TODO embutir vista de pantalla de carga para la primera pantalla que aparezca
 		if(ultimaVista != null) c.anadirVistaAMapa(ultimaVista);
 		ultimaVista = v;
-		
+		c.initComponentes();
 		c.initVisionado();
 		c.initFoco();
 		c.limpiarMapa();
@@ -53,7 +55,11 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		panePrincipal.setPrefSize(1024, 768);
 		panePrincipal.getChildren().add(0,new Pane());
 		panePrincipal.getChildren().add(1, nodoPrincipalPantallaCarga);
-		stage.setScene(new Scene(panePrincipal));
+		
+		Scene escenaPrincipal = new Scene(panePrincipal);
+		escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS, "principal")).toExternalForm());
+		
+		stage.setScene(escenaPrincipal);
 		cambiarEscena(Vistas.INICIO);
 		quitarCargando();
 		

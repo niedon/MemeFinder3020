@@ -30,6 +30,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 @Controller
@@ -86,8 +88,10 @@ public class ResultadoIndividualControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		// TODO Auto-generated method stub
-		
+		setGraficos(btLimpiarCategoria, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
+		setGraficos(btEtiquetas, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
+		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
+		setGraficos(btBorrar, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
 	}
 
 	@Override
@@ -122,11 +126,20 @@ public class ResultadoIndividualControlador extends Controlador {
 	}
 	
 	@FXML
+	private void tfEtiquetas_keyPressed(KeyEvent key) {
+		if(key.getCode()==KeyCode.ENTER) {
+			btEtiquetas_click(null);
+		}
+	}
+	
+	@FXML
 	private void btEtiquetas_click(ActionEvent event) {
 		if(modoEdicion) {
 			String txtEtiqueta = tfEtiquetas.getText().trim().toUpperCase();
-			paneEtiquetas.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(txtEtiqueta), txtEtiqueta);
-			tfEtiquetas.clear();
+			if(!txtEtiqueta.isEmpty()) {
+				paneEtiquetas.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(txtEtiqueta), txtEtiqueta);
+				tfEtiquetas.clear();	
+			}
 		}
 	}
 	
@@ -229,7 +242,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		btEtiquetas.setDisable(!poner);
 		
 		btEditarGuardar.setText(poner ? "Guardar" : "Editar");
-		//TODO setgraphic
+		setGraficos(btEditarGuardar, String.format(Constantes.RUTA_SVG, poner ? Constantes.SVG_GUARDAR : Constantes.SVG_LAPIZ));
 	}
 	
 	private void eliminarEtiqueta(ActionEvent ev) {

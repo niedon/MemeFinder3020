@@ -13,6 +13,8 @@ public class Constantes {
 	public static final String RUTA_FXML = "/fxml/%s.fxml";
 	public static final String RUTA_COMPONENTE_FXML = "/fxml/componentes/%s.fxml";
 	public static final String RUTA_IMG = "/img/%s";
+	public static final String RUTA_SVG = "/img/svg/%s.svg";
+	public static final String RUTA_CSS = "/css/%s.css";
 	public static final String NOMBRE_PANTALLA_CARGA = "pantallaCargando";
 	public static final String NOMBRE_PANTALLA_SPLASH = "splash";
 	public static final String NOMBRE_PANEETIQUETAS = "paneEtiquetas";
@@ -22,5 +24,19 @@ public class Constantes {
 	public static final Path RUTA_BD = fs.getPath(DIRECTORIO_BASE.toString(), "db", "db");
 	
 	public static final String FORMAT_DDMMYYHHMM = "dd/MM/yy HH:mm";
+	
+	public static final String SVG_AJUSTES = "iAjustes";
+	public static final String SVG_CATEGORIA = "iCategoria";
+	public static final String SVG_EQUIS = "iEquis";
+	public static final String SVG_FLECHAABAJO = "iFechaAbajo";
+	public static final String SVG_FLECHAARRIBA = "iFlechaArriba";
+	public static final String SVG_FLECHADERECHA = "iFlechaDerecha";
+	public static final String SVG_FLECHAIZQUIERDA = "iFlechaIzquierda";
+	public static final String SVG_GUARDAR = "iGuardar";
+	public static final String SVG_LAPIZ = "iLapiz";
+	public static final String SVG_LUPA = "iLupa";
+	public static final String SVG_PAPELERA = "iPapelera";
+	public static final String SVG_PLUS = "iPlus";
+	public static final String SVG_TAG = "iTag";
 
 }

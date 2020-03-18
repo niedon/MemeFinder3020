@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<fx:root type="javafx.scene.layout.StackPane" alignment="TOP_LEFT" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<fx:root type="javafx.scene.layout.StackPane" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="paneEtiquetas" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <children>
-    <FlowPane fx:id="fpEtiquetas" prefHeight="-1.0" prefWidth="-1.0" style="-fx-border-style: solid; -fx-padding: 10; -fx-border-insets: 13 5 5 5; -fx-border-radius: 5;" />
-    <Label style="-fx-background-color: #f4f4f4" text="Label">
+    <FlowPane fx:id="fpEtiquetas" maxHeight="-1.0" maxWidth="-1.0" minHeight="50.0" minWidth="50.0" prefHeight="-1.0" prefWidth="-1.0" prefWrapLength="50.0" style="-fx-backdroung-color:red;" styleClass="flowPaneEtiquetas" />
+    <Label styleClass="labelTituloEtiquetas" text="Etiquetas">
       <StackPane.margin>
         <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
       </StackPane.margin>

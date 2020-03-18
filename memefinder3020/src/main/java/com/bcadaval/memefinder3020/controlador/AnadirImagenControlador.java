@@ -13,6 +13,7 @@ import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
+import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.collections.FXCollections;
@@ -47,38 +48,26 @@ public class AnadirImagenControlador extends Controlador {
 	
 	private FileChooser fileChooser;
 	
-	@FXML
-	private TextField tfDireccion;
+	@FXML private TextField tfDireccion;
+	@FXML private Button btExaminar;
 
-	@FXML
-	private ImageView ivImagen;
-	@FXML
-	private Button btAnterior;
-	@FXML
-	private Label lbNumero;
-	@FXML
-	private Button btSiguiente;
+	@FXML private ImageView ivImagen;
+	@FXML private Button btAnterior;
+	@FXML private Label lbNumero;
+	@FXML private Button btSiguiente;
 
-	@FXML
-	private TextField tfEtiqueta;
-	@FXML
-	private Button btAnadir;
-	@FXML
-	private TextField tfNombre;
-	@FXML
-	private ComboBox<String> cbCategoria;
-	@FXML
-	private Button btCoincidencias;
-	@FXML
-	private Label lbCoincidencias;
-	@FXML
-	private AnchorPane apEtiquetas;
+	@FXML private TextField tfEtiqueta;
+	@FXML private Button btAnadir;
+	@FXML private TextField tfNombre;
+	@FXML private ComboBox<String> cbCategoria;
+	@FXML private Button btCoincidencias;
+	@FXML private Label lbCoincidencias;
+	@FXML private AnchorPane apEtiquetas;
 	private PaneEtiquetas paneEtiquetas;
 
-	@FXML
-	private Button btEliminar;
-	@FXML
-	private Button btGuardar;
+	@FXML private Button btVolver;
+	@FXML private Button btEliminar;
+	@FXML private Button btGuardar;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -114,8 +103,13 @@ public class AnadirImagenControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		// TODO Auto-generated method stub
-
+		setGraficos(btExaminar, String.format(Constantes.RUTA_SVG, Constantes.SVG_LUPA));
+		setGraficos(btAnadir, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
+		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
+		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
+		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
+		setGraficos(btEliminar, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
+		setGraficos(btGuardar, String.format(Constantes.RUTA_SVG, Constantes.SVG_GUARDAR));
 	}
 
 	@Override
@@ -326,7 +320,6 @@ public class AnadirImagenControlador extends Controlador {
 		btAnadir.setDisable(imagenes.isEmpty());
 		
 		btEliminar.setDisable(imagenes.isEmpty());
-		
 		
 	}
 	

@@ -30,7 +30,7 @@
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                   <children>
                     <Label fx:id="lbNombre" text="" />
-                    <TextField fx:id="tfNombre" prefWidth="200.0" />
+                    <TextField fx:id="tfNombre" prefWidth="200.0" promptText="Nombre" />
                   </children>
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -45,7 +45,7 @@
                         </FXCollections>
                       </items>
                     </ComboBox>
-                    <Button fx:id="btLimpiarCategoria" mnemonicParsing="false" onAction="#btLimpiarCategoria_click" text="Button" />
+                    <Button fx:id="btLimpiarCategoria" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btLimpiarCategoria_click" prefHeight="25.0" prefWidth="35.0" text="Button" />
                   </children>
                 </HBox>
                 <Label fx:id="lbFecha" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -54,8 +54,8 @@
                 <Label fx:id="lbPeso" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
                   <children>
-                    <TextField fx:id="tfEtiquetas" prefWidth="169.0" />
-                    <Button fx:id="btEtiquetas" mnemonicParsing="false" onAction="#btEtiquetas_click" text="Button" />
+                    <TextField fx:id="tfEtiquetas" onKeyPressed="#tfEtiquetas_keyPressed" prefWidth="169.0" promptText="Etiquetas" />
+                    <Button fx:id="btEtiquetas" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btEtiquetas_click" prefHeight="25.0" prefWidth="25.0" text="Button" />
                   </children>
                 </HBox>
               </children>
@@ -74,11 +74,15 @@
               </rowConstraints>
             </GridPane>
             <AnchorPane fx:id="apEtiquetas" prefHeight="503.0" prefWidth="233.0" />
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0">
+              <children>
+                <Button fx:id="btEditarGuardar" contentDisplay="LEFT" mnemonicParsing="false" onAction="#btEditarGuardar_click" prefHeight="25.0" prefWidth="100.0" text="Editar" />
+              </children>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="55.0" prefWidth="233.0">
               <children>
-                <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_click" text="Volver" />
-                <Button fx:id="btEditarGuardar" mnemonicParsing="false" onAction="#btEditarGuardar_click" text="Editar" />
-                <Button fx:id="btBorrar" mnemonicParsing="false" onAction="#btBorrar_click" text="Borrar" />
+                <Button fx:id="btVolver" contentDisplay="LEFT" mnemonicParsing="false" onAction="#btVolver_click" prefHeight="25.0" prefWidth="100.0" text="Volver" />
+                <Button fx:id="btBorrar" contentDisplay="LEFT" mnemonicParsing="false" onAction="#btBorrar_click" prefHeight="25.0" prefWidth="100.0" text="Borrar" />
               </children>
             </HBox>
           </children>

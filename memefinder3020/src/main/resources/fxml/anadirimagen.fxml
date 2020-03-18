@@ -17,12 +17,12 @@
           <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="512.0">
               <children>
-                <TextField fx:id="tfDireccion" editable="false" prefWidth="336.0">
+                <TextField fx:id="tfDireccion" editable="false" prefWidth="336.0" promptText="Ruta del archivo">
                   <HBox.margin>
                     <Insets right="15.0" />
                   </HBox.margin>
                 </TextField>
-                <Button id="btExaminar" mnemonicParsing="false" onAction="#btExaminar_click" text="Examinar" />
+                <Button fx:id="btExaminar" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btExaminar_click" prefHeight="30.0" prefWidth="60.0" text="Examinar" />
               </children>
             </HBox>
             <BorderPane maxHeight="620.0" prefHeight="620.0" prefWidth="512.0">
@@ -32,7 +32,7 @@
             </BorderPane>
             <HBox alignment="CENTER" prefHeight="47.0" prefWidth="512.0">
               <children>
-                <Button fx:id="btAnterior" mnemonicParsing="false" onAction="#btAnterior_click" text="&lt;&lt;">
+                <Button fx:id="btAnterior" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btAnterior_click" prefHeight="30.0" prefWidth="40.0" text="&lt;&lt;">
                   <HBox.margin>
                     <Insets right="10.0" fx:id="x1" />
                   </HBox.margin>
@@ -42,7 +42,7 @@
                     <Insets right="10.0" fx:id="x1" />
                   </HBox.margin>
                 </Label>
-                <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" text="&gt;&gt;" />
+                <Button fx:id="btSiguiente" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btSiguiente_click" prefHeight="30.0" prefWidth="40.0" text="&gt;&gt;" />
               </children>
             </HBox>
           </children>
@@ -55,9 +55,9 @@
                 <Label text="Etiquetas:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
                 <Label text="Nombre:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                 <TextField fx:id="tfEtiqueta" onKeyPressed="#tfEtiqueta_keyPressed" prefWidth="233.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <Button fx:id="btAnadir" mnemonicParsing="false" onAction="#btAnadir_click" text="Añadir" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                <Button fx:id="btAnadir" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btAnadir_click" prefHeight="25.0" prefWidth="25.0" text="Añadir" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
                 <TextField fx:id="tfNombre" prefWidth="246.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button fx:id="btCoincidencias" mnemonicParsing="false" onAction="#btCoincidencias_click" text="Coincidencias" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Button fx:id="btCoincidencias" mnemonicParsing="false" onAction="#btCoincidencias_click" prefHeight="30.0" text="Coincidencias" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <Label fx:id="lbCoincidencias" prefWidth="311.0" text="Coincidencias label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <Label text="Categoría:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                 <ComboBox fx:id="cbCategoria" editable="true" prefHeight="21.0" prefWidth="261.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
@@ -86,17 +86,17 @@
             <AnchorPane fx:id="apEtiquetas" prefHeight="547.0" prefWidth="512.0" />
             <HBox alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="512.0">
               <children>
-                <Button mnemonicParsing="false" onAction="#btVolver_clic" prefHeight="35.0" prefWidth="100.0" text="Volver">
+                <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_clic" prefHeight="35.0" prefWidth="120.0" text="Volver">
                   <HBox.margin>
                     <Insets right="20.0" />
                   </HBox.margin>
                 </Button>
-                <Button fx:id="btEliminar" mnemonicParsing="false" onAction="#btEliminiar_click" prefHeight="35.0" prefWidth="100.0" text="Eliminar">
+                <Button fx:id="btEliminar" mnemonicParsing="false" onAction="#btEliminiar_click" prefHeight="35.0" prefWidth="120.0" text="Eliminar">
                   <HBox.margin>
                     <Insets right="20.0" />
                   </HBox.margin>
                 </Button>
-                <Button fx:id="btGuardar" mnemonicParsing="false" onAction="#btGuardar_click" prefHeight="35.0" prefWidth="100.0" text="Guardar">
+                <Button fx:id="btGuardar" mnemonicParsing="false" onAction="#btGuardar_click" prefHeight="35.0" prefWidth="120.0" text="Guardar">
                   <HBox.margin>
                     <Insets right="30.0" />
                   </HBox.margin>

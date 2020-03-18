@@ -18,6 +18,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
+import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
@@ -49,6 +50,7 @@ public class ResultadosControlador extends Controlador{
 	
 	private ObservableList<Categoria> listaCategorias;
 	
+	@FXML private Button btBuscar;
 	@FXML private TextField tfNombre;
 	@FXML private CheckBox cbSinCategoria;
 	@FXML private ComboBox<Categoria> cbCategoria;
@@ -56,12 +58,14 @@ public class ResultadosControlador extends Controlador{
 	@FXML private CheckBox cbDespuesDe;
 	@FXML private CheckBox cbAntesDe;
 	@FXML private TextField tfEtiquetas;
+	@FXML private Button btAnadirEtiqueta;
 	@FXML private DatePicker dpDespuesDe;
 	@FXML private DatePicker dpAntesDe;
 	@FXML private CheckBox cbSinEtiquetas;
 	
 	@FXML private AnchorPane apEtiquetasBusqueda;
 	private PaneEtiquetas paneEtiquetasBusqueda;
+	@FXML private Label lbNumResultados;
 
 	@FXML private GridPane gpResultados;
 	
@@ -73,6 +77,7 @@ public class ResultadosControlador extends Controlador{
 	@FXML private Label lbSeleccionada;
 	@FXML private AnchorPane apSeleccionadaEtiquetas;
 	private PaneEtiquetas paneEtiquetasSeleccionada;
+	@FXML private Button btVolver;
 	@FXML private Button btAmpliar;
 
 	@Override
@@ -116,8 +121,12 @@ public class ResultadosControlador extends Controlador{
 
 	@Override
 	public void initComponentes() {
-		// TODO Auto-generated method stub
-		
+		setGraficos(btBuscar, String.format(Constantes.RUTA_SVG, Constantes.SVG_LUPA));
+		setGraficos(btLimpiarCategoria, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
+		setGraficos(btAnadirEtiqueta, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
+		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
+		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
+		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
 	}
 
 	@Override
@@ -156,7 +165,7 @@ public class ResultadosControlador extends Controlador{
 	
 	@FXML
 	private void btLimpiarCategoria_click(ActionEvent event) {
-		cbCategoria.getSelectionModel().clearSelection();
+		cbCategoria.valueProperty().set(null);
 	}
 	
 	@FXML
@@ -180,6 +189,11 @@ public class ResultadosControlador extends Controlador{
 	private void btSiguiente_click(ActionEvent event) {
 		pageable = page.nextPageable();
 		realizarBusqueda();
+	}
+	
+	@FXML
+	private void btVolver_click(ActionEvent event) {
+		gestorDeVentanas.cambiarEscena(Vistas.INICIO);
 	}
 	
 	@FXML
@@ -252,17 +266,23 @@ public class ResultadosControlador extends Controlador{
 		
 		listaCategorias.setAll(servicioCategoria.getAll());
 		
+		int num = (int)page.getTotalElements();
+		lbNumResultados.setText(num + " resultado" + (num==1?"":"s"));
+		
 		gpResultados.getChildren().clear();
 		
 		for (int i=0; i<5; i++) {
 			if(i<page.getContent().size()) {
-				PaneResultado pr = new PaneResultado(page.getContent().get(i),servicioEtiqueta.countUsosDeEtiquetas(page.getContent().get(i).getEtiquetas()));
+				PaneResultado pr = new PaneResultado(page.getContent().get(i));
 				pr.setOnMouseClicked(me -> {
 					refrescarSeleccionada(GridPane.getRowIndex(pr));
 				});
 				gpResultados.add(pr, 0, i);
+				
 			}else {
-				gpResultados.add(new AnchorPane(new Label("cambiar por otra cosa")), 0, i);
+				AnchorPane ap = new AnchorPane();
+				ap.getStyleClass().add("paneResultado");
+				gpResultados.add(ap, 0, i);
 			}
 		}
 		

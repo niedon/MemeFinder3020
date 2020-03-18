@@ -1,0 +1,119 @@
+.root {
+	-fx-font-size: 13px;
+    -fx-font-family: sans-serif;
+    -fx-background-color: #efefef;
+    -fx-test: #0000ff;
+    
+    -fx-fondo-etiqueta: #C3C3FF;
+    -fx-fondo-boton-etiqueta: #7D8BFF;
+    -fx-fondo-elemento: #AEAEAE;
+    -fx-fondo-borde: #5B5B5B;
+}
+
+
+
+.labelTitulo{
+	-fx-font-size: 16px;
+	-fx-underline: true;
+	-fx-font-weight: bold;
+}
+
+.labelTituloEtiquetas{
+	
+	-fx-font-size: 16px;
+	-fx-font-weight: bold;
+	
+	-fx-border-style: solid;
+	-fx-border-color: -fx-fondo-borde;
+	-fx-border-width: 2px;
+	-fx-border-radius: 3px;
+	
+	-fx-background-color: -fx-fondo-elemento;
+	-fx-background-radius: 3px;
+	
+	-fx-padding: 0 5 0 5;
+}
+
+.button{
+	-fx-border-style: solid;
+	-fx-border-color: -fx-fondo-borde;
+	-fx-border-width: 2px;
+	-fx-border-radius: 3px;
+}
+
+.paneBordeGrueso{
+	-fx-border-style: solid;
+	-fx-border-color: -fx-fondo-borde;
+	-fx-padding: 5;
+	-fx-border-width: 5;
+	-fx-border-insets: 5;
+	-fx-border-radius: 5;
+	
+	-fx-background-color: #AEAEAE;
+	-fx-background-insets: 5;
+	-fx-background-radius: 5;
+}
+
+/* =========== PANE ETIQUETAS =========== */
+
+.paneEtiquetas .flowPaneEtiquetas{
+	
+	-fx-border-style: solid;
+	-fx-border-color: -fx-fondo-borde;
+	-fx-padding: 15 20 5 5;
+	-fx-border-width: 5px;
+	-fx-border-insets: 13 5 5 5;
+	-fx-border-radius: 5;
+	
+	-fx-background-color: #AEAEAE;
+	-fx-background-insets: 13 5 5 5;
+	-fx-background-radius: 5;
+	
+	-fx-hgap: 5;
+	-fx-vgap: 5;
+	
+}
+.paneEtiquetas .label{
+	-fx-background-color: inherit;
+	
+}
+
+.paneResultado{
+	
+	-fx-background-insets: 5px;
+	-fx-border-insets: 5px;
+	
+	-fx-background-color: -fx-fondo-elemento;
+	
+	-fx-border-style: solid;
+	-fx-border-color: -fx-fondo-borde;
+	-fx-padding: 4;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+	-fx-border-width: 5px;
+	
+}
+
+.labelPseudoEtiqueta{
+	
+	-fx-background-color:-fx-fondo-etiqueta;
+	-fx-border-style: solid;
+	-fx-padding: 4;
+	-fx-border-radius: 10;
+	-fx-background-radius: 10;
+}
+
+.hboxEtiqueta {
+	-fx-background-color:-fx-fondo-etiqueta;
+	-fx-border-style: solid;
+	-fx-padding: 4;
+	-fx-border-radius: 10;
+	-fx-background-radius: 10;
+}
+
+.hboxEtiqueta .button{
+	-fx-padding: 0px;
+	-fx-background-radius: 5px;
+	-fx-background-color: -fx-fondo-boton-etiqueta;
+}
+

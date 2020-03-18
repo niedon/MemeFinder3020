@@ -7,6 +7,7 @@ import com.bcadaval.memefinder3020.Main;
 import com.bcadaval.memefinder3020.principal.GestorDeVentanas;
 import com.bcadaval.memefinder3020.principal.SpringFxmlLoader;
 
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -27,7 +28,7 @@ public class TaskSplash extends Task<Void> {
 	@Override
 	protected Void call() throws Exception {
 		int tareasActuales = 0;
-		int tareasMax = 3;
+		int tareasMax = 4;
 		
 		updateMessage("Iniciando carga de Spring");
 		updateProgress(++tareasActuales, tareasMax);
@@ -36,6 +37,10 @@ public class TaskSplash extends Task<Void> {
 		updateMessage("Cargando vistas");
 		updateProgress(++tareasActuales, tareasMax);
 		ctx.getBean(SpringFxmlLoader.class).cargaVistas();
+		
+		updateMessage("Instalando lector de SVG");
+		updateProgress(++tareasActuales, tareasMax);
+		SvgImageLoaderFactory.install();
 		
 		updateMessage("Carga finalizada");
 		updateProgress(++tareasActuales, tareasMax);

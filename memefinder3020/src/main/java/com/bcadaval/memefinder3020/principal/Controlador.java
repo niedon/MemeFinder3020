@@ -1,5 +1,6 @@
 package com.bcadaval.memefinder3020.principal;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Labeled;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -62,6 +65,23 @@ public abstract class Controlador implements Initializable{
 			iv.setFitHeight(parent.getPrefHeight());
 		}
 	}
+	
+    protected void setGraficos(Labeled elemento, String ruta){
+        
+        InputStream stream = this.getClass().getResourceAsStream(ruta);
+        if(stream!=null) {
+            
+            double ancho = elemento.getPrefWidth()*0.7;
+            double alto = elemento.getPrefHeight()*0.7;
+            
+            elemento.setGraphic(new ImageView(new Image(stream,
+                    Math.min(alto, ancho),
+                    Math.min(alto, ancho),
+                    true,
+                    true)));
+        }
+        
+    }
 	
 	//--------------Concurrencia--------------
 	
