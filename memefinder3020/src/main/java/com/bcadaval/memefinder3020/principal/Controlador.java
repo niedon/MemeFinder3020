@@ -12,6 +12,8 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 public abstract class Controlador implements Initializable{
 	
@@ -48,6 +50,17 @@ public abstract class Controlador implements Initializable{
 	
 	protected Vistas getVistaOrigen() {
 		return (Vistas) datos.get(VISTA_ORIGEN);
+	}
+	
+	protected void setFit(ImageView iv) {
+		Pane parent = (Pane) iv.getParent();
+		if(parent.getPrefWidth()>iv.getImage().getWidth() && parent.getPrefHeight()>iv.getImage().getHeight()) {
+			iv.setFitWidth(iv.getImage().getWidth());
+			iv.setFitHeight(iv.getImage().getHeight());
+		}else {
+			iv.setFitWidth(parent.getPrefWidth());
+			iv.setFitHeight(parent.getPrefHeight());
+		}
 	}
 	
 	//--------------Concurrencia--------------

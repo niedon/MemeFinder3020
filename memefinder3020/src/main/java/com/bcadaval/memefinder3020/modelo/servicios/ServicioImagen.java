@@ -18,6 +18,9 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 
@@ -44,6 +47,15 @@ public class ServicioImagen {
 	
 	public List<Imagen> getAllPorId(Iterable<Integer> listaId){
 		return repo.findAllById(listaId);
+	}
+	
+	public Imagen getPorId(Integer id) {
+		return repo.findById(id).get();
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public Imagen save(Imagen imagen) {
+		return repo.saveAndFlush(imagen);
 	}
 	
 	@Transactional(rollbackOn = Exception.class)
@@ -95,10 +107,9 @@ public class ServicioImagen {
 				Constantes.RUTA_IMAGENES.toString(),
 				String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension())),
 				StandardCopyOption.REPLACE_EXISTING);
-		
 	}
 	
-	public List<Imagen> getBusqueda(ImagenBusqueda busqueda){
+	public Page<Imagen> getBusqueda(ImagenBusqueda busqueda, Pageable pageable){
 		
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
@@ -134,8 +145,36 @@ public class ServicioImagen {
 			}
 		}
 		
-		cq.select(root).where(predicados.toArray(new Predicate[predicados.size()]));
-		return em.createQuery(cq).setMaxResults(5).setFirstResult(0).getResultList();
+		Predicate[] predicadosArray = predicados.toArray(new Predicate[predicados.size()]);
+		
+		cq.select(root).where(predicadosArray);
+		List<Imagen> resultado =  em.createQuery(cq).setMaxResults(pageable.getPageSize()).setFirstResult((int)pageable.getOffset()).getResultList();
+		
+		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+		Root<Imagen> rootCount = countQuery.from(Imagen.class);
+		countQuery.select(cb.count(rootCount)).where(cb.and(predicadosArray));
+		
+		Long count = em.createQuery(countQuery).getSingleResult();
+		
+		Page<Imagen> retorna = new PageImpl<>(resultado, pageable, count);
+		return retorna;
+		
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void borrarPorId(Integer id) {
+		Imagen imgBorrar = repo.findById(id).get();
+		//TODO si no existe lanzar excepción
+		repo.deleteById(id);
+		try {
+			Files.deleteIfExists(FileSystems.getDefault().getPath(Constantes.RUTA_IMAGENES.toString(),
+					String.format("%d.%s", imgBorrar.getId(),imgBorrar.getExtension())));
+		} catch (IOException e) {
+			e.printStackTrace();
+			//TODO logger archivo no existe
+			throw new RuntimeException("No se ha podido borrar el archivo");
+		}
+		
 	}
 	
 }

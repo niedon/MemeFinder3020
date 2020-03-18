@@ -53,7 +53,7 @@ public class ServicioEtiqueta {
 		return retorna;
 	}
 	
-	@Transactional
+	@Transactional(rollbackOn = Exception.class)
 	public Etiqueta getPorNombre(String nombreEtiqueta) {
 		
 		Etiqueta etParaEjemplo = new Etiqueta();
@@ -61,6 +61,15 @@ public class ServicioEtiqueta {
 		Example<Etiqueta> ejemplo = Example.of(etParaEjemplo,ExampleMatcher.matchingAll());
 		List<Etiqueta> resultado = repo.findAll(ejemplo);
 		return resultado.isEmpty() ? null : resultado.get(0);
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public Etiqueta getOCrear(String nombreEtiqueta) {
+		Etiqueta et = getPorNombre(nombreEtiqueta);
+		if(et==null) {
+			et = anadir(nombreEtiqueta);
+		}
+		return et;
 	}
 	
 }

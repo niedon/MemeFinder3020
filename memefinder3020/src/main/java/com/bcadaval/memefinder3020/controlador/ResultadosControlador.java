@@ -2,9 +2,12 @@ package com.bcadaval.memefinder3020.controlador;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
@@ -14,6 +17,8 @@ import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
 import com.bcadaval.memefinder3020.principal.Controlador;
+import com.bcadaval.memefinder3020.principal.Vistas;
+import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.collections.FXCollections;
@@ -27,6 +32,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -34,7 +40,12 @@ import javafx.scene.layout.GridPane;
 @Controller
 public class ResultadosControlador extends Controlador{
 	
-	private List<Imagen> resultados;
+	static final String DATOS_IMAGENSELECCIONADA = "imagenSeleccionada";
+	
+	private Pageable pageable;
+	private Page<Imagen> page;
+	private ImagenBusqueda busqueda;
+	private Imagen imgSeleccionada;
 	
 	private ObservableList<Categoria> listaCategorias;
 	
@@ -116,9 +127,16 @@ public class ResultadosControlador extends Controlador{
 		case INICIO:
 			limpiarCampos();
 			tfNombre.setText((String)datos.get(InicioControlador.DATOS_TF_BUSQUEDA));
-			iniciarBusqueda();
+			rellenarBusqueda();
 			break;
 
+		case RESULTADOINDIVIDUAL:
+			if((boolean)datos.get(ResultadoIndividualControlador.DATOS_HAYCAMBIOS)) {
+				limpiarSeleccionada();
+				rellenarBusqueda();
+			}
+			break;
+			
 		default:
 			throw new RuntimeException("Pantalla no contemplada");
 		}
@@ -127,28 +145,18 @@ public class ResultadosControlador extends Controlador{
 
 	@Override
 	public void initFoco() {
-		// TODO Auto-generated method stub
-		
+		tfNombre.requestFocus();
 	}
 	
 	@FXML
 	private void btBuscar_click(ActionEvent event) {
-		iniciarBusqueda();
+		limpiarSeleccionada();
+		rellenarBusqueda();
 	}
 	
 	@FXML
 	private void btLimpiarCategoria_click(ActionEvent event) {
 		cbCategoria.getSelectionModel().clearSelection();
-	}
-	
-	@FXML
-	private void cbDespuesDe_click(ActionEvent event) {
-		
-	}
-	
-	@FXML
-	private void cbAntesDe_click(ActionEvent event) {
-		
 	}
 	
 	@FXML
@@ -160,23 +168,26 @@ public class ResultadosControlador extends Controlador{
 			paneEtiquetasBusqueda.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(etiqueta), etiqueta);
 		}
 		
-		
-		
 	}
 	
 	@FXML
 	private void btAnterior_click(ActionEvent event) {
-		
+		pageable = page.previousPageable();
+		realizarBusqueda();
 	}
 	
 	@FXML
 	private void btSiguiente_click(ActionEvent event) {
-		
+		pageable = page.nextPageable();
+		realizarBusqueda();
 	}
 	
 	@FXML
 	private void btAmpliar_click(ActionEvent event) {
-		
+		if(imgSeleccionada!=null) {
+			datos.put(DATOS_IMAGENSELECCIONADA, imgSeleccionada);
+			gestorDeVentanas.cambiarEscena(Vistas.RESULTADOINDIVIDUAL);
+		}
 	}
 	
 	//---------------------------------------------
@@ -187,17 +198,21 @@ public class ResultadosControlador extends Controlador{
 	}
 	
 	private void limpiarCampos() {
+		
 		tfNombre.clear();
 		cbDespuesDe.setSelected(false);
 		cbAntesDe.setSelected(false);
 		tfEtiquetas.clear();
 		cbSinEtiquetas.setSelected(false);
 		
+		limpiarSeleccionada();
+		
 	}
 
-	private void iniciarBusqueda() {
+	private void rellenarBusqueda() {
 		
-		ImagenBusqueda busqueda = new ImagenBusqueda();
+		pageable = PageRequest.of(0, 5, Direction.DESC, "id");
+		busqueda = new ImagenBusqueda();
 		
 		String textoNombre = tfNombre.getText().trim().toUpperCase();
 		if(!textoNombre.isEmpty()) {
@@ -225,8 +240,11 @@ public class ResultadosControlador extends Controlador{
 		}
 		busqueda.setEtiquetas(etiquetas);
 		
-		
-		resultados = servicioImagen.getBusqueda(busqueda);
+		realizarBusqueda();
+	}
+	
+	private void realizarBusqueda() {
+		page = servicioImagen.getBusqueda(busqueda, pageable);
 		refrescarInterfaz();
 	}
 	
@@ -237,13 +255,57 @@ public class ResultadosControlador extends Controlador{
 		gpResultados.getChildren().clear();
 		
 		for (int i=0; i<5; i++) {
-			if(i<resultados.size()) {
-				gpResultados.add(new PaneResultado(resultados.get(i),servicioEtiqueta.countUsosDeEtiquetas(resultados.get(i).getEtiquetas())), 0, i);
+			if(i<page.getContent().size()) {
+				PaneResultado pr = new PaneResultado(page.getContent().get(i),servicioEtiqueta.countUsosDeEtiquetas(page.getContent().get(i).getEtiquetas()));
+				pr.setOnMouseClicked(me -> {
+					refrescarSeleccionada(GridPane.getRowIndex(pr));
+				});
+				gpResultados.add(pr, 0, i);
 			}else {
 				gpResultados.add(new AnchorPane(new Label("cambiar por otra cosa")), 0, i);
 			}
 		}
 		
+		btAnterior.setDisable(!page.hasPrevious());
+		btSiguiente.setDisable(!page.hasNext());
+		if(page.getTotalPages()==0) {
+			lbMarcador.setText("0/0");
+		}else {
+			lbMarcador.setText((page.getNumber()+1) + "/" + page.getTotalPages());
+		}
+	}
+	
+	private void refrescarSeleccionada(int index) {
+		
+		if(index<0 || index>=page.getContent().size()) {
+			limpiarSeleccionada();
+			return;
+		}
+		
+		imgSeleccionada = page.getContent().get(index);
+		
+		ivSeleccionada.setImage(new Image(IOUtils.getURLDeImagen(imgSeleccionada)));
+		setFit(ivSeleccionada);
+		
+		if(imgSeleccionada.getNombre()==null) {
+			lbSeleccionada.setText("[Sin nombre]");
+		}else {
+			lbSeleccionada.setText(imgSeleccionada.getNombre());
+		}
+		paneEtiquetasSeleccionada.borrarEtiquetas();
+		for(Etiqueta et : imgSeleccionada.getEtiquetas()) {
+			paneEtiquetasSeleccionada.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(et), et.getNombre());
+		}
+		btAmpliar.setDisable(false);
+		
+		
+	}
+	
+	private void limpiarSeleccionada() {
+		ivSeleccionada.setImage(null);
+		lbSeleccionada.setText("");
+		paneEtiquetasSeleccionada.borrarEtiquetas();
+		btAmpliar.setDisable(true);
 	}
 
 }

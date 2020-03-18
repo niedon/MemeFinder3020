@@ -32,7 +32,6 @@ public class Imagen {
 	private Integer id;
 	
 	@Column(name="NOMBRE",
-			nullable = false,
 			length = 64)
 	private String nombre;
 	

@@ -1,6 +1,5 @@
 package com.bcadaval.memefinder3020.controlador;
 
-import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -93,6 +92,7 @@ public class CoincidenciasControlador extends Controlador {
 			marcador = 0;
 			
 			ivNueva.setImage(new Image(imgNueva.getImagen().toURI().toString()));
+			setFit(ivNueva);
 			imgNueva.getEtiquetas().forEach( el -> {
 				flowNueva.getChildren().add(new HBoxEtiqueta(el.getNumVeces(), el.getNombre()));
 			});
@@ -101,13 +101,7 @@ public class CoincidenciasControlador extends Controlador {
 			String nombreImagenNueva = imgNueva.getImagen().getName();
 			lbExtensionNueva.setText(nombreImagenNueva.substring(nombreImagenNueva.lastIndexOf('.')));
 			
-			try {
-				Dimension d = IOUtils.getImageDimension(imgNueva.getImagen());
-				lbResolucionNueva.setText(d.width + " x " + d.height);
-			} catch (IOException e) {
-				//TODO log
-				lbResolucionNueva.setText("No disponible");
-			}
+			lbResolucionNueva.setText(ivNueva.getImage().getWidth() + " x " + ivNueva.getImage().getHeight());
 			
 			if(imgNueva.getCategoria() == null) {
 				lbCategoriaNueva.setText("[Sin categoría]");
@@ -201,6 +195,7 @@ public class CoincidenciasControlador extends Controlador {
 		Imagen elegida = listaImgCoincidencias.get(marcador);
 		
 		ivOriginal.setImage(new Image(IOUtils.getURLDeImagen(elegida)));
+		setFit(ivOriginal);
 		
 		elegida.getEtiquetas().forEach( el -> {
 			flowOriginal.getChildren().add(new HBoxEtiqueta(el.getImagenes().size(), el.getNombre()));

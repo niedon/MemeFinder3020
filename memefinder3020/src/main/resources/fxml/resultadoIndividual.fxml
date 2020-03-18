@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.bcadaval.memefinder3020.controlador.ResultadoIndividualControlador">
+  <children>
+    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <BorderPane minWidth="400.0" prefHeight="768.0" prefWidth="791.0">
+          <center>
+            <ImageView fx:id="ivImagen" fitHeight="1.0" fitWidth="1.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+          </center>
+        </BorderPane>
+        <VBox alignment="BOTTOM_CENTER" prefHeight="768.0" prefWidth="233.0">
+          <children>
+            <GridPane>
+              <children>
+                <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label text="Categoría:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label text="Extensión:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <Label text="Resolución:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <Label text="Peso" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+                  <children>
+                    <Label fx:id="lbNombre" text="" />
+                    <TextField fx:id="tfNombre" prefWidth="200.0" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <children>
+                    <Label fx:id="lbCategoria" text="Label" />
+                    <ComboBox fx:id="cbCategoria">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ComboBox>
+                    <Button fx:id="btLimpiarCategoria" mnemonicParsing="false" onAction="#btLimpiarCategoria_click" text="Button" />
+                  </children>
+                </HBox>
+                <Label fx:id="lbFecha" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                <Label fx:id="lbExtension" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Label fx:id="lbResolucion" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                <Label fx:id="lbPeso" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                  <children>
+                    <TextField fx:id="tfEtiquetas" prefWidth="169.0" />
+                    <Button fx:id="btEtiquetas" mnemonicParsing="false" onAction="#btEtiquetas_click" text="Button" />
+                  </children>
+                </HBox>
+              </children>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.0" minWidth="10.0" prefWidth="73.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+            <AnchorPane fx:id="apEtiquetas" prefHeight="503.0" prefWidth="233.0" />
+            <HBox alignment="CENTER" prefHeight="55.0" prefWidth="233.0">
+              <children>
+                <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_click" text="Volver" />
+                <Button fx:id="btEditarGuardar" mnemonicParsing="false" onAction="#btEditarGuardar_click" text="Editar" />
+                <Button fx:id="btBorrar" mnemonicParsing="false" onAction="#btBorrar_click" text="Borrar" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>

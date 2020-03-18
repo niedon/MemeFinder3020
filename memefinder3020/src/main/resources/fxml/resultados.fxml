@@ -42,17 +42,17 @@
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2">
                            <children>
                               <TextField fx:id="tfNombre" prefHeight="25.0" prefWidth="190.0" />
-                              <Button mnemonicParsing="false" onAction="#btBuscar_click" text="Button" />
+                              <Button mnemonicParsing="false" onAction="#btBuscar_click" text="Buscar" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
                            <children>
-                              <CheckBox fx:id="cbDespuesDe" mnemonicParsing="false" onAction="#cbDespuesDe_click" text="Después de:" />
+                              <CheckBox fx:id="cbDespuesDe" mnemonicParsing="false" text="Después de:" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                            <children>
-                              <CheckBox fx:id="cbAntesDe" mnemonicParsing="false" onAction="#cbAntesDe_click" text="Antes de: " />
+                              <CheckBox fx:id="cbAntesDe" mnemonicParsing="false" text="Antes de: " />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
@@ -60,7 +60,7 @@
                               <HBox alignment="CENTER" prefHeight="40.0" prefWidth="260.0">
                                  <children>
                                     <TextField fx:id="tfEtiquetas" prefHeight="25.0" prefWidth="189.0" />
-                                    <Button mnemonicParsing="false" onAction="#btAnadirEtiqueta_click" text="Button" />
+                                    <Button mnemonicParsing="false" onAction="#btAnadirEtiqueta_click" text="+" />
                                  </children>
                               </HBox>
                            </children>
@@ -80,7 +80,7 @@
                             </FXCollections>
                           </items>
                         </ComboBox>
-                              <Button fx:id="btLimpiarCategoria" mnemonicParsing="false" onAction="#btLimpiarCategoria_click" text="Button" />
+                              <Button fx:id="btLimpiarCategoria" mnemonicParsing="false" onAction="#btLimpiarCategoria_click" text="Borrar" />
                            </children>
                         </HBox>
                      </children>
@@ -105,14 +105,14 @@
                   </GridPane>
                   <HBox alignment="CENTER" prefHeight="38.0" prefWidth="380.0">
                      <children>
-                        <Button fx:id="btAnterior" mnemonicParsing="false" onAction="#btAnterior_click" text="Button" />
+                        <Button fx:id="btAnterior" mnemonicParsing="false" onAction="#btAnterior_click" text="&lt;&lt;" />
                         <Label fx:id="lbMarcador" text="Label" />
-                        <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" text="Button" />
+                        <Button fx:id="btSiguiente" mnemonicParsing="false" onAction="#btSiguiente_click" text="&gt;&gt;" />
                      </children>
                   </HBox>
                </children></VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="380.0">
+        <VBox alignment="TOP_CENTER" maxWidth="380.0" prefHeight="200.0" prefWidth="380.0">
                <children>
                   <BorderPane prefHeight="380.0" prefWidth="380.0">
                      <center>
@@ -121,7 +121,7 @@
                   </BorderPane>
                   <Label fx:id="lbSeleccionada" prefHeight="30.0" text="Label" />
                   <AnchorPane fx:id="apSeleccionadaEtiquetas" prefHeight="330.0" prefWidth="200.0" />
-                  <Button fx:id="btAmpliar" mnemonicParsing="false" onAction="#btAmpliar_click" text="Button" />
+                  <Button fx:id="btAmpliar" mnemonicParsing="false" onAction="#btAmpliar_click" text="Ampliar" />
                </children></VBox>
       </children>
     </HBox>

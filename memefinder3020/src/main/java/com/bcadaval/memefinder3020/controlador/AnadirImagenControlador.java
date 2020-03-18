@@ -263,7 +263,12 @@ public class AnadirImagenControlador extends Controlador {
 		
 		if(!imagenes.isEmpty()) {
 			imagenes.get(marcador).setNombre(tfNombre.getText().trim());
-			imagenes.get(marcador).setCategoria(cbCategoria.getValue().trim().toUpperCase());
+			if(cbCategoria.getValue()==null) {
+				imagenes.get(marcador).setCategoria(null);
+			} else {
+				imagenes.get(marcador).setCategoria(cbCategoria.getValue().trim().toUpperCase());
+			}
+			
 		}
 		refrescarInterfaz();
 	}
@@ -297,7 +302,10 @@ public class AnadirImagenControlador extends Controlador {
 			ImagenTemp seleccionada = imagenes.get(marcador);
 			
 			tfDireccion.setText(seleccionada.getImagen().getAbsolutePath());
+			
 			ivImagen.setImage(new Image(seleccionada.getImagen().toURI().toString()));
+			setFit(ivImagen);
+			
 			tfNombre.setText(seleccionada.getNombre());
 			cbCategoria.setDisable(false);
 			servicioCategoria.getAll().forEach(el -> listaCategorias.add(el.getNombre()));
