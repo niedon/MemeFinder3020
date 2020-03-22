@@ -15,6 +15,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 @Component
@@ -27,6 +28,8 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	
 	private Stage stage;
 	private StackPane panePrincipal;
+	
+	private Stage stageVisor;
 	
 	private Vistas ultimaVista;
 
@@ -104,6 +107,26 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ctx = applicationContext;
+		
+	}
+	
+	public void mostrarVisorImagen() {
+		
+		Controlador c = ctx.getBean(Vistas.VISORIMAGEN.getClaseControlador());
+		
+		if(stageVisor==null) {
+			stageVisor = new Stage();
+			
+			stageVisor.initOwner(stage);
+			stageVisor.initModality(Modality.APPLICATION_MODAL);
+			
+			stageVisor.setMaximized(true);
+			stageVisor.setScene(new Scene(c.getVista()));
+			c.initComponentes();
+			
+		}
+		c.initVisionado();
+		stageVisor.showAndWait();
 		
 	}
 

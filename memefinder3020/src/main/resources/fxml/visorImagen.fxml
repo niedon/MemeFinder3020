@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="contenedor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.bcadaval.memefinder3020.controlador.VisorImagenControlador">
+  <children>
+    <ImageView fx:id="view" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <VBox fx:id="vbInterfaz" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="0.0">
+          <children>
+            <Label fx:id="lbEscala" alignment="CENTER" prefWidth="84.0" text="Label">
+              <effect>
+                <DropShadow blurType="GAUSSIAN" color="WHITE" height="41.0" radius="20.0" width="41.0" />
+              </effect>
+              <font>
+                <Font size="20.0" />
+              </font>
+            </Label>
+          </children>
+        </HBox>
+        <HBox id="hbBotones" alignment="CENTER" mouseTransparent="false" prefHeight="80.0" prefWidth="0.0" spacing="10.0" visible="true" VBox.margin="$x1">
+          <children>
+            <Button fx:id="btMenos" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" onAction="#btMenos_click" prefHeight="50.0" prefWidth="50.0" text="" />
+            <Button fx:id="btAjustar" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="" />
+            <Button fx:id="btMas" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" onAction="#btMas_click" prefHeight="50.0" prefWidth="50.0" text="" />
+          </children>
+          <padding>
+            <Insets fx:id="x1" />
+          </padding>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

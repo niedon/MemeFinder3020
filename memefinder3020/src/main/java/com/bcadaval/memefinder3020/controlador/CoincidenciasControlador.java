@@ -77,9 +77,9 @@ public class CoincidenciasControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
-		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
-		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
+		setGraficos(btAnterior, Constantes.SVG_FLECHAIZQUIERDA);
+		setGraficos(btSiguiente, Constantes.SVG_FLECHADERECHA);
+		setGraficos(btVolver, Constantes.SVG_EQUIS);
 	}
 
 	@Override
@@ -134,14 +134,10 @@ public class CoincidenciasControlador extends Controlador {
 			throw new UnsupportedOperationException("Se ha accedido desde una vista no soportada");
 		}
 		
-		
-		
 	}
 
 	@Override
 	public void initFoco() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@FXML

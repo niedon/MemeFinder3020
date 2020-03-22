@@ -103,13 +103,13 @@ public class AnadirImagenControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		setGraficos(btExaminar, String.format(Constantes.RUTA_SVG, Constantes.SVG_LUPA));
-		setGraficos(btAnadir, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
-		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
-		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
-		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
-		setGraficos(btEliminar, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
-		setGraficos(btGuardar, String.format(Constantes.RUTA_SVG, Constantes.SVG_GUARDAR));
+		setGraficos(btExaminar, Constantes.SVG_LUPA);
+		setGraficos(btAnadir, Constantes.SVG_PLUS);
+		setGraficos(btAnterior, Constantes.SVG_FLECHAIZQUIERDA);
+		setGraficos(btSiguiente, Constantes.SVG_FLECHADERECHA);
+		setGraficos(btVolver, Constantes.SVG_EQUIS);
+		setGraficos(btEliminar, Constantes.SVG_PAPELERA);
+		setGraficos(btGuardar, Constantes.SVG_GUARDAR);
 	}
 
 	@Override
@@ -136,8 +136,6 @@ public class AnadirImagenControlador extends Controlador {
 
 	@Override
 	public void initFoco() {
-		// TODO Auto-generated method stub
-
 	}
 
 	// -----------------------------------

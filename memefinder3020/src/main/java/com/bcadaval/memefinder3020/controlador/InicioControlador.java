@@ -49,11 +49,11 @@ public class InicioControlador extends Controlador {
 	
 	@Override
 	public void initComponentes() {
-		setGraficos(btBuscar, String.format(Constantes.RUTA_SVG, Constantes.SVG_LUPA));
-		setGraficos(btAnadirImagen, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
-		setGraficos(btCategorias, String.format(Constantes.RUTA_SVG, Constantes.SVG_CATEGORIA));
-		setGraficos(btEtiquetas, String.format(Constantes.RUTA_SVG, Constantes.SVG_TAG));
-		setGraficos(btAjustes, String.format(Constantes.RUTA_SVG, Constantes.SVG_AJUSTES));
+		setGraficos(btBuscar, Constantes.SVG_LUPA);
+		setGraficos(btAnadirImagen, Constantes.SVG_PLUS);
+		setGraficos(btCategorias, Constantes.SVG_CATEGORIA);
+		setGraficos(btEtiquetas, Constantes.SVG_TAG);
+		setGraficos(btAjustes, Constantes.SVG_AJUSTES);
 	}
 
 	@Override

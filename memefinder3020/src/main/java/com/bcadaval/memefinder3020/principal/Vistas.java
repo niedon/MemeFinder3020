@@ -5,13 +5,15 @@ import com.bcadaval.memefinder3020.controlador.CoincidenciasControlador;
 import com.bcadaval.memefinder3020.controlador.InicioControlador;
 import com.bcadaval.memefinder3020.controlador.ResultadoIndividualControlador;
 import com.bcadaval.memefinder3020.controlador.ResultadosControlador;
+import com.bcadaval.memefinder3020.controlador.VisorImagenControlador;
 public enum Vistas {
 	
 	INICIO("inicio", InicioControlador.class),
 	ANADIR_IMAGEN("anadirimagen", AnadirImagenControlador.class),
 	COINCIDENCIAS("coincidencias", CoincidenciasControlador.class),
 	RESULTADOS("resultados", ResultadosControlador.class),
-	RESULTADOINDIVIDUAL("resultadoIndividual",ResultadoIndividualControlador.class);
+	RESULTADOINDIVIDUAL("resultadoIndividual", ResultadoIndividualControlador.class),
+	VISORIMAGEN("visorImagen", VisorImagenControlador.class);
 	
 	private String nombre;
 	private Class<? extends Controlador> claseControlador;

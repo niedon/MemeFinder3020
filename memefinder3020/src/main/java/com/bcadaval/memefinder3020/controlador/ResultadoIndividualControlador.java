@@ -61,8 +61,9 @@ public class ResultadoIndividualControlador extends Controlador {
 	@FXML private TextField tfEtiquetas;
 	@FXML private Button btEtiquetas;
 	
-	@FXML private Button btVolver;
+	@FXML private Button btAmpliar;
 	@FXML private Button btEditarGuardar;
+	@FXML private Button btVolver;
 	@FXML private Button btBorrar;
 
 	@Override
@@ -88,10 +89,11 @@ public class ResultadoIndividualControlador extends Controlador {
 
 	@Override
 	public void initComponentes() {
-		setGraficos(btLimpiarCategoria, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
-		setGraficos(btEtiquetas, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
-		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
-		setGraficos(btBorrar, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
+		setGraficos(btLimpiarCategoria, Constantes.SVG_PAPELERA);
+		setGraficos(btEtiquetas, Constantes.SVG_PLUS);
+		setGraficos(btAmpliar, Constantes.SVG_LUPA);
+		setGraficos(btVolver, Constantes.SVG_EQUIS);
+		setGraficos(btBorrar, Constantes.SVG_PAPELERA);
 	}
 
 	@Override
@@ -114,8 +116,6 @@ public class ResultadoIndividualControlador extends Controlador {
 
 	@Override
 	public void initFoco() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	//------------------------
@@ -147,6 +147,12 @@ public class ResultadoIndividualControlador extends Controlador {
 	private void btVolver_click(ActionEvent event) {
 		datos.put(DATOS_HAYCAMBIOS, hayCambios);
 		gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
+	}
+	
+	@FXML
+	private void btAmpliar_click(ActionEvent event) {
+		datos.put(VisorImagenControlador.DATOS_IMAGENVISIONADO, ivImagen.getImage());
+		gestorDeVentanas.mostrarVisorImagen();
 	}
 	
 	@FXML
@@ -242,7 +248,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		btEtiquetas.setDisable(!poner);
 		
 		btEditarGuardar.setText(poner ? "Guardar" : "Editar");
-		setGraficos(btEditarGuardar, String.format(Constantes.RUTA_SVG, poner ? Constantes.SVG_GUARDAR : Constantes.SVG_LAPIZ));
+		setGraficos(btEditarGuardar, poner ? Constantes.SVG_GUARDAR : Constantes.SVG_LAPIZ);
 	}
 	
 	private void eliminarEtiqueta(ActionEvent ev) {

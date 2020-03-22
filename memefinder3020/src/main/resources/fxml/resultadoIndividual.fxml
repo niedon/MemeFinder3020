@@ -76,6 +76,7 @@
             <AnchorPane fx:id="apEtiquetas" prefHeight="503.0" prefWidth="233.0" />
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0">
               <children>
+                <Button fx:id="btAmpliar" mnemonicParsing="false" onAction="#btAmpliar_click" prefHeight="25.0" prefWidth="100.0" text="Ampliar" />
                 <Button fx:id="btEditarGuardar" contentDisplay="LEFT" mnemonicParsing="false" onAction="#btEditarGuardar_click" prefHeight="25.0" prefWidth="100.0" text="Editar" />
               </children>
             </HBox>

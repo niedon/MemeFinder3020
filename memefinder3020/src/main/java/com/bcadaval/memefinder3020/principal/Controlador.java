@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
+import com.bcadaval.memefinder3020.utils.Constantes;
 
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
@@ -66,9 +67,9 @@ public abstract class Controlador implements Initializable{
 		}
 	}
 	
-    protected void setGraficos(Labeled elemento, String ruta){
+    protected void setGraficos(Labeled elemento, String constSvg){
         
-        InputStream stream = this.getClass().getResourceAsStream(ruta);
+        InputStream stream = this.getClass().getResourceAsStream(String.format(Constantes.RUTA_SVG, constSvg));
         if(stream!=null) {
             
             double ancho = elemento.getPrefWidth()*0.7;

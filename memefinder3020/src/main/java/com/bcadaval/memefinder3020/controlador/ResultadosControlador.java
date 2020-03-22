@@ -121,12 +121,13 @@ public class ResultadosControlador extends Controlador{
 
 	@Override
 	public void initComponentes() {
-		setGraficos(btBuscar, String.format(Constantes.RUTA_SVG, Constantes.SVG_LUPA));
-		setGraficos(btLimpiarCategoria, String.format(Constantes.RUTA_SVG, Constantes.SVG_PAPELERA));
-		setGraficos(btAnadirEtiqueta, String.format(Constantes.RUTA_SVG, Constantes.SVG_PLUS));
-		setGraficos(btAnterior, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHAIZQUIERDA));
-		setGraficos(btSiguiente, String.format(Constantes.RUTA_SVG, Constantes.SVG_FLECHADERECHA));
-		setGraficos(btVolver, String.format(Constantes.RUTA_SVG, Constantes.SVG_EQUIS));
+		setGraficos(btBuscar, Constantes.SVG_LUPA);
+		setGraficos(btLimpiarCategoria, Constantes.SVG_PAPELERA);
+		setGraficos(btAnadirEtiqueta, Constantes.SVG_PLUS);
+		setGraficos(btAnterior, Constantes.SVG_FLECHAIZQUIERDA);
+		setGraficos(btSiguiente, Constantes.SVG_FLECHADERECHA);
+		setGraficos(btVolver, Constantes.SVG_EQUIS);
+		setGraficos(btAmpliar, Constantes.SVG_LUPA);
 	}
 
 	@Override
@@ -317,7 +318,6 @@ public class ResultadosControlador extends Controlador{
 			paneEtiquetasSeleccionada.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(et), et.getNombre());
 		}
 		btAmpliar.setDisable(false);
-		
 		
 	}
 	

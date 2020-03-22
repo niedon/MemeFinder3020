@@ -15,6 +15,7 @@ public class Constantes {
 	public static final String RUTA_IMG = "/img/%s";
 	public static final String RUTA_SVG = "/img/svg/%s.svg";
 	public static final String RUTA_CSS = "/css/%s.css";
+	public static final String RUTA_CSSESPECIFICO = "/css/especifico/%s.css"; 
 	public static final String NOMBRE_PANTALLA_CARGA = "pantallaCargando";
 	public static final String NOMBRE_PANTALLA_SPLASH = "splash";
 	public static final String NOMBRE_PANEETIQUETAS = "paneEtiquetas";
@@ -33,6 +34,9 @@ public class Constantes {
 	public static final String SVG_FLECHADERECHA = "iFlechaDerecha";
 	public static final String SVG_FLECHAIZQUIERDA = "iFlechaIzquierda";
 	public static final String SVG_GUARDAR = "iGuardar";
+	public static final String SVG_IMAGENFIT = "iImagenFit";
+	public static final String SVG_IMAGENESCALA = "iImagenEscala";
+	public static final String SVG_MENOS = "iMenos";
 	public static final String SVG_LAPIZ = "iLapiz";
 	public static final String SVG_LUPA = "iLupa";
 	public static final String SVG_PAPELERA = "iPapelera";

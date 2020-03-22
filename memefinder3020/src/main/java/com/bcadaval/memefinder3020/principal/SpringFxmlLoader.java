@@ -1,6 +1,7 @@
 package com.bcadaval.memefinder3020.principal;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +28,15 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, v.getNombre())));
 			load.setControllerFactory(ctx::getBean);
 			Parent p = load.load();
+			
+			URL cssEspecifico = getClass().getResource(String.format(Constantes.RUTA_CSSESPECIFICO, v.getNombre()));
+			if(cssEspecifico==null) {
+				//TODO al logger
+			}else {
+				//TODO al logger
+				p.getStylesheets().add(cssEspecifico.toExternalForm());
+			}
+			
 			((Controlador)load.getController()).setVista(p);
 		}
 		
