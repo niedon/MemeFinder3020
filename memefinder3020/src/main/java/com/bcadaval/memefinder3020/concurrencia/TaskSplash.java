@@ -34,13 +34,13 @@ public class TaskSplash extends Task<Void> {
 		updateProgress(++tareasActuales, tareasMax);
 		ctx = SpringApplication.run(Main.class);
 		
-		updateMessage("Cargando vistas");
-		updateProgress(++tareasActuales, tareasMax);
-		ctx.getBean(SpringFxmlLoader.class).cargaVistas();
-		
 		updateMessage("Instalando lector de SVG");
 		updateProgress(++tareasActuales, tareasMax);
 		SvgImageLoaderFactory.install();
+		
+		updateMessage("Cargando vistas");
+		updateProgress(++tareasActuales, tareasMax);
+		ctx.getBean(SpringFxmlLoader.class).cargaVistas();
 		
 		updateMessage("Carga finalizada");
 		updateProgress(++tareasActuales, tareasMax);

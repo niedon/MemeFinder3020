@@ -88,12 +88,10 @@ public class VisorImagenControlador extends Controlador {
 			view.setViewport(viewportInicio(view, contenedor));
 		});
 		
-	}
-
-	@Override
-	public void initComponentes() {
+		//Asignación de gráficos
 		setGraficos(btMenos, Constantes.SVG_MENOS);
 		setGraficos(btMas, Constantes.SVG_PLUS);
+		
 	}
 
 	@Override

@@ -99,10 +99,7 @@ public class AnadirImagenControlador extends Controlador {
 		AnchorPane.setBottomAnchor(paneEtiquetas, .0);
 		AnchorPane.setLeftAnchor(paneEtiquetas, .0);
 		
-	}
-
-	@Override
-	public void initComponentes() {
+		//Asignación de gráficos
 		setGraficos(btExaminar, Constantes.SVG_LUPA);
 		setGraficos(btAnadir, Constantes.SVG_PLUS);
 		setGraficos(btAnterior, Constantes.SVG_FLECHAIZQUIERDA);
@@ -110,6 +107,7 @@ public class AnadirImagenControlador extends Controlador {
 		setGraficos(btVolver, Constantes.SVG_EQUIS);
 		setGraficos(btEliminar, Constantes.SVG_PAPELERA);
 		setGraficos(btGuardar, Constantes.SVG_GUARDAR);
+		
 	}
 
 	@Override

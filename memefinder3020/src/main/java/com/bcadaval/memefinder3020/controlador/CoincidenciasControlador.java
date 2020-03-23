@@ -73,13 +73,11 @@ public class CoincidenciasControlador extends Controlador {
 		tpNueva.setCollapsible(false);
 		tpOriginal.setCollapsible(false);
 		
-	}
-
-	@Override
-	public void initComponentes() {
+		//Asignación de gráficos
 		setGraficos(btAnterior, Constantes.SVG_FLECHAIZQUIERDA);
 		setGraficos(btSiguiente, Constantes.SVG_FLECHADERECHA);
 		setGraficos(btVolver, Constantes.SVG_EQUIS);
+		
 	}
 
 	@Override

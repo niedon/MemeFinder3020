@@ -12,9 +12,13 @@ import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.utils.IOUtils;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,23 +45,34 @@ public class InicioControlador extends Controlador {
 	@FXML private ImageView ivUltimas3;
 	@FXML private ImageView ivUltimas4;
 
+	private Alert broma;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-	}
-	
-	@Override
-	public void initComponentes() {
 		setGraficos(btBuscar, Constantes.SVG_LUPA);
 		setGraficos(btAnadirImagen, Constantes.SVG_PLUS);
 		setGraficos(btCategorias, Constantes.SVG_CATEGORIA);
 		setGraficos(btEtiquetas, Constantes.SVG_TAG);
 		setGraficos(btAjustes, Constantes.SVG_AJUSTES);
+		Platform.runLater(() -> broma = new Alert(AlertType.INFORMATION, "No se apuren, vendrá pronto", ButtonType.OK));
+		
 	}
 
 	@Override
 	public void initVisionado() {
+		
+		switch (getVistaOrigen()) {
+		case INICIO://Viene desde pantalla de carga
+			//TODO comprobar errores
+			break;
+
+		case RESULTADOS:
+		case ANADIR_IMAGEN:
+			break;
+			
+		default:
+			throw new RuntimeException("Pantalla no contemplada");
+		}
 		
 		ultimasImagenes = servicioImagen.getUltimas(4);
 		
@@ -96,7 +111,7 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btBuscar_click(ActionEvent event) {
-		datos.put(DATOS_TF_BUSQUEDA, tfBusqueda.getText());
+		datos.put(DATOS_TF_BUSQUEDA, tfBusqueda.getText().trim());
 		gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
 	}
 	
@@ -109,17 +124,17 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btCategorias_click(ActionEvent event) {
-		
+		broma.showAndWait();
 	}
 	
 	@FXML
 	private void btEtiquetas_click(ActionEvent event) {
-		
+		broma.showAndWait();
 	}
 	
 	@FXML
 	private void btAjustes_click(ActionEvent event) {
-		
+		broma.showAndWait();
 	}
 
 }

@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 @Component
 public class GestorDeVentanas implements ApplicationContextAware{
 	
+	private static final Vistas primeraPantalla = Vistas.INICIO;
+	
 	@FXML private AnchorPane nodoPrincipalPantallaCarga;
 	@FXML private Button btCancelar;
 	
@@ -42,13 +44,28 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		Controlador c = ctx.getBean(v.getClaseControlador());
 		
 		panePrincipal.getChildren().set(0, c.getVista());
-		//TODO embutir vista de pantalla de carga para la primera pantalla que aparezca
-		if(ultimaVista != null) c.anadirVistaAMapa(ultimaVista);
+		c.anadirVistaAMapa(ultimaVista);
 		ultimaVista = v;
-		c.initComponentes();
+		
 		c.initVisionado();
 		c.initFoco();
 		c.limpiarMapa();
+	}
+	
+	private void mostrarPrimeraPantalla(){
+		
+		Controlador c = ctx.getBean(primeraPantalla.getClaseControlador());
+		panePrincipal.getChildren().set(0, c.getVista());
+		
+		//Datos de carga
+		c.anadirVistaAMapa(primeraPantalla);
+		ultimaVista = primeraPantalla;
+		Controlador.datos.put("test", "datos aquí");//TODO añadir datos de errores
+		
+		c.initVisionado();
+		c.initFoco();
+		c.limpiarMapa();
+		
 	}
 	
 	public void iniciar(Stage stage) {
@@ -63,9 +80,8 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS, "principal")).toExternalForm());
 		
 		stage.setScene(escenaPrincipal);
-		cambiarEscena(Vistas.INICIO);
+		mostrarPrimeraPantalla();
 		quitarCargando();
-		
 		
 	}
 	
@@ -107,7 +123,6 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ctx = applicationContext;
-		
 	}
 	
 	public void mostrarVisorImagen() {
@@ -122,7 +137,6 @@ public class GestorDeVentanas implements ApplicationContextAware{
 			
 			stageVisor.setMaximized(true);
 			stageVisor.setScene(new Scene(c.getVista()));
-			c.initComponentes();
 			
 		}
 		c.initVisionado();

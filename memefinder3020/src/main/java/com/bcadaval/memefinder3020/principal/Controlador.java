@@ -32,7 +32,6 @@ public abstract class Controlador implements Initializable{
 	
 	private Parent vista;
 	
-	public abstract void initComponentes();
 	public abstract void initVisionado();
 	public abstract void initFoco();
 

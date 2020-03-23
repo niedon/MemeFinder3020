@@ -14,6 +14,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
+import com.bcadaval.memefinder3020.utils.FormatUtils;
 import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
@@ -85,15 +86,13 @@ public class ResultadoIndividualControlador extends Controlador {
 		});
 		cbCategoria.setButtonCell(cbCategoria.getCellFactory().call(null));
 		
-	}
-
-	@Override
-	public void initComponentes() {
+		//Asignación de gráficos
 		setGraficos(btLimpiarCategoria, Constantes.SVG_PAPELERA);
 		setGraficos(btEtiquetas, Constantes.SVG_PLUS);
 		setGraficos(btAmpliar, Constantes.SVG_LUPA);
 		setGraficos(btVolver, Constantes.SVG_EQUIS);
 		setGraficos(btBorrar, Constantes.SVG_PAPELERA);
+		
 	}
 
 	@Override
@@ -219,7 +218,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		lbFecha.setText(imagenSeleccionada.getFecha().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
 		lbExtension.setText(imagenSeleccionada.getExtension());
 		lbResolucion.setText((int)ivImagen.getImage().getWidth() + " x " + (int)ivImagen.getImage().getHeight() + " px");
-		lbPeso.setText(IOUtils.getFileDeImagen(imagenSeleccionada).length() + " bytes");
+		lbPeso.setText(FormatUtils.formatoPeso(IOUtils.getFileDeImagen(imagenSeleccionada).length()));
 		
 		paneEtiquetas.borrarEtiquetas();
 		for(Etiqueta et : imagenSeleccionada.getEtiquetas()) {

@@ -117,10 +117,7 @@ public class ResultadosControlador extends Controlador{
 		cbCategoria.disableProperty().bind(cbSinCategoria.selectedProperty());
 		btLimpiarCategoria.disableProperty().bind(cbSinCategoria.selectedProperty());
 		
-	}
-
-	@Override
-	public void initComponentes() {
+		//Asignación de gráficos
 		setGraficos(btBuscar, Constantes.SVG_LUPA);
 		setGraficos(btLimpiarCategoria, Constantes.SVG_PAPELERA);
 		setGraficos(btAnadirEtiqueta, Constantes.SVG_PLUS);
@@ -128,6 +125,7 @@ public class ResultadosControlador extends Controlador{
 		setGraficos(btSiguiente, Constantes.SVG_FLECHADERECHA);
 		setGraficos(btVolver, Constantes.SVG_EQUIS);
 		setGraficos(btAmpliar, Constantes.SVG_LUPA);
+		
 	}
 
 	@Override
