@@ -17,7 +17,7 @@ public class SplashControlador {
 	@FXML private ProgressBar pbCarga;
 	
 	public void asignarBindings(ReadOnlyStringProperty msj, ReadOnlyDoubleProperty carga) {
-		ivPrincipal.setImage(new Image(getClass().getResource(String.format(Constantes.RUTA_IMG, "splash.jpg")).toString()));
+		ivPrincipal.setImage(new Image(getClass().getResource(String.format(Constantes.RUTA_IMG_RF, "splash.jpg")).toString()));
 		lbTexto.textProperty().bind(msj);
 		pbCarga.progressProperty().bind(carga);
 	}

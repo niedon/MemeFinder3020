@@ -49,6 +49,10 @@ public class ServicioImagen {
 		return repo.findAllById(listaId);
 	}
 	
+	public List<Integer> getAllIds(){
+		return repo.getAllIds();
+	}
+	
 	public Imagen getPorId(Integer id) {
 		return repo.findById(id).get();
 	}
@@ -112,13 +116,9 @@ public class ServicioImagen {
 		
 	}
 	
-	public void borrarImagen(Imagen imagen) {
-		repo.delete(imagen);
-	}
-	
 	public void sustituirImagen(File fNueva, Imagen imgOriginal) throws IOException {
 		Files.copy(fNueva.toPath(), FileSystems.getDefault().getPath(
-				Constantes.RUTA_IMAGENES.toString(),
+				Constantes.RUTA_IMAGENES_AC.toString(),
 				String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension())),
 				StandardCopyOption.REPLACE_EXISTING);
 	}
@@ -181,7 +181,7 @@ public class ServicioImagen {
 		//TODO si no existe lanzar excepción
 		repo.deleteById(id);
 		try {
-			Files.deleteIfExists(FileSystems.getDefault().getPath(Constantes.RUTA_IMAGENES.toString(),
+			Files.deleteIfExists(FileSystems.getDefault().getPath(Constantes.RUTA_IMAGENES_AC.toString(),
 					String.format("%d.%s", imgBorrar.getId(),imgBorrar.getExtension())));
 		} catch (IOException e) {
 			e.printStackTrace();

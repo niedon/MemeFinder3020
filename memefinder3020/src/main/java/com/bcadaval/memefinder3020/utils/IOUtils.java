@@ -11,7 +11,7 @@ public class IOUtils {
 	}
 
 	public static File getFileRutaImagen(String idYExtension) {
-		return Constantes.fs.getPath(Constantes.RUTA_IMAGENES.toString(), idYExtension).toFile();
+		return Constantes.fs.getPath(Constantes.RUTA_IMAGENES_AC.toString(), idYExtension).toFile();
 	}
 
 	public static File getFileDeImagen(Imagen imagen) {

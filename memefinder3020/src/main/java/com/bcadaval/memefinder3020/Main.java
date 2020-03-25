@@ -40,7 +40,7 @@ public class Main extends Application {
 		
 		TaskSplash ts = new TaskSplash(stage, carga);
 		SplashControlador con = new SplashControlador();
-		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, Constantes.NOMBRE_PANTALLA_SPLASH)));
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, Constantes.NOMBRE_PANTALLA_SPLASH)));
 		load.setController(con);
 		carga.setScene(new Scene(load.load()));
 		carga.show();

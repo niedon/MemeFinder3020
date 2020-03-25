@@ -68,7 +68,7 @@ public abstract class Controlador implements Initializable{
 	
     protected void setGraficos(Labeled elemento, String constSvg){
         
-        InputStream stream = this.getClass().getResourceAsStream(String.format(Constantes.RUTA_SVG, constSvg));
+        InputStream stream = this.getClass().getResourceAsStream(String.format(Constantes.RUTA_SVG_RFE, constSvg));
         if(stream!=null) {
             
             double ancho = elemento.getPrefWidth()*0.7;

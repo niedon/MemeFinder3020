@@ -28,7 +28,7 @@ public class PaneEtiquetas extends StackPane {
 	
 	public PaneEtiquetas() {
 		
-		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_COMPONENTE_FXML, Constantes.NOMBRE_PANEETIQUETAS)));
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_COMPONENTES_FXML_RFE, Constantes.NOMBRE_PANEETIQUETAS)));
 		load.setRoot(this);
 		load.setController(this);
 		

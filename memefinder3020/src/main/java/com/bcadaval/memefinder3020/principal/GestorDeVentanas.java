@@ -60,7 +60,8 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		//Datos de carga
 		c.anadirVistaAMapa(primeraPantalla);
 		ultimaVista = primeraPantalla;
-		Controlador.datos.put("test", "datos aquí");//TODO añadir datos de errores
+		//TODO añadir datos de información de carga
+		Controlador.datos.put("test", "datos aquí");
 		
 		c.initVisionado();
 		c.initFoco();
@@ -77,7 +78,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		panePrincipal.getChildren().add(1, nodoPrincipalPantallaCarga);
 		
 		Scene escenaPrincipal = new Scene(panePrincipal);
-		escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS, "principal")).toExternalForm());
+		escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS_RFE, "principal")).toExternalForm());
 		
 		stage.setScene(escenaPrincipal);
 		mostrarPrimeraPantalla();

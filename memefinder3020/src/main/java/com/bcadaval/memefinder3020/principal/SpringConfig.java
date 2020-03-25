@@ -35,7 +35,7 @@ public class SpringConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
 		
-		String url = "jdbc:hsqldb:file:" + Constantes.RUTA_BD;
+		String url = "jdbc:hsqldb:file:" + Constantes.RUTA_BD_AA;
 		dataSource.setUrl(url);
 		
 		dataSource.setUsername("SA");

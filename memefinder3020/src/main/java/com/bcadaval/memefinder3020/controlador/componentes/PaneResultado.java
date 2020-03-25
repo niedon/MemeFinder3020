@@ -25,7 +25,7 @@ public class PaneResultado extends AnchorPane{
 	
 	public PaneResultado(Imagen imagen) {
 		
-		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_COMPONENTE_FXML, Constantes.NOMBRE_PANERESULTADO)));
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_COMPONENTES_FXML_RFE, Constantes.NOMBRE_PANERESULTADO)));
 		load.setRoot(this);
 		load.setController(this);
 		

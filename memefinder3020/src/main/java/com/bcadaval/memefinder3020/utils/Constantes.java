@@ -8,21 +8,22 @@ public class Constantes {
 	
 	static final FileSystem fs = FileSystems.getDefault();
 	
-	public static final Path DIRECTORIO_BASE = fs.getPath(System.getProperty("user.home"), "memefinder3020");
+	public static final Path DIRECTORIO_BASE_AC = fs.getPath(System.getProperty("user.home"), "memefinder3020");
 	
-	public static final String RUTA_FXML = "/fxml/%s.fxml";
-	public static final String RUTA_COMPONENTE_FXML = "/fxml/componentes/%s.fxml";
-	public static final String RUTA_IMG = "/img/%s";
-	public static final String RUTA_SVG = "/img/svg/%s.svg";
-	public static final String RUTA_CSS = "/css/%s.css";
-	public static final String RUTA_CSSESPECIFICO = "/css/especifico/%s.css"; 
+	public static final String RUTA_FXML_RFE = "/fxml/%s.fxml";
+	public static final String RUTA_COMPONENTES_FXML_RFE = "/fxml/componentes/%s.fxml";
+	public static final String RUTA_IMG_RF = "/img/%s";
+	public static final String RUTA_SVG_RFE = "/img/svg/%s.svg";
+	public static final String RUTA_CSS_RFE = "/css/%s.css";
+	public static final String RUTA_CSSESPECIFICO_RFE = "/css/especifico/%s.css";
+	
 	public static final String NOMBRE_PANTALLA_CARGA = "pantallaCargando";
 	public static final String NOMBRE_PANTALLA_SPLASH = "splash";
 	public static final String NOMBRE_PANEETIQUETAS = "paneEtiquetas";
 	public static final String NOMBRE_PANERESULTADO = "paneResultado";
 	
-	public static final Path RUTA_IMAGENES = fs.getPath(DIRECTORIO_BASE.toString(), "img");
-	public static final Path RUTA_BD = fs.getPath(DIRECTORIO_BASE.toString(), "db", "db");
+	public static final Path RUTA_IMAGENES_AC = fs.getPath(DIRECTORIO_BASE_AC.toString(), "img");
+	public static final Path RUTA_BD_AA = fs.getPath(DIRECTORIO_BASE_AC.toString(), "db", "db");
 	
 	public static final String FORMAT_DDMMYYHHMM = "dd/MM/yy HH:mm";
 	

@@ -25,11 +25,11 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 		
 		//Carga de vistas "accesibles"
 		for(Vistas v : Vistas.values()) {
-			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, v.getNombre())));
+			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, v.getNombre())));
 			load.setControllerFactory(ctx::getBean);
 			Parent p = load.load();
 			
-			URL cssEspecifico = getClass().getResource(String.format(Constantes.RUTA_CSSESPECIFICO, v.getNombre()));
+			URL cssEspecifico = getClass().getResource(String.format(Constantes.RUTA_CSSESPECIFICO_RFE, v.getNombre()));
 			if(cssEspecifico==null) {
 				//TODO al logger
 			}else {
@@ -41,7 +41,7 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 		}
 		
 		//Carga de pantalla de carga
-		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML, Constantes.NOMBRE_PANTALLA_CARGA)));
+		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, Constantes.NOMBRE_PANTALLA_CARGA)));
 		load.setController(ctx.getBean(GestorDeVentanas.class));
 		load.load();
 		

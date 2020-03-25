@@ -43,7 +43,7 @@ public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 		
 		for(Imagen img : imagenesBD) {
 			
-			Hash otraImagen = hasher.hash(new File(Constantes.RUTA_IMAGENES + "\\" + img.getId() + '.' + img.getExtension()));//TODO cambiar por miscutils
+			Hash otraImagen = hasher.hash(new File(Constantes.RUTA_IMAGENES_AC + "\\" + img.getId() + '.' + img.getExtension()));//TODO cambiar por miscutils
 			if(imgOriginal.normalizedHammingDistanceFast(otraImagen) < .2) {
 				retorna.add(img.getId());
 			}
