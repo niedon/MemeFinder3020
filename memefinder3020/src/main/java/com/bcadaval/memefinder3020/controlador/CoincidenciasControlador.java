@@ -117,11 +117,11 @@ public class CoincidenciasControlador extends Controlador {
 				refrescarInterfaz();
 			});
 			task.setOnCancelled(e -> {
-				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+				cambiarEscena(Vistas.ANADIR_IMAGEN);
 			});
 			task.setOnFailed(e -> {
 				new Alert(AlertType.ERROR, "Ha habido un error calculando el parecido de la imagen", ButtonType.OK).showAndWait();
-				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+				cambiarEscena(Vistas.ANADIR_IMAGEN);
 			});
 			
 			comenzarTarea(task, 10);
@@ -140,7 +140,7 @@ public class CoincidenciasControlador extends Controlador {
 	
 	@FXML
 	private void btVolver_click(ActionEvent event) {
-		gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+		cambiarEscena(Vistas.ANADIR_IMAGEN);
 	}
 	
 	@FXML
@@ -156,7 +156,7 @@ public class CoincidenciasControlador extends Controlador {
 			try {
 				
 				datos.put(BORRAR_IMAGEN, true);
-				gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+				cambiarEscena(Vistas.ANADIR_IMAGEN);
 				servicioImagen.sustituirImagen(imgNueva.getImagen(), listaImgCoincidencias.get(marcador));
 				new Alert(AlertType.INFORMATION, "La imagen se ha sustituido",ButtonType.OK).showAndWait();
 				

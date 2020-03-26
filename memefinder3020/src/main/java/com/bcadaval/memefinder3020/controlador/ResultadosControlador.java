@@ -146,7 +146,7 @@ public class ResultadosControlador extends Controlador{
 			break;
 			
 		default:
-			throw new RuntimeException("Pantalla no contemplada");
+			throw new RuntimeException(String.format("Pantalla no contemplada: %s", getVistaOrigen()));
 		}
 		
 	}
@@ -192,14 +192,14 @@ public class ResultadosControlador extends Controlador{
 	
 	@FXML
 	private void btVolver_click(ActionEvent event) {
-		gestorDeVentanas.cambiarEscena(Vistas.INICIO);
+		cambiarEscena(Vistas.INICIO);
 	}
 	
 	@FXML
 	private void btAmpliar_click(ActionEvent event) {
 		if(imgSeleccionada!=null) {
 			datos.put(DATOS_IMAGENSELECCIONADA, imgSeleccionada);
-			gestorDeVentanas.cambiarEscena(Vistas.RESULTADOINDIVIDUAL);
+			cambiarEscena(Vistas.RESULTADOINDIVIDUAL);
 		}
 	}
 	

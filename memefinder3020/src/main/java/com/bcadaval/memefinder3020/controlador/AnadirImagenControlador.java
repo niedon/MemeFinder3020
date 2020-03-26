@@ -219,12 +219,12 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btCoincidencias_click(ActionEvent event) {
 		datos.put(DATOS_IMAGEN_TEMP, imagenes.get(marcador));
-		gestorDeVentanas.cambiarEscena(Vistas.COINCIDENCIAS);
+		cambiarEscena(Vistas.COINCIDENCIAS);
 	}
 
 	@FXML
 	private void btVolver_clic(ActionEvent event) {
-		gestorDeVentanas.cambiarEscena(Vistas.INICIO);
+		cambiarEscena(Vistas.INICIO);
 	}
 
 	@FXML

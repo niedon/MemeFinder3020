@@ -107,6 +107,9 @@ public class ResultadoIndividualControlador extends Controlador {
 			refrescarInterfaz();
 			break;
 
+		case VISORIMAGEN:
+			break;
+			
 		default:
 			throw new RuntimeException("Pantalla no contemplada");
 		}
@@ -145,13 +148,13 @@ public class ResultadoIndividualControlador extends Controlador {
 	@FXML
 	private void btVolver_click(ActionEvent event) {
 		datos.put(DATOS_HAYCAMBIOS, hayCambios);
-		gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
+		cambiarEscena(Vistas.RESULTADOS);
 	}
 	
 	@FXML
 	private void btAmpliar_click(ActionEvent event) {
 		datos.put(VisorImagenControlador.DATOS_IMAGENVISIONADO, ivImagen.getImage());
-		gestorDeVentanas.mostrarVisorImagen();
+		cambiarEscena(Vistas.VISORIMAGEN);
 	}
 	
 	@FXML
@@ -188,7 +191,7 @@ public class ResultadoIndividualControlador extends Controlador {
 				new Alert(AlertType.INFORMATION,"La imagen se ha borrado",ButtonType.OK).showAndWait();
 				hayCambios = true;
 				datos.put(DATOS_HAYCAMBIOS, hayCambios);
-				gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
+				cambiarEscena(Vistas.RESULTADOS);
 			} catch (RuntimeException e) {
 				new Alert(AlertType.ERROR,"No se ha podido borrar la imagen",ButtonType.OK).showAndWait();
 			}

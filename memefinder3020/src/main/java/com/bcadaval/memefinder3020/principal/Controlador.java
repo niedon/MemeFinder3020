@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bcadaval.memefinder3020.excepciones.GUIException;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
@@ -14,10 +15,14 @@ import com.bcadaval.memefinder3020.utils.Constantes;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public abstract class Controlador implements Initializable{
 	
@@ -31,12 +36,25 @@ public abstract class Controlador implements Initializable{
 	@Autowired protected ServicioCategoria servicioCategoria;
 	
 	private Parent vista;
+	private Vistas vistaPadre;
 	
 	public abstract void initVisionado();
 	public abstract void initFoco();
 
-	public Parent getVista() {
+	Parent getVista() {
 		return vista;
+	}
+	
+	Stage getStage() {
+		return (Stage)vista.getScene().getWindow();
+	}
+	
+	Vistas getVistaPadre() {
+		return vistaPadre;
+	}
+	
+	void setVistaPadre(Vistas vistaPadre) {
+		this.vistaPadre = vistaPadre;
 	}
 
 	void setVista(Parent vista) {
@@ -81,6 +99,20 @@ public abstract class Controlador implements Initializable{
                     true)));
         }
         
+    }
+    
+    protected void cambiarEscena(Vistas v){
+    	try {
+			gestorDeVentanas.cambiarEscena(v);
+		} catch (GUIException e) {
+			//TODO completar y log
+			new Alert(AlertType.ERROR, e.getMensaje(), ButtonType.OK);
+			limpiarMapa();
+		}
+    }
+    
+    protected final void onClose() {
+    	gestorDeVentanas.onClose();
     }
 	
 	//--------------Concurrencia--------------

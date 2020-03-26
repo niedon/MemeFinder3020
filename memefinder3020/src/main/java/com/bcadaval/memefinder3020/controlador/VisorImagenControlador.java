@@ -80,6 +80,7 @@ public class VisorImagenControlador extends Controlador {
 		view.fitWidthProperty().bind(contenedor.widthProperty());
 		view.fitHeightProperty().bind(contenedor.heightProperty());
 		
+		//TODO corregir para el nuevo sistema de ventanas
 		//Estos eventos son necesarios  
 		contenedor.widthProperty().addListener((obs,viejo,nuevo) -> {
 			view.setViewport(viewportInicio(view, contenedor));
@@ -124,6 +125,10 @@ public class VisorImagenControlador extends Controlador {
 	private Rectangle2D viewportInicio(ImageView iv, Pane p) {
 
 		Image im = iv.getImage();
+		
+		if(im==null) {
+			return null;
+		}
 		
 		escala.set(Math.max(1, Math.max(im.getWidth()/p.getWidth(), im.getHeight()/p.getHeight())));
 		

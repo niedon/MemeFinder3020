@@ -99,7 +99,7 @@ public class TaskSplash extends Task<Void> {
 				f.delete();
 			}
 		}
-		System.out.println(listaIdImagen);
+		
 		if(!listaIdImagen.isEmpty()) {
 			listaIdImagen.forEach(e -> servicioImagen.borrarPorId(e));
 		}

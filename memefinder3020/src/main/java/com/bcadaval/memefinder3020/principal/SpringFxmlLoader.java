@@ -9,8 +9,11 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.bcadaval.memefinder3020.utils.Constantes;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class SpringFxmlLoader implements ApplicationContextAware{
 	
@@ -37,6 +40,23 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 				p.getStylesheets().add(cssEspecifico.toExternalForm());
 			}
 			
+			/*TODO
+				mover el siguiente if a gestordeventanas si no se puede
+				cambiar el initowner de una ventana, o dejar así si no
+				se plantea mostrar una ventana modal sobre distintos
+				stages 
+			*/
+			if(v.esModal()) {
+				Platform.runLater(() -> {
+					Stage stageModal = new Stage();
+					stageModal.setOnCloseRequest(e -> {
+						((Controlador)load.getController()).onClose();
+						e.consume();
+					});
+					stageModal.setScene(new Scene(p));
+				});
+				
+			}
 			((Controlador)load.getController()).setVista(p);
 		}
 		

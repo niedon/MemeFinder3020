@@ -68,6 +68,7 @@ public class InicioControlador extends Controlador {
 
 		case RESULTADOS:
 		case ANADIR_IMAGEN:
+		case AJUSTES:
 			break;
 			
 		default:
@@ -112,14 +113,14 @@ public class InicioControlador extends Controlador {
 	@FXML
 	private void btBuscar_click(ActionEvent event) {
 		datos.put(DATOS_TF_BUSQUEDA, tfBusqueda.getText().trim());
-		gestorDeVentanas.cambiarEscena(Vistas.RESULTADOS);
+		cambiarEscena(Vistas.RESULTADOS);
 	}
 	
 
 	
 	@FXML
 	private void btAnadirImagen_click(ActionEvent event) {
-		gestorDeVentanas.cambiarEscena(Vistas.ANADIR_IMAGEN);
+		cambiarEscena(Vistas.ANADIR_IMAGEN);
 	}
 	
 	@FXML
@@ -134,7 +135,7 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btAjustes_click(ActionEvent event) {
-		broma.showAndWait();
+		cambiarEscena(Vistas.AJUSTES);
 	}
 
 }
