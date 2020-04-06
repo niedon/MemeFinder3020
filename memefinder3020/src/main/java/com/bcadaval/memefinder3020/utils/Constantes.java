@@ -43,5 +43,6 @@ public class Constantes {
 	public static final String SVG_PAPELERA = "iPapelera";
 	public static final String SVG_PLUS = "iPlus";
 	public static final String SVG_TAG = "iTag";
+	public static final String SVG_UNIR = "iUnir";
 
 }

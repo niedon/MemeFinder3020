@@ -69,6 +69,7 @@ public class InicioControlador extends Controlador {
 		case RESULTADOS:
 		case ANADIR_IMAGEN:
 		case AJUSTES:
+		case CATEGORIAS:
 			break;
 			
 		default:
@@ -125,7 +126,7 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btCategorias_click(ActionEvent event) {
-		broma.showAndWait();
+		cambiarEscena(Vistas.CATEGORIAS);
 	}
 	
 	@FXML

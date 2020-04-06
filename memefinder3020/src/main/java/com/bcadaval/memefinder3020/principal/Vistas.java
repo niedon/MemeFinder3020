@@ -2,6 +2,7 @@ package com.bcadaval.memefinder3020.principal;
 
 import com.bcadaval.memefinder3020.controlador.AjustesControlador;
 import com.bcadaval.memefinder3020.controlador.AnadirImagenControlador;
+import com.bcadaval.memefinder3020.controlador.CategoriasControlador;
 import com.bcadaval.memefinder3020.controlador.CoincidenciasControlador;
 import com.bcadaval.memefinder3020.controlador.InicioControlador;
 import com.bcadaval.memefinder3020.controlador.ResultadoIndividualControlador;
@@ -12,6 +13,7 @@ public enum Vistas {
 	
 	AJUSTES("ajustes", AjustesControlador.class, true),
 	ANADIR_IMAGEN("anadirimagen", AnadirImagenControlador.class, false),
+	CATEGORIAS("categorias", CategoriasControlador.class, true),
 	COINCIDENCIAS("coincidencias", CoincidenciasControlador.class, false),
 	INICIO("inicio", InicioControlador.class, false),
 	RESULTADOS("resultados", ResultadosControlador.class, false),

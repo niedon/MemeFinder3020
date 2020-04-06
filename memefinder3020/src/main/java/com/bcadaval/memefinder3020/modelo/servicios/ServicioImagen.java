@@ -13,17 +13,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 
+import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
@@ -187,6 +191,67 @@ public class ServicioImagen {
 			e.printStackTrace();
 			//TODO logger archivo no existe
 			throw new RuntimeException("No se ha podido borrar el archivo");
+		}
+		
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void borrarPorCategoria(Categoria cat) {
+		
+		Imagen img = new Imagen();
+		img.setCategoria(cat);
+		Example<Imagen> ejemplo = Example.of(img, ExampleMatcher.matchingAll());
+		
+		repo.deleteAll(repo.findAll(ejemplo));
+		
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void fusionarCategorias(List<Categoria> categorias, String nuevoNombre) {
+		
+		if(categorias==null || categorias.isEmpty()) {
+			throw new RuntimeException("La lista de categorías no puede estar vacía");
+		}
+		
+		Categoria categoriaMasAntigua = categorias.get(0);
+		for(Categoria c : categorias) {
+			if(c.getId() < categoriaMasAntigua.getId()) {
+				categoriaMasAntigua = c;
+			}
+		}
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
+		CriteriaUpdate<Imagen> cu = cb.createCriteriaUpdate(Imagen.class);
+		Root<Imagen> root = cu.from(Imagen.class);
+		
+		List<Predicate> listaOr = new ArrayList<Predicate>();
+		for(Categoria c : categorias) {
+			if(c != categoriaMasAntigua) {
+				listaOr.add(cb.equal(root.get("categoria"), c));
+			}
+		}
+		
+		Predicate predicateOr = cb.or(listaOr.toArray(new Predicate[listaOr.size()]));
+		
+		cu.set(root.get("categoria"), categoriaMasAntigua);
+		cu.where(predicateOr);
+		
+		em.createQuery(cu).executeUpdate();
+		
+		List<Categoria> nuevasCat = new ArrayList<Categoria>(categorias.size());
+		categorias.forEach(el -> nuevasCat.add(em.find(Categoria.class, el.getId())));
+		
+		for(Categoria c : nuevasCat) {
+			if(c.getId() != categoriaMasAntigua.getId()) {
+				servicioCategoria.borrar(c);
+			}
+		}
+		
+		if(nuevoNombre==null || nuevoNombre.trim().isEmpty()) {
+			return;
+		}else {
+			servicioCategoria.renombrar(categoriaMasAntigua, nuevoNombre);
 		}
 		
 	}
