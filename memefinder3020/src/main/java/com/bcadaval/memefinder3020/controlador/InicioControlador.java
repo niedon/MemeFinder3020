@@ -10,7 +10,6 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
-import com.bcadaval.memefinder3020.utils.IOUtils;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -79,19 +78,19 @@ public class InicioControlador extends Controlador {
 		ultimasImagenes = servicioImagen.getUltimas(4);
 		
 		if(ultimasImagenes.size()>0) {
-			ivUltimas1.setImage(new Image(IOUtils.getURLDeImagen(ultimasImagenes.get(0))));
+			ivUltimas1.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(0))));
 			setFit(ivUltimas1);
 		}
 		if(ultimasImagenes.size()>1) {
-			ivUltimas2.setImage(new Image(IOUtils.getURLDeImagen(ultimasImagenes.get(1))));
+			ivUltimas2.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(1))));
 			setFit(ivUltimas2);		
 		}
 		if(ultimasImagenes.size()>2) {
-			ivUltimas3.setImage(new Image(IOUtils.getURLDeImagen(ultimasImagenes.get(2))));
+			ivUltimas3.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(2))));
 			setFit(ivUltimas3);
 		}
 		if(ultimasImagenes.size()>3) {
-			ivUltimas4.setImage(new Image(IOUtils.getURLDeImagen(ultimasImagenes.get(3))));
+			ivUltimas4.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(3))));
 			setFit(ivUltimas4);
 		}
 		

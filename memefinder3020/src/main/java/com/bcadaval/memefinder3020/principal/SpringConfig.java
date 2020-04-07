@@ -4,46 +4,43 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.bcadaval.memefinder3020.utils.Constantes;
+import com.bcadaval.memefinder3020.utils.RutasUtils;
 
 @Configuration
 @EnableTransactionManagement
 public class SpringConfig {
 
-	@Bean
-	public GestorDeVentanas gestorDeVentanas() {
-		return new GestorDeVentanas();
-	}
+	@Autowired
+	private Environment env;
 	
 	@Bean
-	public SpringFxmlLoader springFxmlLoader() {
-		return new SpringFxmlLoader();
+	public RutasUtils rutasUtils() {
+		return new RutasUtils(env.getProperty("custom.arranquetest"));
 	}
-	
-	//---------------------------------------------------
 	
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+		dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
 		
-		String url = "jdbc:hsqldb:file:" + Constantes.RUTA_BD_AA;
+		String url = env.getProperty("spring.datasource.url") + rutasUtils().RUTA_BD_AA;
 		dataSource.setUrl(url);
 		
-		dataSource.setUsername("SA");
-		dataSource.setPassword("");
+		dataSource.setUsername(env.getProperty("spring.datasource.username"));
+		dataSource.setPassword(env.getProperty("spring.datasource.password"));
 		return dataSource;
 		
 	}
-	
 
 	@Bean
 	public EntityManager entityManager() {

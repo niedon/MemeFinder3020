@@ -15,7 +15,6 @@ import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
-import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.event.ActionEvent;
@@ -111,7 +110,7 @@ public class CoincidenciasControlador extends Controlador {
 			
 			lbFechaNueva.setText("(Ahora)");
 			
-			TaskGetPorcentajeImagenesParecidas task = new TaskGetPorcentajeImagenesParecidas(imgNueva.getImagen(), listaImgCoincidencias);
+			TaskGetPorcentajeImagenesParecidas task = new TaskGetPorcentajeImagenesParecidas(imgNueva.getImagen(), listaImgCoincidencias, rutasUtils);
 			task.setOnSucceeded(e -> {
 				listaPorcentajeCoincidencias = task.getValue();
 				refrescarInterfaz();
@@ -190,7 +189,7 @@ public class CoincidenciasControlador extends Controlador {
 		}
 		Imagen elegida = listaImgCoincidencias.get(marcador);
 		
-		ivOriginal.setImage(new Image(IOUtils.getURLDeImagen(elegida)));
+		ivOriginal.setImage(new Image(rutasUtils.getURLDeImagen(elegida)));
 		setFit(ivOriginal);
 		
 		elegida.getEtiquetas().forEach( el -> {

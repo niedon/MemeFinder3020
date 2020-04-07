@@ -13,7 +13,7 @@ import com.bcadaval.memefinder3020.Main;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import com.bcadaval.memefinder3020.principal.GestorDeVentanas;
 import com.bcadaval.memefinder3020.principal.SpringFxmlLoader;
-import com.bcadaval.memefinder3020.utils.Constantes;
+import com.bcadaval.memefinder3020.utils.RutasUtils;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Platform;
@@ -68,7 +68,7 @@ public class TaskSplash extends Task<Void> {
 		ServicioImagen servicioImagen = ctx.getBean(ServicioImagen.class);
 		List<Integer> listaIdImagen = servicioImagen.getAllIds();
 		
-		File carpetaImagenes = Constantes.RUTA_IMAGENES_AC.toFile();
+		File carpetaImagenes = new File(ctx.getBean(RutasUtils.class).RUTA_IMAGENES_AC);
 		if(!carpetaImagenes.exists()) {
 			return;
 		}

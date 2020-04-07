@@ -19,7 +19,6 @@ import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
-import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.collections.FXCollections;
@@ -272,7 +271,7 @@ public class ResultadosControlador extends Controlador{
 		
 		for (int i=0; i<5; i++) {
 			if(i<page.getContent().size()) {
-				PaneResultado pr = new PaneResultado(page.getContent().get(i));
+				PaneResultado pr = new PaneResultado(page.getContent().get(i), rutasUtils);
 				pr.setOnMouseClicked(me -> {
 					refrescarSeleccionada(GridPane.getRowIndex(pr));
 				});
@@ -303,7 +302,7 @@ public class ResultadosControlador extends Controlador{
 		
 		imgSeleccionada = page.getContent().get(index);
 		
-		ivSeleccionada.setImage(new Image(IOUtils.getURLDeImagen(imgSeleccionada)));
+		ivSeleccionada.setImage(new Image(rutasUtils.getURLDeImagen(imgSeleccionada)));
 		setFit(ivSeleccionada);
 		
 		if(imgSeleccionada.getNombre()==null) {

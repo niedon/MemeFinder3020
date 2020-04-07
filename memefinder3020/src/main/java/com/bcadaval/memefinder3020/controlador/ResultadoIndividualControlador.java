@@ -15,7 +15,6 @@ import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.utils.FormatUtils;
-import com.bcadaval.memefinder3020.utils.IOUtils;
 import com.bcadaval.memefinder3020.vista.HBoxEtiqueta;
 
 import javafx.collections.FXCollections;
@@ -203,7 +202,7 @@ public class ResultadoIndividualControlador extends Controlador {
 	
 	private void refrescarInterfaz() {
 		
-		ivImagen.setImage(new Image(IOUtils.getURLDeImagen(imagenSeleccionada)));
+		ivImagen.setImage(new Image(rutasUtils.getURLDeImagen(imagenSeleccionada)));
 		setFit(ivImagen);
 		
 		if(imagenSeleccionada.getNombre()==null) {
@@ -221,7 +220,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		lbFecha.setText(imagenSeleccionada.getFecha().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
 		lbExtension.setText(imagenSeleccionada.getExtension());
 		lbResolucion.setText((int)ivImagen.getImage().getWidth() + " x " + (int)ivImagen.getImage().getHeight() + " px");
-		lbPeso.setText(FormatUtils.formatoPeso(IOUtils.getFileDeImagen(imagenSeleccionada).length()));
+		lbPeso.setText(FormatUtils.formatoPeso(rutasUtils.getFileDeImagen(imagenSeleccionada).length()));
 		
 		paneEtiquetas.borrarEtiquetas();
 		for(Etiqueta et : imagenSeleccionada.getEtiquetas()) {

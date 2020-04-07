@@ -33,12 +33,13 @@ import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.modelo.dao.RepositorioImagen;
-import com.bcadaval.memefinder3020.utils.Constantes;
-import com.bcadaval.memefinder3020.utils.IOUtils;
+import com.bcadaval.memefinder3020.utils.RutasUtils;
 
 @Service
 public class ServicioImagen {
 
+	@Autowired private RutasUtils rutasUtils;
+	
 	@Autowired RepositorioImagen repo;
 	@PersistenceContext EntityManager em;
 	
@@ -96,7 +97,7 @@ public class ServicioImagen {
 		
 		Imagen imgInsertada = repo.save(img);
 		
-		File copiada = IOUtils.getFileDeImagen(imgInsertada);
+		File copiada = rutasUtils.getFileDeImagen(imgInsertada);
 		try {
 			copiada.getParentFile().mkdirs();
 			FileSystemUtils.copyRecursively(archivoImagen, copiada);
@@ -122,7 +123,7 @@ public class ServicioImagen {
 	
 	public void sustituirImagen(File fNueva, Imagen imgOriginal) throws IOException {
 		Files.copy(fNueva.toPath(), FileSystems.getDefault().getPath(
-				Constantes.RUTA_IMAGENES_AC.toString(),
+				rutasUtils.RUTA_IMAGENES_AC,
 				String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension())),
 				StandardCopyOption.REPLACE_EXISTING);
 	}
@@ -185,7 +186,7 @@ public class ServicioImagen {
 		//TODO si no existe lanzar excepción
 		repo.deleteById(id);
 		try {
-			Files.deleteIfExists(FileSystems.getDefault().getPath(Constantes.RUTA_IMAGENES_AC.toString(),
+			Files.deleteIfExists(FileSystems.getDefault().getPath(rutasUtils.RUTA_IMAGENES_AC,
 					String.format("%d.%s", imgBorrar.getId(),imgBorrar.getExtension())));
 		} catch (IOException e) {
 			e.printStackTrace();

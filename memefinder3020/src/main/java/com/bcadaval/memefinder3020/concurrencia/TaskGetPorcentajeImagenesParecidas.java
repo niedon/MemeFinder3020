@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
-import com.bcadaval.memefinder3020.utils.IOUtils;
+import com.bcadaval.memefinder3020.utils.RutasUtils;
 import com.github.kilianB.hash.Hash;
 import com.github.kilianB.hashAlgorithms.HashingAlgorithm;
 import com.github.kilianB.hashAlgorithms.PerceptiveHash;
@@ -14,12 +14,14 @@ import javafx.concurrent.Task;
 
 public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 
+	private RutasUtils rutasUtils;
 	private File imagenNueva;
 	private List<Imagen> listaImagenes;
 	
-	public TaskGetPorcentajeImagenesParecidas(File imagenNueva, List<Imagen> listaImagenes) {
+	public TaskGetPorcentajeImagenesParecidas(File imagenNueva, List<Imagen> listaImagenes, RutasUtils rutasUtils) {
 		this.imagenNueva = imagenNueva;
 		this.listaImagenes = listaImagenes;
+		this.rutasUtils = rutasUtils;
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 			
 			for(int i=0; i<listaImagenes.size(); i++) {
 				
-				Hash otraImagen = hasher.hash(IOUtils.getFileDeImagen(listaImagenes.get(i)));
+				Hash otraImagen = hasher.hash(rutasUtils.getFileDeImagen(listaImagenes.get(i)));
 				retorna.add(i, imgOriginal.normalizedHammingDistance(otraImagen));
 				
 //				//TODO quitar al acabar testeos

@@ -156,7 +156,7 @@ public class AnadirImagenControlador extends Controlador {
 			imgTemp.setImagen(f);
 			imgTemp.setNombre(f.getName().substring(0,f.getName().lastIndexOf('.')));
 			
-			Task<List<Integer>> coincidencias = new TaskGetIndicesImagenesParecidas(f,servicioImagen);
+			Task<List<Integer>> coincidencias = new TaskGetIndicesImagenesParecidas(f,servicioImagen,rutasUtils);
 			coincidencias.setOnSucceeded(e -> activarBotonCoincidenciasSiProcede(coincidencias));
 			coincidencias.setOnCancelled(e -> btEliminiar_click(null));
 			coincidencias.setOnFailed(e -> {

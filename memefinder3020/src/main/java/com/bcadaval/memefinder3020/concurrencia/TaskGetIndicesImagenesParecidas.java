@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
-import com.bcadaval.memefinder3020.utils.Constantes;
+import com.bcadaval.memefinder3020.utils.RutasUtils;
 import com.github.kilianB.hash.Hash;
 import com.github.kilianB.hashAlgorithms.HashingAlgorithm;
 import com.github.kilianB.hashAlgorithms.PerceptiveHash;
@@ -15,13 +15,16 @@ import javafx.concurrent.Task;
 
 public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 
+	private RutasUtils rutasUtils;
+	
 	private ServicioImagen servicioImagen;
 	
 	private File original;
 	
-	public TaskGetIndicesImagenesParecidas(File original, ServicioImagen servicioImagen) {
+	public TaskGetIndicesImagenesParecidas(File original, ServicioImagen servicioImagen, RutasUtils rutasUtils) {
 		this.original = original;
 		this.servicioImagen = servicioImagen;
+		this.rutasUtils = rutasUtils;
 	}
 	
 	@Override
@@ -43,7 +46,7 @@ public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 		
 		for(Imagen img : imagenesBD) {
 			
-			Hash otraImagen = hasher.hash(new File(Constantes.RUTA_IMAGENES_AC + "\\" + img.getId() + '.' + img.getExtension()));//TODO cambiar por miscutils
+			Hash otraImagen = hasher.hash(rutasUtils.getFileDeImagen(img));
 			if(imgOriginal.normalizedHammingDistanceFast(otraImagen) < .2) {
 				retorna.add(img.getId());
 			}

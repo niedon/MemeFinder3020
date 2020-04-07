@@ -6,6 +6,7 @@ import java.net.URL;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import com.bcadaval.memefinder3020.utils.Constantes;
 
@@ -15,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+@Component
 public class SpringFxmlLoader implements ApplicationContextAware{
 	
 	private ApplicationContext ctx;
