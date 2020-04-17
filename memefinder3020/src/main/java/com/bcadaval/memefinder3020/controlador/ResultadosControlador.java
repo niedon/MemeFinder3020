@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
 import com.bcadaval.memefinder3020.controlador.componentes.PaneResultado;
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
+import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
@@ -25,17 +27,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
 
 @Controller
 public class ResultadosControlador extends Controlador{
@@ -85,14 +90,16 @@ public class ResultadosControlador extends Controlador{
 		listaCategorias = FXCollections.observableArrayList();
 		cbCategoria.setItems(listaCategorias);
 		
-		cbCategoria.setCellFactory(lv -> new ListCell<Categoria>() {
+		cbCategoria.setConverter(new StringConverter<Categoria>() {
 			@Override
-			protected void updateItem(Categoria item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(empty ? "" : item.getNombre());
+			public String toString(Categoria object) {
+				return object==null ? "" : object.getNombre();
+			}
+			@Override
+			public Categoria fromString(String string) {
+				return null;
 			}
 		});
-		cbCategoria.setButtonCell(cbCategoria.getCellFactory().call(null));
 		
 		paneEtiquetasBusqueda = new PaneEtiquetas();
 		paneEtiquetasBusqueda.setEventoEtiquetas(this::eliminarEtiqueta);
@@ -170,9 +177,17 @@ public class ResultadosControlador extends Controlador{
 	private void btAnadirEtiqueta_click(ActionEvent event) {
 		
 		String etiqueta = tfEtiquetas.getText().trim().toUpperCase();
+		tfEtiquetas.clear();
 		
 		if(!etiqueta.isEmpty()) {
-			paneEtiquetasBusqueda.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(etiqueta), etiqueta);
+			
+			try {
+				Long count = servicioEtiqueta.count(etiqueta);
+				paneEtiquetasBusqueda.anadirEtiqueta(count, etiqueta);
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR, String.format("Etiqueta no añadida: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+			}
+			
 		}
 		
 	}
@@ -248,7 +263,11 @@ public class ResultadosControlador extends Controlador{
 		busqueda.setBuscarSinEtiquetas(cbSinEtiquetas.isSelected());
 		ArrayList<Etiqueta> etiquetas = new ArrayList<Etiqueta>();
 		for(HBoxEtiqueta et : paneEtiquetasBusqueda.getEtiquetas()) {
-			etiquetas.add(servicioEtiqueta.getPorNombre(et.getNombre()));
+			try {
+				etiquetas.add(servicioEtiqueta.getPorNombre(et.getNombre()));
+			} catch (ConstraintViolationException | NotFoundException e) {
+				//TODO al log
+			}
 		}
 		busqueda.setEtiquetas(etiquetas);
 		
@@ -312,7 +331,7 @@ public class ResultadosControlador extends Controlador{
 		}
 		paneEtiquetasSeleccionada.borrarEtiquetas();
 		for(Etiqueta et : imgSeleccionada.getEtiquetas()) {
-			paneEtiquetasSeleccionada.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(et), et.getNombre());
+			paneEtiquetasSeleccionada.anadirEtiqueta(servicioEtiqueta.count(et), et.getNombre());
 		}
 		btAmpliar.setDisable(false);
 		

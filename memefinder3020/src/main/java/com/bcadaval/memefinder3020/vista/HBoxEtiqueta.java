@@ -12,20 +12,20 @@ import javafx.scene.layout.HBox;
 
 public class HBoxEtiqueta extends HBox {
 
-	private int numVeces;
+	private Long numVeces;
 	private String etiqueta;
 	
 	private Label labelContador;
 	
-	public HBoxEtiqueta(int numVeces, String etiqueta) {
+	public HBoxEtiqueta(Long numVeces, String etiqueta) {
 		this(numVeces,etiqueta,false,null);
 	}
 	
-	public HBoxEtiqueta(int numVeces, @NonNull String etiqueta, @NonNull EventHandler<ActionEvent> eventoDelBoton) {
+	public HBoxEtiqueta(Long numVeces, @NonNull String etiqueta, @NonNull EventHandler<ActionEvent> eventoDelBoton) {
 		this(numVeces,etiqueta,true,eventoDelBoton);
 	}
 	
-	private HBoxEtiqueta(int numVeces, @NonNull String etiqueta, boolean eliminable, EventHandler<ActionEvent> eventoDelBoton) {
+	private HBoxEtiqueta(Long numVeces, @NonNull String etiqueta, boolean eliminable, EventHandler<ActionEvent> eventoDelBoton) {
 		super();
 		this.getStyleClass().add("hboxEtiqueta");
 		this.numVeces = numVeces;
@@ -50,7 +50,7 @@ public class HBoxEtiqueta extends HBox {
 		labelContador.setText("("+num+")");
 	}
 	
-	public int getNumVeces() {
+	public Long getNumVeces() {
 		return numVeces;
 	}
 	

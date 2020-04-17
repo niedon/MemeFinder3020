@@ -138,7 +138,7 @@
                   <HBox alignment="CENTER" prefHeight="37.0" prefWidth="350.0">
                      <children>
                         <Button fx:id="btVolver" mnemonicParsing="false" onAction="#btVolver_click" prefHeight="25.0" prefWidth="100.0" text="Volver" />
-                        <Button fx:id="btAmpliar" mnemonicParsing="false" onAction="#btAmpliar_click" prefHeight="25.0" prefWidth="100.0" text="Ampliar" />
+                        <Button fx:id="btAmpliar" mnemonicParsing="false" onAction="#btAmpliar_click" prefHeight="25.0" prefWidth="100.0" text="Detalles" />
                      </children>
                   </HBox>
                </children></VBox>

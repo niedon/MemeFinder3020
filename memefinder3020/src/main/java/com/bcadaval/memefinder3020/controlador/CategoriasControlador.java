@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaBusqueda;
@@ -142,16 +143,14 @@ public class CategoriasControlador extends Controlador {
 		Optional<String> resultado = dialog.showAndWait();
 		if(resultado.isPresent()) {
 			
-			Categoria conNombre = servicioCategoria.getPorNombre(resultado.get());
-			
-			if(conNombre!=null) {
-				new Alert(AlertType.ERROR, String.format("La categoría %s ya existe", conNombre.getNombre()),ButtonType.OK).showAndWait();
+			try {
+				servicioCategoria.anadir(resultado.get());
+				new Alert(AlertType.INFORMATION, String.format("Se ha creado la categoría con nombre %s", resultado.get()), ButtonType.OK).showAndWait();
+				hacerBusqueda();
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR,String.format("No se ha podido añadir la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 				return;
 			}
-			
-			servicioCategoria.crear(resultado.get());
-			new Alert(AlertType.INFORMATION, String.format("Se ha creado la categoría con nombre %s", resultado.get()), ButtonType.OK).showAndWait();
-			hacerBusqueda();
 			
 		}
 		
@@ -164,7 +163,7 @@ public class CategoriasControlador extends Controlador {
 		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Borrar la categoría %s?", cat.getNombre()), ButtonType.YES, ButtonType.NO).showAndWait();
 		if(respuesta.isPresent() && respuesta.get()==ButtonType.YES) {
 			
-			servicioCategoria.borrar(cat);
+			servicioCategoria.eliminar(cat);
 			new Alert(AlertType.INFORMATION, "Se ha borrado la categoría", ButtonType.OK).showAndWait();
 			hacerBusqueda();
 			
@@ -192,9 +191,13 @@ public class CategoriasControlador extends Controlador {
 			
 			if(confirmacion.isPresent() && confirmacion.get()==ButtonType.YES) {
 				
-				servicioImagen.borrarPorCategoria(cat);
-				new Alert(AlertType.INFORMATION, "La categoría se ha vaciado", ButtonType.OK).showAndWait();
-				hacerBusqueda();
+				try {
+					servicioImagen.borrarPorCategoria(cat);
+					new Alert(AlertType.INFORMATION, "La categoría se ha vaciado", ButtonType.OK).showAndWait();
+					hacerBusqueda();
+				} catch (ConstraintViolationException e) {
+					new Alert(AlertType.ERROR,String.format("No se ha podido vaciar la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+				}
 				
 			}
 			
@@ -219,8 +222,12 @@ public class CategoriasControlador extends Controlador {
 				return;
 			}
 			
-			servicioCategoria.renombrar(cat, nuevoNombre);
-			hacerBusqueda();
+			try {
+				servicioCategoria.editar(cat, nuevoNombre);
+				hacerBusqueda();
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR,String.format("No se ha podido editar la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+			}
 			
 		}
 		
@@ -237,9 +244,12 @@ public class CategoriasControlador extends Controlador {
 			dialog.setHeaderText("Elige el nombre de la nueva categoría (o deja vacío para unirlas con el nombre de la más antigua)");
 			
 			Optional<String> nuevoNombre = dialog.showAndWait();
-			if(nuevoNombre.isPresent()) {
-				servicioImagen.fusionarCategorias(tvCategorias.getSelectionModel().getSelectedItems(), nuevoNombre.get());
+			
+			try {
+				servicioImagen.fusionarCategorias(tvCategorias.getSelectionModel().getSelectedItems(), nuevoNombre.isPresent() ? nuevoNombre.get() : null);
 				hacerBusqueda();
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR,String.format("No se han podido fusionar las categorías: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 			}
 			
 		}

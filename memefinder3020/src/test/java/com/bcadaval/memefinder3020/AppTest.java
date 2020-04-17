@@ -1,34 +1,23 @@
 package com.bcadaval.memefinder3020;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
-import com.bcadaval.memefinder3020.utils.RutasUtils;
+import com.bcadaval.memefinder3020.serviciostest.IntegracionImagenBusqueda;
+import com.bcadaval.memefinder3020.serviciostest.IntegracionImagenCategoria;
+import com.bcadaval.memefinder3020.serviciostest.ServicioCategoriaTest;
+import com.bcadaval.memefinder3020.serviciostest.ServicioEtiquetaTest;
+import com.bcadaval.memefinder3020.serviciostest.ServicioImagenTest;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(Suite.class)
+@SuiteClasses({
+	ServicioEtiquetaTest.class,
+	ServicioCategoriaTest.class,
+	ServicioImagenTest.class,
+	IntegracionImagenBusqueda.class,
+	IntegracionImagenCategoria.class
+	})
 public class AppTest {
-	
-	@Autowired private ServicioImagen servicioImagen;
-	@Autowired private RutasUtils ru;
-	
-	@Test
-	public void test1() {
-		assertTrue(servicioImagen!=null);
-	}
-	
-	@Test
-	public void test2() {
-		System.out.println(ru.DIRECTORIO_BASE_AC);
-		System.out.println(ru.RUTA_BD_AA);
-		System.out.println(ru.RUTA_IMAGENES_AC);
-		assertTrue(true);
-	}
-	
+	public static final String RUTA_TESTIMAGENES_RF = "/testimg/%s";
 }

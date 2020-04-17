@@ -1,11 +1,14 @@
 package com.bcadaval.memefinder3020.controlador;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Controller;
 
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
@@ -29,7 +32,8 @@ public class InicioControlador extends Controlador {
 	
 	static final String DATOS_TF_BUSQUEDA = "valorTfBusqueda";
 	
-	private List<Imagen> ultimasImagenes;
+	private static final int numUltimas = 4;
+	private List<ImageView> ultimasIv;
 	
 	@FXML private TextField tfBusqueda;
 	
@@ -48,7 +52,16 @@ public class InicioControlador extends Controlador {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		setGraficos(btBuscar, Constantes.SVG_LUPA);
+		
+		ultimasIv = new ArrayList<ImageView>(Arrays.asList(ivUltimas1, ivUltimas2, ivUltimas3, ivUltimas4));
+		
+		tfBusqueda.textProperty().addListener((obs, viejo, nuevo) -> {
+			if(viejo.isEmpty() != nuevo.isEmpty()) {
+				setGraficos(btBuscar, nuevo.isEmpty() ? Constantes.SVG_IMAGEN : Constantes.SVG_LUPA);
+			}
+		});
+		
+		setGraficos(btBuscar, Constantes.SVG_IMAGEN);
 		setGraficos(btAnadirImagen, Constantes.SVG_PLUS);
 		setGraficos(btCategorias, Constantes.SVG_CATEGORIA);
 		setGraficos(btEtiquetas, Constantes.SVG_TAG);
@@ -75,25 +88,16 @@ public class InicioControlador extends Controlador {
 			throw new RuntimeException("Pantalla no contemplada");
 		}
 		
-		ultimasImagenes = servicioImagen.getUltimas(4);
-		
-		if(ultimasImagenes.size()>0) {
-			ivUltimas1.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(0))));
-			setFit(ivUltimas1);
+		ultimasIv.forEach(el -> el.setImage(null));
+		try {
+			List<Imagen> ultimas = servicioImagen.getUltimas(numUltimas);
+			for(int i=0; i<ultimas.size();i++) {
+				ultimasIv.get(i).setImage(new Image(rutasUtils.getURLDeImagen(ultimas.get(i))));
+			}
+		} catch (ConstraintViolationException e) {
+			new Alert(AlertType.ERROR,String.format("No se han podido cargar las últimas imágenes: %s", e.getMensaje(), ButtonType.OK)).showAndWait();
 		}
-		if(ultimasImagenes.size()>1) {
-			ivUltimas2.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(1))));
-			setFit(ivUltimas2);		
-		}
-		if(ultimasImagenes.size()>2) {
-			ivUltimas3.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(2))));
-			setFit(ivUltimas3);
-		}
-		if(ultimasImagenes.size()>3) {
-			ivUltimas4.setImage(new Image(rutasUtils.getURLDeImagen(ultimasImagenes.get(3))));
-			setFit(ivUltimas4);
-		}
-		
+
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 @Entity
@@ -27,11 +26,6 @@ public class Categoria {
 	
 	@OneToMany(mappedBy = "categoria")
 	private Set<Imagen> imagenes;
-
-	@PreRemove
-	public void nullImagenes() {
-		imagenes.forEach(el -> el.setCategoria(null));
-	}
 	
 	public Integer getId() {
 		return id;

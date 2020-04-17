@@ -14,6 +14,7 @@ public class ImagenTemp {
 	private String nombre;
 	private String categoria;
 	private List<HBoxEtiqueta> etiquetas = new ArrayList<HBoxEtiqueta>();
+	private List<String> etiquetasString = new ArrayList<String>();
 	private Task<List<Integer>> coincidencias;
 	
 	public File getImagen() {
@@ -31,8 +32,14 @@ public class ImagenTemp {
 	public List<HBoxEtiqueta> getEtiquetas() {
 		return etiquetas;
 	}
+	public List<String> getEtiquetasString(){
+		return etiquetasString;
+	}
 	public void setEtiquetas(List<HBoxEtiqueta> etiquetas) {
 		this.etiquetas = etiquetas;
+	}
+	public void setEtiquetasString(List<String> etiquetasString) {
+		this.etiquetasString = etiquetasString;
 	}
 	public Task<List<Integer>> getCoincidencias() {
 		return coincidencias;

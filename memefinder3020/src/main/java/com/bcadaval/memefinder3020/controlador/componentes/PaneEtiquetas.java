@@ -47,7 +47,7 @@ public class PaneEtiquetas extends StackPane {
 		fpEtiquetas.getChildren().remove(etiqueta);
 	}
 	
-	public void anadirEtiqueta(int num, String etiqueta) {
+	public void anadirEtiqueta(Long num, String etiqueta) {
 		fpEtiquetas.getChildren().add(new HBoxEtiqueta(num, etiqueta, eventoEtiquetas));
 	}
 	

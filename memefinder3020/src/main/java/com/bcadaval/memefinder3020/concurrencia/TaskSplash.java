@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
 import com.bcadaval.memefinder3020.Main;
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import com.bcadaval.memefinder3020.principal.GestorDeVentanas;
 import com.bcadaval.memefinder3020.principal.SpringFxmlLoader;
@@ -101,7 +102,13 @@ public class TaskSplash extends Task<Void> {
 		}
 		
 		if(!listaIdImagen.isEmpty()) {
-			listaIdImagen.forEach(e -> servicioImagen.borrarPorId(e));
+			listaIdImagen.forEach(e -> {
+				try {
+					servicioImagen.eliminar(e);
+				} catch (ConstraintViolationException e1) {
+					//TODO log
+				}
+			});
 		}
 		
 	}

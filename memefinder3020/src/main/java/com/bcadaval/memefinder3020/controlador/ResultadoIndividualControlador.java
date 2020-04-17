@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
+import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
@@ -26,13 +28,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.StringConverter;
 
 @Controller
 public class ResultadoIndividualControlador extends Controlador {
@@ -76,14 +78,16 @@ public class ResultadoIndividualControlador extends Controlador {
 		AnchorPane.setBottomAnchor(paneEtiquetas, .0);
 		AnchorPane.setLeftAnchor(paneEtiquetas, .0);
 		
-		cbCategoria.setCellFactory(lv -> new ListCell<Categoria>() {
+		cbCategoria.setConverter(new StringConverter<Categoria>() {
 			@Override
-			protected void updateItem(Categoria item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(empty ? "" : item.getNombre());
+			public String toString(Categoria object) {
+				return object==null ? "" : object.getNombre();
+			}
+			@Override
+			public Categoria fromString(String string) {
+				return null;
 			}
 		});
-		cbCategoria.setButtonCell(cbCategoria.getCellFactory().call(null));
 		
 		//Asignación de gráficos
 		setGraficos(btLimpiarCategoria, Constantes.SVG_PAPELERA);
@@ -123,7 +127,7 @@ public class ResultadoIndividualControlador extends Controlador {
 	
 	@FXML
 	private void btLimpiarCategoria_click(ActionEvent event) {
-		cbCategoria.getSelectionModel().clearSelection();
+		cbCategoria.valueProperty().set(null);
 	}
 	
 	@FXML
@@ -135,12 +139,19 @@ public class ResultadoIndividualControlador extends Controlador {
 	
 	@FXML
 	private void btEtiquetas_click(ActionEvent event) {
+		//TODO evitar repetidas
 		if(modoEdicion) {
 			String txtEtiqueta = tfEtiquetas.getText().trim().toUpperCase();
-			if(!txtEtiqueta.isEmpty()) {
-				paneEtiquetas.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(txtEtiqueta), txtEtiqueta);
-				tfEtiquetas.clear();	
+			tfEtiquetas.clear();
+			
+			try {
+				Long count = servicioEtiqueta.count(txtEtiqueta);
+				paneEtiquetas.anadirEtiqueta(count, txtEtiqueta);
+				
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR, "Nombre de etiqueta inválido", ButtonType.OK).showAndWait();
 			}
+			
 		}
 	}
 	
@@ -161,7 +172,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		if(modoEdicion) {
 			
 			try {
-				Imagen temp = servicioImagen.save(getImagenEditada());
+				Imagen temp = servicioImagen.editar(getImagenEditada());
 				new Alert(AlertType.INFORMATION, "Se han guardado los cambios", ButtonType.OK).showAndWait();
 				modoEdicion = false;
 				setModoEdicion(modoEdicion);
@@ -184,15 +195,15 @@ public class ResultadoIndividualControlador extends Controlador {
 	private void btBorrar_click(ActionEvent event) {
 		Optional<ButtonType> pulsado = new Alert(AlertType.CONFIRMATION, "¿Quiere borrar esta imagen?", ButtonType.YES, ButtonType.NO).showAndWait();
 		
-		if(pulsado.get()==ButtonType.YES) {
+		if(pulsado.isPresent() && pulsado.get()==ButtonType.YES) {
 			try {
-				servicioImagen.borrarPorId((imagenSeleccionada.getId()));
+				servicioImagen.eliminar((imagenSeleccionada.getId()));
 				new Alert(AlertType.INFORMATION,"La imagen se ha borrado",ButtonType.OK).showAndWait();
 				hayCambios = true;
 				datos.put(DATOS_HAYCAMBIOS, hayCambios);
 				cambiarEscena(Vistas.RESULTADOS);
-			} catch (RuntimeException e) {
-				new Alert(AlertType.ERROR,"No se ha podido borrar la imagen",ButtonType.OK).showAndWait();
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR, String.format("No se ha podido borrar la imagen: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 			}
 			
 		}
@@ -224,7 +235,7 @@ public class ResultadoIndividualControlador extends Controlador {
 		
 		paneEtiquetas.borrarEtiquetas();
 		for(Etiqueta et : imagenSeleccionada.getEtiquetas()) {
-			paneEtiquetas.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(et), et.getNombre());
+			paneEtiquetas.anadirEtiqueta(servicioEtiqueta.count(et), et.getNombre());
 		}
 	}
 	
@@ -264,13 +275,19 @@ public class ResultadoIndividualControlador extends Controlador {
 		cbCategoria.getSelectionModel().select(imagenSeleccionada.getCategoria());//TODO comprobar si da excepción
 		paneEtiquetas.borrarEtiquetas();
 		for(Etiqueta et : imagenSeleccionada.getEtiquetas()) {
-			paneEtiquetas.anadirEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(et), et.getNombre());
+			paneEtiquetas.anadirEtiqueta(servicioEtiqueta.count(et), et.getNombre());
 		}
 		
 	}
 	
 	private Imagen getImagenEditada() {
-		Imagen retorna = servicioImagen.getPorId(imagenSeleccionada.getId());
+		Imagen retorna = null;
+		try {
+			retorna = servicioImagen.getPorId(imagenSeleccionada.getId());
+		} catch (ConstraintViolationException | NotFoundException e1) {
+			new Alert(AlertType.ERROR, "Ha ocurrido un error inesperado", ButtonType.OK).showAndWait();
+			retorna = imagenSeleccionada;
+		}
 		
 		if(tfNombre.getText().trim().equals("")) {
 			retorna.setNombre(null);
@@ -282,7 +299,11 @@ public class ResultadoIndividualControlador extends Controlador {
 		
 		retorna.getEtiquetas().clear();
 		for(HBoxEtiqueta hb : paneEtiquetas.getEtiquetas()) {
-			retorna.getEtiquetas().add(servicioEtiqueta.getOCrear(hb.getNombre()));
+			try {
+				retorna.getEtiquetas().add(servicioEtiqueta.getOCrear(hb.getNombre()));
+			} catch (ConstraintViolationException e) {
+				// TODO logger
+			}
 		}
 		
 		return retorna;

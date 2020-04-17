@@ -3,6 +3,7 @@ package com.bcadaval.memefinder3020.controlador;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -10,6 +11,7 @@ import java.util.ResourceBundle;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.concurrencia.TaskGetPorcentajeImagenesParecidas;
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
@@ -87,7 +89,12 @@ public class CoincidenciasControlador extends Controlador {
 			flowNueva.getChildren().clear();
 			
 			imgNueva = (ImagenTemp) datos.get(AnadirImagenControlador.DATOS_IMAGEN_TEMP);
-			listaImgCoincidencias = servicioImagen.getAllPorId(imgNueva.getCoincidencias().getValue());
+			try {
+				listaImgCoincidencias = servicioImagen.getAllPorId(imgNueva.getCoincidencias().getValue());
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR, String.format("No se han podido cargar las imágenes: %s", e.getMensaje()), ButtonType.OK).showAndWait();
+				listaImgCoincidencias = new ArrayList<Imagen>();
+			}
 			marcador = 0;
 			
 			ivNueva.setImage(new Image(imgNueva.getImagen().toURI().toString()));
@@ -193,7 +200,7 @@ public class CoincidenciasControlador extends Controlador {
 		setFit(ivOriginal);
 		
 		elegida.getEtiquetas().forEach( el -> {
-			flowOriginal.getChildren().add(new HBoxEtiqueta(el.getImagenes().size(), el.getNombre()));
+			flowOriginal.getChildren().add(new HBoxEtiqueta((long)el.getImagenes().size(), el.getNombre()));
 		});
 		
 		if(elegida.getNombre()==null || elegida.getNombre().isEmpty()) {

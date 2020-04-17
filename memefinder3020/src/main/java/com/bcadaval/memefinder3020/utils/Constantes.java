@@ -24,6 +24,7 @@ public class Constantes {
 	public static final String SVG_FLECHADERECHA = "iFlechaDerecha";
 	public static final String SVG_FLECHAIZQUIERDA = "iFlechaIzquierda";
 	public static final String SVG_GUARDAR = "iGuardar";
+	public static final String SVG_IMAGEN = "iImagen";
 	public static final String SVG_IMAGENFIT = "iImagenFit";
 	public static final String SVG_IMAGENESCALA = "iImagenEscala";
 	public static final String SVG_MENOS = "iMenos";
@@ -33,5 +34,7 @@ public class Constantes {
 	public static final String SVG_PLUS = "iPlus";
 	public static final String SVG_TAG = "iTag";
 	public static final String SVG_UNIR = "iUnir";
+	
+	public static final String[] FORMATOS_PERMITIDOS = new String[] {"JPG","JPEG","JPE","JIF","JFIF","JFI","PNG","GIF","BMP","DIB"};
 
 }

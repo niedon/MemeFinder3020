@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.concurrencia.TaskGetIndicesImagenesParecidas;
 import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
+import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
@@ -201,18 +202,26 @@ public class AnadirImagenControlador extends Controlador {
 			return;
 		}
 		
-		HBoxEtiqueta ve = new HBoxEtiqueta(servicioEtiqueta.countUsosDeEtiqueta(texto), texto, this::eliminarEtiqueta);
-		
-		ImagenTemp seleccionada = imagenes.get(marcador);
-		
-		if(seleccionada.getEtiquetas().contains(ve)) {
-			int indice = seleccionada.getEtiquetas().indexOf(ve);
-			//TODO efecto en la etiqueta indice
-			return;
+		try {
+			
+			Long count = servicioEtiqueta.count(texto);
+			
+			HBoxEtiqueta ve = new HBoxEtiqueta(count, texto, this::eliminarEtiqueta);
+			
+			ImagenTemp seleccionada = imagenes.get(marcador);
+			
+			if(seleccionada.getEtiquetas().contains(ve)) {
+				//int indice = seleccionada.getEtiquetas().indexOf(ve);
+				//TODO efecto en la etiqueta indice
+				return;
+			}
+			
+			paneEtiquetas.anadirEtiqueta(ve);
+			seleccionada.getEtiquetas().add(ve);
+			
+		} catch (ConstraintViolationException e) {
+			new Alert(AlertType.ERROR, "Nombre de etiqueta inválido", ButtonType.OK).showAndWait();
 		}
-		
-		paneEtiquetas.anadirEtiqueta(ve);
-		seleccionada.getEtiquetas().add(ve);
 		
 	}
 	
@@ -236,12 +245,20 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btGuardar_click(ActionEvent event) {
 		
-		imagenes.get(marcador).setNombre(tfNombre.getText().trim());
+		ImagenTemp seleccionada = imagenes.get(marcador); 
+		
+		seleccionada.setNombre(tfNombre.getText().trim());
 		if(cbCategoria.getValue()!=null) {
-			imagenes.get(marcador).setCategoria(cbCategoria.getValue().trim().toUpperCase());
+			seleccionada.setCategoria(cbCategoria.getValue().trim().toUpperCase());
 		}
-		servicioImagen.anadirImagen(imagenes.get(marcador));
-		imagenes.remove(marcador);
+		seleccionada.getEtiquetas().forEach(el -> seleccionada.getEtiquetasString().add(el.getNombre()));
+		
+		try {
+			servicioImagen.anadir(imagenes.get(marcador));
+			imagenes.remove(marcador);
+		} catch (ConstraintViolationException e) {
+			new Alert(AlertType.ERROR,String.format("No se ha podido añadir la imagen: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+		}
 		//TODO actualizar contador etiquetas
 		refrescarInterfaz();
 		
