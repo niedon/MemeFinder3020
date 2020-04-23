@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{HH:mm:ss.SSS} [%10.10t{10}] %25.25logger %msg%n" />
+        </Console>
+ 
+        <RollingFile name="RollingFile"
+            fileName="${sys:user.home}/memefinder3020/logs/spring-boot-logger-log4j2.log"
+            filePattern="${sys:user.home}/memefinder3020/logs/archivo/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS}\t[%t{10}]\t%logger\t>%msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                    size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+ 
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+        </Root>
+ 
+        <Logger name="com.bcadaval" level="debug"></Logger>
+    </Loggers>
+ 
+</Configuration>

@@ -275,7 +275,12 @@ public class ResultadosControlador extends Controlador{
 	}
 	
 	private void realizarBusqueda() {
-		page = servicioImagen.getBusqueda(busqueda, pageable);
+		try {
+			page = servicioImagen.getBusqueda(busqueda, pageable);
+		} catch (ConstraintViolationException e) {
+			new Alert(AlertType.ERROR, e.getMensaje(), ButtonType.OK).showAndWait();
+			return;
+		}
 		refrescarInterfaz();
 	}
 	

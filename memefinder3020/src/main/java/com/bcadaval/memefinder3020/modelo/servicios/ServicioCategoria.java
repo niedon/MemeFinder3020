@@ -10,7 +10,7 @@ import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaBusqueda;
 public interface ServicioCategoria {
 
 	List<Categoria> getAll();
-	List<Categoria> getBusqueda(CategoriaBusqueda busqueda);
+	List<Categoria> getBusqueda(CategoriaBusqueda busqueda) throws ConstraintViolationException;
 	Categoria getPorNombre(String nombre) throws ConstraintViolationException, NotFoundException;
 	Categoria getOCrear(String nombre) throws ConstraintViolationException;
 	

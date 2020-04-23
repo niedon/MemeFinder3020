@@ -267,7 +267,6 @@ public class ServicioCategoriaTest {
 		} catch (ConstraintViolationException e) {
 			fail("No se ha podido rescatar una categoría existente (ConstraintViolation)");
 		} catch (NotFoundException e) {
-			e.printStackTrace();
 			fail("No se ha encontrado una categoría existente (NotFound)");
 		}
 		

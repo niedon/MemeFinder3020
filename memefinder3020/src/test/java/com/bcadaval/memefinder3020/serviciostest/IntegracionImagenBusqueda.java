@@ -183,34 +183,40 @@ public class IntegracionImagenBusqueda {
 		
 		bus = new ImagenBusqueda();
 		
-		//2 imágenes tienen la categoría dank
-		bus.setBuscarSinCategoria(false);
-		bus.setBuscarSinEtiquetas(false);
-		bus.setCategoria(dank);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=2) {
-			fail("Se esperaban 2 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//1 imagen tiene la categoría emoji
-		bus.setCategoria(emoji);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Ninguna imagen tiene la categoría recién añadida "vacía"
-		bus.setCategoria(vacia);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=0) {
-			fail("Se esperabann 0 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//1 imagen no tiene categoría
-		bus.setBuscarSinCategoria(true);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+		try {
+			
+			//2 imágenes tienen la categoría dank
+			bus.setBuscarSinCategoria(false);
+			bus.setBuscarSinEtiquetas(false);
+			bus.setCategoria(dank);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=2) {
+				fail("Se esperaban 2 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//1 imagen tiene la categoría emoji
+			bus.setCategoria(emoji);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Ninguna imagen tiene la categoría recién añadida "vacía"
+			bus.setCategoria(vacia);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=0) {
+				fail("Se esperabann 0 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//1 imagen no tiene categoría
+			bus.setBuscarSinCategoria(true);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+		}catch(ConstraintViolationException e) {
+			fail("Se ha lanzado una excepción con parámetros válidos: " + e.getMensaje());
 		}
 		
 	}
@@ -235,49 +241,56 @@ public class IntegracionImagenBusqueda {
 		bus.setBuscarSinCategoria(false);
 		bus.setBuscarSinEtiquetas(false);
 		
-		//2 imágenes tienen la etiqueta test2
-		bus.getEtiquetas().clear();
-		bus.getEtiquetas().add(test2);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=2) {
-			fail("Se esperaban 2 resultados y se han obtenido: " + resultados.getNumberOfElements());
+		try {
+			
+			//2 imágenes tienen la etiqueta test2
+			bus.getEtiquetas().clear();
+			bus.getEtiquetas().add(test2);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=2) {
+				fail("Se esperaban 2 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//1 imagen tiene las etiquetas test2 y test1
+			bus.getEtiquetas().add(test1);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Ninguna imagen tiene las dos anteriores y etiquetaDistinta 
+			bus.getEtiquetas().add(etiquetaDistinta);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=0) {
+				fail("Se esperaban 0 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//1 imagen no tiene etiquetas (sin borrar lista de etiquetas en ImagenBusqueda)
+			bus.setBuscarSinEtiquetas(true);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//1 imagen no tiene etiquetas (borrando lista de etiquetas en ImagenBusqueda)
+			bus.getEtiquetas().clear();
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Al buscar con etiquetas pero ninguna etiqueta en la lista, debería devolver las 4 imágenes
+			bus.setBuscarSinEtiquetas(false);
+			bus.getEtiquetas().clear();
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=4) {
+				fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+		}catch(ConstraintViolationException e) {
+			fail("Se ha lanzado una excepción con parámetros válidos: " + e.getMensaje());
 		}
 		
-		//1 imagen tiene las etiquetas test2 y test1
-		bus.getEtiquetas().add(test1);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Ninguna imagen tiene las dos anteriores y etiquetaDistinta 
-		bus.getEtiquetas().add(etiquetaDistinta);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=0) {
-			fail("Se esperaban 0 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//1 imagen no tiene etiquetas (sin borrar lista de etiquetas en ImagenBusqueda)
-		bus.setBuscarSinEtiquetas(true);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//1 imagen no tiene etiquetas (borrando lista de etiquetas en ImagenBusqueda)
-		bus.getEtiquetas().clear();
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Al buscar con etiquetas pero ninguna etiqueta en la lista, debería devolver las 4 imágenes
-		bus.setBuscarSinEtiquetas(false);
-		bus.getEtiquetas().clear();
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=4) {
-			fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
 	}
 	
 	@Test
@@ -288,47 +301,52 @@ public class IntegracionImagenBusqueda {
 		bus.setBuscarSinEtiquetas(false);
 		bus.setEtiquetas(new ArrayList<Etiqueta>());
 		
-		
-		//Una cadena vacía debe devolver lo mismo que buscar sin nombre
-		bus.setNombre("");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=4) {
-			fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Una cadena de espacios debe devolver lo mismo que buscar sin nombre
-		bus.setNombre("  ");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=4) {
-			fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Se debe buscar independientemente de mayúsculas-minúsculas
-		bus.setNombre("dAt BoI");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Se debe buscar por fragmentos del nombre
-		bus.setNombre("pensa");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Se debe buscar trimeando el nombre
-		bus.setNombre(" pensa   ");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
-		}
-		
-		//Los tres anteriores combinados
-		bus.setNombre("  eNsA ");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=1) {
-			fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+		try {
+			
+			//Una cadena vacía debe devolver lo mismo que buscar sin nombre
+			bus.setNombre("");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=4) {
+				fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Una cadena de espacios debe devolver lo mismo que buscar sin nombre
+			bus.setNombre("  ");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=4) {
+				fail("Se esperaban 4 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Se debe buscar independientemente de mayúsculas-minúsculas
+			bus.setNombre("dAt BoI");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Se debe buscar por fragmentos del nombre
+			bus.setNombre("pensa");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Se debe buscar trimeando el nombre
+			bus.setNombre(" pensa   ");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+			//Los tres anteriores combinados
+			bus.setNombre("  eNsA ");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=1) {
+				fail("Se esperaban 1 resultados y se han obtenido: " + resultados.getNumberOfElements());
+			}
+			
+		}catch(ConstraintViolationException e) {
+			fail("Se ha lanzado una excepción con parámetros válidos: " + e.getMensaje());
 		}
 		
 	}
@@ -343,12 +361,18 @@ public class IntegracionImagenBusqueda {
 		bus.setBuscarSinEtiquetas(false);
 		bus.setEtiquetas(new ArrayList<Etiqueta>());
 		
-		bus.setNombre("A%';UPDATE IMAGEN SET NOMBRE='" + nuevoNombre + "' WHERE 1=1;SELECT * FROM IMAGEN WHERE NOMBRE LIKE '%A");
-		resultados = servImagen.getBusqueda(bus, pageable);
-		bus.setNombre(nuevoNombre);
-		resultados = servImagen.getBusqueda(bus, pageable);
-		if(resultados.getNumberOfElements()!=0) {
-			fail("Es usted susceptible a una inyección SQL, comunique con el DBA de este proyecto y cántele las cuarenta");
+		try {
+			
+			bus.setNombre("A%';UPDATE IMAGEN SET NOMBRE='" + nuevoNombre + "' WHERE 1=1;SELECT * FROM IMAGEN WHERE NOMBRE LIKE '%A");
+			resultados = servImagen.getBusqueda(bus, pageable);
+			bus.setNombre(nuevoNombre);
+			resultados = servImagen.getBusqueda(bus, pageable);
+			if(resultados.getNumberOfElements()!=0) {
+				fail("Es usted susceptible a una inyección SQL, comunique con el DBA de este proyecto y cántele las cuarenta");
+			}
+			
+		}catch(ConstraintViolationException e) {
+			fail("Se ha lanzado una excepción con parámetros válidos: " + e.getMensaje());
 		}
 		
 	}

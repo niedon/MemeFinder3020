@@ -1,7 +1,6 @@
 package com.bcadaval.memefinder3020.modelo.servicios;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface ServicioImagen {
 	List<Imagen> getAll();
 	List<Imagen> getAllPorId(Collection<Integer> listaId) throws ConstraintViolationException;
 	List<Integer> getAllIds();
-	Page<Imagen> getBusqueda(ImagenBusqueda busqueda, Pageable pageable);
+	Page<Imagen> getBusqueda(ImagenBusqueda busqueda, Pageable pageable) throws ConstraintViolationException;
 	Imagen getPorId(Integer id) throws ConstraintViolationException, NotFoundException;
 	List<Imagen> getUltimas(int num) throws ConstraintViolationException;
 	
@@ -29,7 +28,7 @@ public interface ServicioImagen {
 	void eliminar(Imagen imagen);
 	void eliminar(Integer id) throws ConstraintViolationException;
 	
-	void sustituirImagen(File fNueva, Imagen imgOriginal) throws IOException;
+	void sustituirImagen(File fNueva, Imagen imgOriginal) throws ConstraintViolationException;
 	void fusionarCategorias(List<Categoria> categorias, String nuevoNombre) throws ConstraintViolationException;
 	void borrarPorCategoria(Categoria cat) throws ConstraintViolationException;
 	

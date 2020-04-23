@@ -1,6 +1,5 @@
 package com.bcadaval.memefinder3020.controlador;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -166,9 +165,8 @@ public class CoincidenciasControlador extends Controlador {
 				servicioImagen.sustituirImagen(imgNueva.getImagen(), listaImgCoincidencias.get(marcador));
 				new Alert(AlertType.INFORMATION, "La imagen se ha sustituido",ButtonType.OK).showAndWait();
 				
-			} catch (IOException e) {
-				e.printStackTrace();
-				new Alert(AlertType.ERROR, "No se ha podido sustituir la imagen",ButtonType.OK).showAndWait();
+			} catch (ConstraintViolationException e) {
+				new Alert(AlertType.ERROR, "No se ha podido sustituir la imagen: " + e.getMensaje(),ButtonType.OK).showAndWait();
 			}
 		}
 		

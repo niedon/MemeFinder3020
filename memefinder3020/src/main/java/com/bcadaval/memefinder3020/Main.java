@@ -16,21 +16,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
     public static void main(String[] args) {
-    	try {
-    		launch(args);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Throwable t = e;
-			while(true) {
-				System.out.println(e.getCause());
-				System.out.println(e.getMessage());
-				System.out.println("-------");
-				if(t.getCause()==null)break;
-				else t=t.getCause();
-			}
-			System.out.println("------fin");
-		}
-        
+    	launch(args);
     }
     
 	@Override
@@ -46,7 +32,7 @@ public class Main extends Application {
 		carga.show();
 		con.asignarBindings(ts.messageProperty(),ts.progressProperty());
 		
-		new Thread(ts).start();
+		new Thread(ts, "Carga").start();
 		
 	}
 	

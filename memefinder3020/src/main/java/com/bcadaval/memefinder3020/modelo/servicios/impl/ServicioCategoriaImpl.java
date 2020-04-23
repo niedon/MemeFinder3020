@@ -18,6 +18,8 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
@@ -30,16 +32,24 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 
 @Service
 public class ServicioCategoriaImpl extends Servicio implements ServicioCategoria {
+	
+	private static final Logger log = LogManager.getLogger(ServicioCategoriaImpl.class);
 
-	@PersistenceContext EntityManager em;
+	@PersistenceContext private EntityManager em;
 	
 	@Override
 	public List<Categoria> getAll(){
+		
+		log.debug(".getAll() - Iniciando recuperación de todas las categorías");
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Categoria> cq = cb.createQuery(Categoria.class);
         Root<Categoria> rootEntry = cq.from(Categoria.class);
         cq.select(rootEntry);
-        return em.createQuery(cq).getResultList();
+        
+        List<Categoria> resultados = em.createQuery(cq).getResultList();
+        log.debug(".getAll() - Finalizada recuperación de todas las categorías: " + resultados.size());
+        return resultados;
 	}
 	
 	/*
@@ -54,7 +64,13 @@ WHERE CATEGORIA.ID IN (
 )
 	*/
 	@Override
-	public List<Categoria> getBusqueda(CategoriaBusqueda busqueda){
+	public List<Categoria> getBusqueda(CategoriaBusqueda busqueda) throws ConstraintViolationException{
+		
+		log.debug(".getBusqueda() - Iniciando recuperación de categorías por búsqueda");
+		
+		if(busqueda==null) {
+			throw new ConstraintViolationException("Objeto de búsqueda nulo");
+		}
 		
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Categoria> cq = cb.createQuery(Categoria.class);
@@ -62,9 +78,12 @@ WHERE CATEGORIA.ID IN (
 		
 		List<Predicate> predicados = new ArrayList<Predicate>();
 		
+		log.debug(".getBusqueda() - ================ CONDICIONES ================");
+		
 		//Condición nombre
-		if(busqueda.getNombre()!=null && !busqueda.getNombre().isEmpty()) {
-			predicados.add(cb.like(cb.upper(root.get("nombre")), '%'+busqueda.getNombre().toUpperCase()+'%'));
+		if(busqueda.getNombre()!=null && !busqueda.getNombre().trim().isEmpty()) {
+			predicados.add(cb.like(cb.upper(root.get("nombre")), '%'+busqueda.getNombre().trim().toUpperCase()+'%'));
+			log.debug(".getBusqueda() - NOMBRE: " + busqueda.getNombre().trim().toUpperCase());
 		}
 		
 		//Condición número
@@ -97,17 +116,26 @@ WHERE CATEGORIA.ID IN (
 			
 			subQCategoria.select(rootSub);
 			predicados.add(cb.in(root).value(subQCategoria));
+			
+			log.debug(".getBusqueda() - NÚM IMG: " + busqueda.getComparador().toString() + " " + busqueda.getNum());
+			
 		}
+		
+		log.debug(".getBusqueda() - =============================================");
 		
 		Predicate[] predicadosArray = predicados.toArray(new Predicate[predicados.size()]);
 		cq.select(root).where(predicadosArray);
 		
-		return em.createQuery(cq).getResultList();
+		List<Categoria> resultados = em.createQuery(cq).getResultList();
+		log.debug(".getBusqueda() - Finalizada recuperación de categorías por búsqueda: " + resultados.size());
+		return resultados;
 		
 	}
 	
 	@Override
 	public Categoria getPorNombre(String nombre) throws ConstraintViolationException, NotFoundException {
+		
+		log.debug(".getPorNombre() - Iniciando recuperación de categoría por nombre");
 		
 		nombre = validarNombre(nombre);
 		
@@ -122,12 +150,14 @@ WHERE CATEGORIA.ID IN (
 		
 		try {
 			Categoria result = em.createQuery(cq).getSingleResult();
+			log.debug(".getPorNombre() - Finalizada recuperación de categoría por nombre: " + result.getNombre());
 			return result;
 		} catch (NoResultException e) {
+			log.debug(".getPorNombre() - Finalizada recuperación de categoría por nombre (no encontrada)");
 			throw new NotFoundException();
 		}catch (NonUniqueResultException e) {
+			log.error(".getPorNombre() - Hay más de una categoría con el mismo nombre");
 			throw new ConstraintViolationException("Hay más de una categoría con el mismo nombre");
-			//TODO al log pero ya
 		}
 		
 	}
@@ -136,11 +166,17 @@ WHERE CATEGORIA.ID IN (
 	@Transactional(rollbackOn = Exception.class)
 	public Categoria getOCrear(String nombre) throws ConstraintViolationException {
 		
+		log.debug(".getOCrear() - Iniciado");
+		
+		Categoria cat;
 		try {
-			return getPorNombre(nombre);
+			cat = getPorNombre(nombre);
 		} catch (NotFoundException e) {
-			return anadir(nombre);
+			cat = anadir(nombre);
 		}
+		
+		log.debug(".getOCrear() - Finalizado");
+		return cat;
 		
 	}
 	
@@ -148,20 +184,25 @@ WHERE CATEGORIA.ID IN (
 	@Transactional(rollbackOn = Exception.class)
 	public Categoria anadir(String nombre) throws ConstraintViolationException {
 		
+		log.debug(".anadir() - Iniciando adición de categoría");
+		
 		nombre = validarNombre(nombre);
 		
 		try {
 			getPorNombre(nombre);
+			log.error(".anadir() - Ya hay una categoría con este nombre: " + nombre);
 			throw new ConstraintViolationException("Esta categoría ya existe");
 		} catch (NotFoundException e) {
-			Categoria et = new Categoria();
-			et.setNombre(nombre.trim().toUpperCase());
-			em.persist(et);
+			Categoria cat = new Categoria();
+			cat.setNombre(nombre.trim().toUpperCase());
+			em.persist(cat);
 			
 			//TODO quitar?
 			em.flush();
 			
-			return et;
+			Categoria anadida = em.merge(cat);
+			log.debug(".anadir() - Finalizada adición de categoría");
+			return anadida;
 		}
 		
 	}
@@ -170,7 +211,10 @@ WHERE CATEGORIA.ID IN (
 	@Transactional(rollbackOn = Exception.class)
 	public Categoria editar(Categoria categoria, String nuevoNombre) throws ConstraintViolationException {
 		
+		log.debug(".editar() - Iniciando edición");
+		
 		if(categoria==null) {
+			log.error(".editar() - Categoría nula");
 			throw new ConstraintViolationException("Categoría nula");
 		}
 		
@@ -179,16 +223,20 @@ WHERE CATEGORIA.ID IN (
 		Categoria cat = em.contains(categoria) ? categoria : em.merge(categoria);
 		
 		if(cat.getNombre().equals(nuevoNombre)) {
+			log.debug(".editar() - Finalizada edición (nuevo nombre coincide con antiguo)");
 			return cat;
 		}
 		
 		try {
 			getPorNombre(nuevoNombre);
+			log.error(".editar() - Ya hay otra categoría con el nuevo nombre");
 			throw new ConstraintViolationException("Hay otra categoría con ese nombre");
 		} catch (NotFoundException e) {
 		
 			cat.setNombre(nuevoNombre);
-			return em.merge(cat);
+			Categoria retorna = em.merge(cat);
+			log.debug(".editar() - Finalizada edición: " + nuevoNombre);
+			return retorna;
 			
 		}
 		
@@ -198,7 +246,10 @@ WHERE CATEGORIA.ID IN (
 	@Transactional(rollbackOn = Exception.class)
 	public void eliminar(Categoria cat){
 		
+		log.debug(".eliminar() - Iniciando eliminación de categoría");
+		
 		if(cat==null) {
+			log.debug(".eliminar() - Finalizada eliminación de categoría (categoría nula)");
 			return;
 		}
 		
@@ -206,18 +257,20 @@ WHERE CATEGORIA.ID IN (
 		CriteriaUpdate<Imagen> cu = cb.createCriteriaUpdate(Imagen.class);
 		Root<Imagen> root = cu.from(Imagen.class);
 		
-		
+		//Categoría nula, el método no permite poner directamente null
 		Categoria proxyCat = null;
 		
 		cu.set(root.get("categoria"), proxyCat);
 		
 		cu.where(cb.equal(root.get("categoria"), cat));
 		
-		em.createQuery(cu).executeUpdate();
-		//TODO añadir al log imágenes afectadas
-		
+		int alteradas = em.createQuery(cu).executeUpdate();
+		log.debug(".eliminar() - Imágenes alteradas: " + alteradas);
 		
 		em.remove(em.contains(cat) ? cat : em.merge(cat));
+		
+		log.debug(".eliminar() - Finalizada eliminación de categoría");
+		
 	}
 
 }

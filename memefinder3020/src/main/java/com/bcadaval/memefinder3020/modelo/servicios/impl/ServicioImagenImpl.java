@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +26,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,29 +52,40 @@ import com.bcadaval.memefinder3020.utils.RutasUtils;
 @Service
 public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 
+	private static final Logger log = LogManager.getLogger(ServicioImagenImpl.class);
+	
 	@Autowired private RutasUtils rutasUtils;
 	
-	@PersistenceContext EntityManager em;
+	@PersistenceContext private EntityManager em;
 	
-	@Autowired ServicioEtiqueta servicioEtiqueta;
-	@Autowired ServicioCategoria servicioCategoria;
+	@Autowired private ServicioEtiqueta servicioEtiqueta;
+	@Autowired private ServicioCategoria servicioCategoria;
 	
 	@Override
 	public List<Imagen> getAll() {
+		
+		log.debug(".getAll() - Iniciando recuperación de todas las imágenes");
+		
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
 		final Root<Imagen> root = cq.from(Imagen.class);
         cq.select(root);
-        return em.createQuery(cq).getResultList();
+        
+        List<Imagen> resultados = em.createQuery(cq).getResultList();
+        log.debug(".getAll() - Finalizada recuperación de todas las imágenes: " + resultados.size());
+        return resultados;
 	}
 	
 	@Override
 	public List<Imagen> getAllPorId(Collection<Integer> listaId) throws ConstraintViolationException{
 		
+		log.debug(".getAllPorId() - Iniciando recuperación de imágenes por ID");
+		
 		if(listaId==null) {
+			log.error(".getAllPorId() - La lista es nula");
 			throw new ConstraintViolationException("Lista nula");
 		}else if(listaId.isEmpty()) {
-			//TODO comprobar fallos
+			log.warn(".getAllPorId() - La lista está vacía");
 			return Collections.emptyList();
 		}
 		
@@ -85,12 +100,17 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
         
         cq.select(root).where(pIn);
         
-        return em.createQuery(cq).getResultList();
+        List<Imagen> resultados = em.createQuery(cq).getResultList();
+        log.debug(".getAllPorId() - Finalizada recuperación de imágenes por ID: " + resultados.size());
+        return resultados;
 		
 	}
 	
 	@Override
 	public List<Integer> getAllIds() {
+		
+		log.debug(".getAllIds() - Iniciando recuperación de todas las ID");
+		
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
@@ -98,12 +118,25 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		
 		cq.select(root.get("id"));
 		
-		return em.createQuery(cq).getResultList();
+		List<Integer> resultados = em.createQuery(cq).getResultList();
+		log.debug(".getAllIds() - Finalizada recuperación de ID de imágenes: " + resultados.size());
+		return resultados;
 		
 	}
 	
 	@Override
-	public Page<Imagen> getBusqueda(ImagenBusqueda busqueda, Pageable pageable) {
+	public Page<Imagen> getBusqueda(ImagenBusqueda busqueda, Pageable pageable) throws ConstraintViolationException {
+		
+		log.debug(".getBusqueda() - Iniciando recuperación de imágenes por búsqueda");
+		
+		if(busqueda==null) {
+			log.error(".getBusqueda() - ImagenBusqueda null");
+			throw new ConstraintViolationException("Objeto de búsqueda nulo");
+		}
+		if(pageable==null) {
+			log.error(".getBusqueda() - Pageable null");
+			throw new ConstraintViolationException("Pageable nulo");
+		}
 		
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
@@ -111,40 +144,54 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		
 		List<Predicate> predicados = new ArrayList<Predicate>();
 		
+		log.debug(".getBusqueda() - ================ CONDICIONES ================");
+		
 		//Con nombre %X%
 		if(busqueda.getNombre() != null && !busqueda.getNombre().trim().isEmpty()) {
 			predicados.add(cb.like(cb.upper(root.get("nombre")), '%'+busqueda.getNombre().trim().toUpperCase()+'%'));
+			log.debug(".getBusqueda() - NOMBRE: " + busqueda.getNombre().trim().toUpperCase());
 		}
 		
 		//Sin categoría
 		if(busqueda.isBuscarSinCategoria()) {
 			predicados.add(cb.isNull(root.get("categoria")));
+			log.debug(".getBusqueda() - CATEGORÍA: [imágenes sin categoría]");
 		//Con categoría X
 		}else if(busqueda.getCategoria()!=null) {
 			predicados.add(cb.equal(root.get("categoria"), busqueda.getCategoria().getId()));
+			log.debug(".getBusqueda() - CATEGORÍA: " + busqueda.getCategoria().getNombre());
 		}
 		
 		//Después de X
 		if(busqueda.getFechaDespues()!=null) {
 			predicados.add(cb.greaterThan(root.get("fecha"), busqueda.getFechaDespues()));
+			log.debug(".getBusqueda() - DESPUÉS DE: " + busqueda.getFechaDespues().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
 		}
 		
 		//Antes de X
 		if(busqueda.getFechaAntes()!=null) {
 			predicados.add(cb.lessThan(root.get("fecha"), busqueda.getFechaAntes()));
+			log.debug(".getBusqueda() - ANTES DE: " + busqueda.getFechaAntes().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
 		}
 		
 		//Sin etiquetas
 		if(busqueda.isBuscarSinEtiquetas()) {
 			predicados.add(cb.isEmpty(root.get("etiquetas")));
+			log.debug(".getBusqueda() - ETIQUETAS: [imágenes sin etiqueta]");
 		}else {
+			
 			//Con al menos tales etiquetas
 			if(busqueda.getEtiquetas()!=null) {
+				ArrayList<String> listaEtiquetasLog = new ArrayList<String>(busqueda.getEtiquetas().size());
 				for(Etiqueta et : busqueda.getEtiquetas()) {
+					listaEtiquetasLog.add(et.getNombre());
 					predicados.add(cb.isMember(et, root.get("etiquetas")));
 				}
+				log.debug(".getBusqueda() - ETIQUETAS: " + listaEtiquetasLog);
 			}
 		}
+		
+		log.debug(".getBusqueda() - =============================================");
 		
 		Predicate[] predicadosArray = predicados.toArray(new Predicate[predicados.size()]);
 		
@@ -157,15 +204,19 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		
 		Long count = em.createQuery(countQuery).getSingleResult();
 		
-		Page<Imagen> retorna = new PageImpl<>(resultado, pageable, count);
-		return retorna;
+		Page<Imagen> resultados = new PageImpl<>(resultado, pageable, count);
+		log.debug(".getBusqueda() - Finalizada recuperación de imágenes por búsqueda: " + count);
+		return resultados;
 		
 	}
 	
 	@Override
 	public Imagen getPorId(Integer id) throws ConstraintViolationException, NotFoundException {
 		
+		log.debug(".getPorId() - Iniciando recuperación de imagen por ID: " + id);
+		
 		if(id==null) {
+			log.error(".getPorId() - ID nula");
 			throw new ConstraintViolationException("ID nula");
 		}
 		
@@ -178,8 +229,10 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		cq.select(root).where(p);
 		
 		try {
+			log.debug(".getPorId() - Finalizada recuperación de imagen por ID");
 			return em.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
+			log.debug(".getPorId() - Finalizada recuperación de imagen por ID (no encontrada)");
 			throw new NotFoundException();
 		}
 		
@@ -188,7 +241,10 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	@Override
 	public List<Imagen> getUltimas(int num) throws ConstraintViolationException {
 		
+		log.debug(".getUltimas() - Iniciando recuperación de últimas imágenes");
+		
 		if(num<1) {
+			log.error(".getUltimas() - Se ha introducido un valor menor que 1: " + num);
 			throw new ConstraintViolationException("No se permiten valores menores que 1");
 		}
 		
@@ -197,7 +253,9 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		Root<Imagen> root = cq.from(Imagen.class);
 		cq.orderBy(cb.desc(root.get("fecha")));
 		
-		return em.createQuery(cq).setMaxResults(num).getResultList();
+		List<Imagen> resultados = em.createQuery(cq).getResultList();
+		log.debug(".getUltimas() - Finalizada recuperación de las últimas " + num + " imágenes: " + resultados.size());
+		return resultados;
 		
 	}
 	
@@ -205,23 +263,15 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	@Transactional(rollbackOn = Exception.class)
 	public Imagen anadir(ImagenTemp iTemp) throws ConstraintViolationException {
 		
+		log.debug(".anadir() - Iniciando adición de imagen");
+		
 		if(iTemp==null) {
+			log.error(".anadir() - ImagenTemp nula");
 			throw new ConstraintViolationException("Se ha recibido una imagen vacía");
 		}
 		
 		File archivoImagen = iTemp.getImagen();
-		
-		if(archivoImagen == null) {
-			throw new ConstraintViolationException("La imagen es nula");
-		}else if(!archivoImagen.exists()) {
-			throw new ConstraintViolationException("La imagen no existe");
-		}else if(archivoImagen.isDirectory()) {
-			throw new ConstraintViolationException("El archivo es un directorio");
-		}else if( ! archivoImagen.getName().contains(".") || archivoImagen.getName().charAt(archivoImagen.getName().length()-1)=='.') {
-			throw new ConstraintViolationException("El archivo no tiene extensión");
-		}else if( ! Arrays.asList(Constantes.FORMATOS_PERMITIDOS).contains(archivoImagen.getName().substring(archivoImagen.getName().indexOf('.')+1).toUpperCase())){
-			throw new ConstraintViolationException("El archivo tiene un formato no permitido");
-		}
+		validarArchivoImagen(archivoImagen);
 		
 		Imagen img = new Imagen();
 		String nombre = iTemp.getNombre();
@@ -242,7 +292,7 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 			try {
 				img.getEtiquetas().add(servicioEtiqueta.getOCrear(el));
 			} catch (ConstraintViolationException e) {
-				//TODO al log
+				log.error(".anadir() - Etiqueta inválida: " + el);
 			}
 		});
 		
@@ -253,21 +303,26 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 			copiada.getParentFile().mkdirs();
 			FileSystemUtils.copyRecursively(archivoImagen, copiada);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			log.error(".anadir() - Error copiando File");
 			throw new ConstraintViolationException("Error copiando el archivo de imagen");
 		}
 		
 		em.flush();
 		
-		return em.merge(img);
-
+		Imagen anadida = em.merge(img);
+		log.debug(".anadir() - Finalizada adición de imagen");
+		return anadida;
+		
 	}
 	
 	@Override
 	@Transactional(rollbackOn = Exception.class)
 	public Imagen editar(Imagen imagen) {
 		
-		return em.merge(imagen);
+		log.debug(".editar() - Iniciando edición de imagen");
+		Imagen im = em.merge(imagen);
+		log.debug(".editar() - Finalizada edición de imagen");
+		return im;
 		
 	}
 	
@@ -275,13 +330,17 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	@Transactional(rollbackOn = Exception.class)
 	public void eliminar(Imagen imagen) {
 		
+		log.debug(".eliminar() - Iniciando eliminación de imagen");
+		
 		File f = rutasUtils.getFileDeImagen(imagen);
 		
 		em.remove(em.contains(imagen) ? imagen : em.merge(imagen));
 		
 		if( ! FileSystemUtils.deleteRecursively(f)) {
-			//TODO al log
+			log.error(".eliminar() - No se ha podido eliminar el arhcivo de imagen: " + f.getAbsolutePath());
 		}
+		
+		log.debug(".eliminar() - Finalizada eliminación de imagen");
 		
 	}
 	
@@ -289,22 +348,21 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	@Transactional(rollbackOn = Exception.class)
 	public void eliminar(Integer id) throws ConstraintViolationException {
 		
+		log.debug(".eliminar() - Iniciando eliminación de imagen por ID");
+		
 		if(id==null) {
+			log.error(".eliminar() - ID nula");
 			throw new ConstraintViolationException("ID null");
 		}
 		
 		try {
-			Imagen img = getPorId(id);
 			
-			File f = rutasUtils.getFileDeImagen(img);
+			log.debug(".eliminar() - ID: " + id);
 			
-			em.remove(img);
-			
-			if( ! FileSystemUtils.deleteRecursively(f)) {
-				//TODO al log
-			}
+			eliminar(getPorId(id));
 			
 		} catch (NotFoundException e) {
+			log.error(".eliminar() - La imagen no existe");
 			throw new ConstraintViolationException("La imagen no existe");
 		}
 		
@@ -312,18 +370,43 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	}
 	
 	@Override
-	public void sustituirImagen(File fNueva, Imagen imgOriginal) throws IOException {
-		Files.copy(fNueva.toPath(), FileSystems.getDefault().getPath(
-				rutasUtils.RUTA_IMAGENES_AC,
-				String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension())),
-				StandardCopyOption.REPLACE_EXISTING);
+	public void sustituirImagen(File fNueva, Imagen imgOriginal) throws ConstraintViolationException {
+		
+		log.debug(".sustituirImagen() - Iniciando sustitución de imagen");
+		
+		validarArchivoImagen(fNueva);
+		if(imgOriginal==null) {
+			log.error(".sustituirImagen() - Imagen nula");
+		}
+		
+		try {
+			
+			Path rutaArchivo = FileSystems.getDefault().getPath(
+					rutasUtils.RUTA_IMAGENES_AC,
+					String.format("%d.%s", imgOriginal.getId(),imgOriginal.getExtension()));
+			
+			Files.copy(fNueva.toPath(), rutaArchivo,
+					StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			log.error(".sustituirImagen() - Excepción I/O: " + e.getMessage());
+			throw new ConstraintViolationException("Error copiando la imagen");
+		}catch(InvalidPathException e) {
+			log.error(".sustituirImagen() - Ruta de imagen inválida: " + e.getMessage());
+			throw new ConstraintViolationException("Ruta de mensaje inválida");
+		}
+		
+		log.debug(".sustituirImagen() - Finalizada sustitución de imagen");
+		
 	}
 	
 	@Override
 	@Transactional(rollbackOn = Exception.class)
 	public void fusionarCategorias(List<Categoria> categorias, String nuevoNombre) throws ConstraintViolationException {
 		
+		log.debug(".fusionarCategorias() - Iniciando fusión de categorías");
+		
 		if(categorias==null || categorias.isEmpty()) {
+			log.error(".fusionarCategorias() - No hay categorías que fusionar");
 			throw new ConstraintViolationException("La lista de categorías no puede estar vacía");
 		}
 		
@@ -357,7 +440,9 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		cu.set(root.get("categoria"), categoriaMasAntigua);
 		cu.where(predicateOr);
 		
-		em.createQuery(cu).executeUpdate();
+		int alteradas = em.createQuery(cu).executeUpdate();
+		
+		log.debug(".fusionarCategorias() - Imágenes alteradas: " + alteradas);
 		
 		List<Categoria> nuevasCat = new ArrayList<Categoria>(categorias.size());
 		categorias.forEach(el -> nuevasCat.add(em.find(Categoria.class, el.getId())));
@@ -371,8 +456,11 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 			nuevoNombre = validarNombre(nuevoNombre);
 			servicioCategoria.editar(categoriaMasAntigua, nuevoNombre);
 		}catch (ConstraintViolationException e) {
+			log.error(".fusionarCategorias() - Error validando o editando nombre de categoría");
 			return;
 		}
+		
+		log.debug(".fusionarCategorias() - Finalizada fusión de categorías");
 		
 	}
 	
@@ -380,7 +468,10 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	@Transactional(rollbackOn = Exception.class)
 	public void borrarPorCategoria(Categoria cat) throws ConstraintViolationException {
 		
+		log.debug(".borrarPorCategoria() - Iniciando borrado por categoría");
+		
 		if(cat==null) {
+			log.error(".borrarPorCategoria() - Categoría nula");
 			throw new ConstraintViolationException("Categoría nula");
 		}
 		
@@ -393,6 +484,7 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		List<Imagen> listaSelect = em.createQuery(querySelect).getResultList();
 
 		if(listaSelect.isEmpty()) {
+			log.debug(".borrarPorCategoria() - Finalizado borrado por categoría (no hay imágenes en estacategoría)");
 			return;
 		}
 		
@@ -403,13 +495,17 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		
 		cd.where(p);
 		
-		em.createQuery(cd).executeUpdate();
+		int borradas = em.createQuery(cd).executeUpdate();
+		log.debug(".borrarPorCategoria() - Imágenes borradas: " + borradas);
 		
 		listaSelect.forEach(el -> {
-			if( ! FileSystemUtils.deleteRecursively(rutasUtils.getFileDeImagen(el))) {
-				//TODO al log
+			File f = rutasUtils.getFileDeImagen(el);
+			if( ! FileSystemUtils.deleteRecursively(f)) {
+				log.error(".borrarPorCategoria() - No se ha podido borrar archivo: " + f.getAbsolutePath());
 			}
 		});
+		
+		log.debug(".borrarPorCategoria() - Finalizado borrado por categoría");
 		
 	}
 	

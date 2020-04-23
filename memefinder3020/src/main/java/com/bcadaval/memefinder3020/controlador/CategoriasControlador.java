@@ -293,7 +293,11 @@ public class CategoriasControlador extends Controlador {
 	
 	private void hacerBusqueda() {
 		
-		resultados.setAll(servicioCategoria.getBusqueda(getBusqueda()));
+		try {
+			resultados.setAll(servicioCategoria.getBusqueda(getBusqueda()));
+		} catch (ConstraintViolationException e) {
+			new Alert(AlertType.ERROR, "No se ha podido hacer la búsqueda: " + e.getMensaje(), ButtonType.OK).showAndWait();
+		}
 		
 	}
 	
