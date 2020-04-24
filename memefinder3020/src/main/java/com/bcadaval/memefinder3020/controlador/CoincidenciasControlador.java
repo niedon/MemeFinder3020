@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.concurrencia.TaskGetPorcentajeImagenesParecidas;
@@ -32,6 +34,8 @@ import javafx.scene.layout.FlowPane;
 
 @Controller
 public class CoincidenciasControlador extends Controlador {
+	
+	private static final Logger log = LogManager.getLogger(CoincidenciasControlador.class);
 	
 	static final String BORRAR_IMAGEN = "borrarImagen";
 	
@@ -82,6 +86,8 @@ public class CoincidenciasControlador extends Controlador {
 
 	@Override
 	public void initVisionado() {
+		
+		log.debug(".initVisionado() - Iniciando visionado");
 		
 		switch(getVistaOrigen()) {
 		case ANADIR_IMAGEN:
@@ -134,6 +140,7 @@ public class CoincidenciasControlador extends Controlador {
 			break;
 			
 		default:
+			log.error(".initVisionado() - Pantalla no contemplada: " + getVistaOrigen().toString());
 			throw new UnsupportedOperationException("Se ha accedido desde una vista no soportada");
 		}
 		

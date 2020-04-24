@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import com.bcadaval.memefinder3020.utils.RutasUtils;
@@ -15,6 +18,8 @@ import javafx.concurrent.Task;
 
 public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 
+	private static final Logger log = LogManager.getLogger(TaskGetIndicesImagenesParecidas.class);
+	
 	private RutasUtils rutasUtils;
 	
 	private ServicioImagen servicioImagen;
@@ -29,6 +34,8 @@ public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 	
 	@Override
 	protected List<Integer> call() throws Exception {
+		
+		log.debug(".call() - Iniciando recuperación de índices de imágenes parecidas");
 		
 		updateProgress(0, 100);
 		
@@ -68,6 +75,8 @@ public class TaskGetIndicesImagenesParecidas extends Task<List<Integer>> {
 		}else {
 			updateMessage("Coincidencias encontradas: " + retorna.size());
 		}
+		
+		log.debug(".call() - Finalizada recuperación de índices de imágenes parecidas: " + retorna.size());
 		
 		return retorna;
 	}

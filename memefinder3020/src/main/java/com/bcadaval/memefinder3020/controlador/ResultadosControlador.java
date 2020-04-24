@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +46,8 @@ import javafx.util.StringConverter;
 
 @Controller
 public class ResultadosControlador extends Controlador{
+	
+	private static final Logger log = LogManager.getLogger(ResultadosControlador.class);
 	
 	static final String DATOS_IMAGENSELECCIONADA = "imagenSeleccionada";
 	
@@ -137,6 +141,8 @@ public class ResultadosControlador extends Controlador{
 	@Override
 	public void initVisionado() {
 		
+		log.debug(".initVisionado() - Iniciando visionado");
+		
 		switch (getVistaOrigen()) {
 		case INICIO:
 			limpiarCampos();
@@ -152,7 +158,8 @@ public class ResultadosControlador extends Controlador{
 			break;
 			
 		default:
-			throw new RuntimeException(String.format("Pantalla no contemplada: %s", getVistaOrigen()));
+			log.error(".initVisionado() - Pantalla no contemplada: " + getVistaOrigen().toString());
+			throw new UnsupportedOperationException("Pantalla no contemplada");
 		}
 		
 	}

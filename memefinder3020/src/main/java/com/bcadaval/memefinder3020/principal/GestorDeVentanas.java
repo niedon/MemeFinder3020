@@ -1,5 +1,7 @@
 package com.bcadaval.memefinder3020.principal;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -23,6 +25,8 @@ import javafx.stage.Stage;
 @Component
 public class GestorDeVentanas implements ApplicationContextAware{
 	
+	private static final Logger log = LogManager.getLogger(GestorDeVentanas.class);
+	
 	private static final Vistas primeraPantalla = Vistas.INICIO;
 	
 	@FXML private AnchorPane nodoPrincipalPantallaCarga;
@@ -41,13 +45,17 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	
 	public void cambiarEscena(Vistas v) throws GUIException {
 		
+		log.debug(String.format(".cambiarEscena() - Cambiando vista: %s -> %s", vistaActual.toString(), v.toString()));
+		
 		//Se evita cambiar de una vista modal a una normal (hay que usar onClose)
 		if(vistaActual.esModal() && !v.esModal()) {
+			log.error(".cambiarEscena() - Se ha intentado cambiar de una vista modal a una normal");
 			throw new GUIException("No se puede cambiar a una vista normal desde una modal");
 		}
 		
 		//Se evita cambiar a la misma vista
 		if(v==vistaActual) {
+			log.error(".cambiarEscena() - Se ha intentado cambiar de una vista a sí misma");
 			throw new GUIException("No se puede cambiar a la misma vista");
 		}
 		
@@ -55,6 +63,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		Controlador c = ctx.getBean(vistaActual.getClaseControlador());
 		while(c.getVistaPadre() != null) {
 			if(c.getVistaPadre()==v) {
+				log.error(".cambiarEscena() - Se ha intentado cambiar a una vista que ya está en la pila");
 				throw new GUIException(String.format("La vista %s ya está en la pila de vistas", v.getNombre()));
 			}
 			c = ctx.getBean(c.getVistaPadre().getClaseControlador());
@@ -68,6 +77,10 @@ public class GestorDeVentanas implements ApplicationContextAware{
 			if(cNuevaVista.getStage().getOwner()==null) {
 				cNuevaVista.getStage().initOwner(ctx.getBean(vistaActual.getClaseControlador()).getStage());
 				cNuevaVista.getStage().initModality(Modality.WINDOW_MODAL);
+			}
+			
+			if(v==Vistas.VISORIMAGEN) {
+				cNuevaVista.getStage().setMaximized(true);
 			}
 			
 			cNuevaVista.getStage().show();
@@ -84,8 +97,11 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		Controlador cActual = ctx.getBean(vistaActual.getClaseControlador());
 		
 		if(cActual.getVistaPadre()==null) {
+			log.debug(".onClose() - Cerrando aplicación");
 			Platform.exit();
 		}else {
+			
+			log.debug(String.format(".onClose() - Cambiando de vista actual a vista padre: %s -> %s", vistaActual, cActual.getVistaPadre()));
 			
 			Controlador cPadre = ctx.getBean(cActual.getVistaPadre().getClaseControlador());
 			
@@ -135,12 +151,16 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS_RFE, "principal")).toExternalForm());
 		
 		stage.setScene(escenaPrincipal);
+		stage.setResizable(false);
 		mostrarPrimeraPantalla();
 		quitarCargando();
 		
 	}
 	
 	void setCargando(Task<?> task, int segundos) {
+		
+		log.debug(String.format(".setCargando() - Iniciando carga. Tarea: [%s]. Tiempo botón cancelar: [%d]", task.getTitle(), segundos));
+		
 		panePrincipal.getChildren().get(0).setEffect(new GaussianBlur(5));
 		nodoPrincipalPantallaCarga.setMouseTransparent(false);
 		nodoPrincipalPantallaCarga.setVisible(true);
@@ -158,6 +178,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 			}).start();
 			btCancelar.setOnAction(e -> {
 				if(task!=null && task.isRunning()) {
+					log.debug(".setCargando() - Carga cancelada");
 					task.cancel();
 				}
 			});
@@ -169,6 +190,9 @@ public class GestorDeVentanas implements ApplicationContextAware{
 	}
 	
 	void quitarCargando() {
+		
+		log.debug(".quitarCargando() - Quitando pantalla de carga");
+		
 		panePrincipal.getChildren().get(0).setEffect(null);
 		nodoPrincipalPantallaCarga.setMouseTransparent(true);
 		nodoPrincipalPantallaCarga.setVisible(false);

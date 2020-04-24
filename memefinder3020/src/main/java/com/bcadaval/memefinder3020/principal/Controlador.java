@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bcadaval.memefinder3020.excepciones.GUIException;
@@ -27,6 +29,8 @@ import javafx.stage.Stage;
 
 public abstract class Controlador implements Initializable{
 	
+	private static final Logger log = LogManager.getLogger(Controlador.class);
+	
 	protected static final Map<String,Object> datos = new HashMap<String,Object>();
 	static final String VISTA_ORIGEN = "vistaOrigen";
 	
@@ -44,39 +48,39 @@ public abstract class Controlador implements Initializable{
 	public abstract void initVisionado();
 	public abstract void initFoco();
 
-	Parent getVista() {
+	final Parent getVista() {
 		return vista;
 	}
 	
-	Stage getStage() {
+	final Stage getStage() {
 		return (Stage)vista.getScene().getWindow();
 	}
 	
-	Vistas getVistaPadre() {
+	final Vistas getVistaPadre() {
 		return vistaPadre;
 	}
 	
-	void setVistaPadre(Vistas vistaPadre) {
+	final void setVistaPadre(Vistas vistaPadre) {
 		this.vistaPadre = vistaPadre;
 	}
 
-	void setVista(Parent vista) {
+	final void setVista(Parent vista) {
 		this.vista = vista;
 	}
 	
-	void limpiarMapa() {
+	final void limpiarMapa() {
 		datos.clear();
 	}
 	
-	void anadirVistaAMapa(Vistas v) {
+	final void anadirVistaAMapa(Vistas v) {
 		datos.put(VISTA_ORIGEN, v);
 	}
 	
-	protected Vistas getVistaOrigen() {
+	protected final Vistas getVistaOrigen() {
 		return (Vistas) datos.get(VISTA_ORIGEN);
 	}
 	
-	protected void setFit(ImageView iv) {
+	protected final void setFit(ImageView iv) {
 		Pane parent = (Pane) iv.getParent();
 		if(parent.getPrefWidth()>iv.getImage().getWidth() && parent.getPrefHeight()>iv.getImage().getHeight()) {
 			iv.setFitWidth(iv.getImage().getWidth());
@@ -87,7 +91,7 @@ public abstract class Controlador implements Initializable{
 		}
 	}
 	
-    protected void setGraficos(Labeled elemento, String constSvg){
+    protected final void setGraficos(Labeled elemento, String constSvg){
         
         InputStream stream = this.getClass().getResourceAsStream(String.format(Constantes.RUTA_SVG_RFE, constSvg));
         if(stream!=null) {
@@ -104,11 +108,12 @@ public abstract class Controlador implements Initializable{
         
     }
     
-    protected void cambiarEscena(Vistas v){
+    protected final void cambiarEscena(Vistas v){
     	try {
 			gestorDeVentanas.cambiarEscena(v);
 		} catch (GUIException e) {
-			//TODO completar y log
+			log.error(String.format(".cambiarEscena() - Error al cambiar vista: %s -> %s", getVistaOrigen().toString(), v.toString()));
+			log.error(".cambiarEscena() - Error: " + e.getMensaje());
 			new Alert(AlertType.ERROR, e.getMensaje(), ButtonType.OK);
 			limpiarMapa();
 		}
@@ -120,7 +125,7 @@ public abstract class Controlador implements Initializable{
 	
 	//--------------Concurrencia--------------
 	
-	protected void comenzarTarea(Task<?> t, int segundos) {
+	protected final void comenzarTarea(Task<?> t, int segundos) {
 		
 		t.stateProperty().addListener((obs, viejo, nuevo) -> {
 			
@@ -141,7 +146,7 @@ public abstract class Controlador implements Initializable{
 			
 		});
 		
-		new Thread(t).start();
+		new Thread(t,String.format("Hilo tarea: %s", t.getTitle())).start();
 		
 	}
 

@@ -3,6 +3,8 @@ package com.bcadaval.memefinder3020.principal;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,6 +21,8 @@ import javafx.stage.Stage;
 @Component
 public class SpringFxmlLoader implements ApplicationContextAware{
 	
+	private static final Logger log = LogManager.getLogger(SpringFxmlLoader.class);
+	
 	private ApplicationContext ctx;
 
 	@Override
@@ -28,17 +32,22 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 	
 	public void cargaVistas() throws IOException{
 		
+		log.debug(".cargaVistas() - Iniciando carga de vistas");
+		
 		//Carga de vistas "accesibles"
 		for(Vistas v : Vistas.values()) {
+			
+			log.debug(".cargaVistas() - Cargando vista: " + v.toString());
+			
 			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, v.getNombre())));
 			load.setControllerFactory(ctx::getBean);
 			Parent p = load.load();
 			
 			URL cssEspecifico = getClass().getResource(String.format(Constantes.RUTA_CSSESPECIFICO_RFE, v.getNombre()));
 			if(cssEspecifico==null) {
-				//TODO al logger
+				log.error(".cargaVistas() - No se ha encontrado css específico para: " + v.toString());
 			}else {
-				//TODO al logger
+				log.debug(".cargaVistas() - Aplicando css específico a: " + v.toString());
 				p.getStylesheets().add(cssEspecifico.toExternalForm());
 			}
 			
@@ -55,6 +64,7 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 						((Controlador)load.getController()).onClose();
 						e.consume();
 					});
+					stageModal.setResizable(false);
 					stageModal.setScene(new Scene(p));
 				});
 				
@@ -62,10 +72,14 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 			((Controlador)load.getController()).setVista(p);
 		}
 		
+		log.debug(".cargaVistas() - Cargando vista de pantalla splash");
+		
 		//Carga de pantalla de carga
 		FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, Constantes.NOMBRE_PANTALLA_CARGA)));
 		load.setController(ctx.getBean(GestorDeVentanas.class));
 		load.load();
+		
+		log.debug(".cargaVistas() - Finalizada carga de vistas");
 		
 	}
 

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.concurrencia.TaskGetIndicesImagenesParecidas;
@@ -39,6 +41,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 @Controller
 public class AnadirImagenControlador extends Controlador {
+	
+	private static final Logger log = LogManager.getLogger(AnadirImagenControlador.class);
 	
 	static final String DATOS_IMAGEN_TEMP = "imagenTemp";
 	static final String DATOS_LISTA_NUM_IMG = "listaNumImg";
@@ -114,6 +118,8 @@ public class AnadirImagenControlador extends Controlador {
 	@Override
 	public void initVisionado() {
 		
+		log.debug(".initVisionado() - Iniciando visionado");
+		
 		switch(getVistaOrigen()) {
 		case INICIO:
 			refrescarInterfaz();
@@ -127,6 +133,7 @@ public class AnadirImagenControlador extends Controlador {
 			break;
 			
 		default:
+			log.error(".initVisionado() - Pantalla no contemplada: " + getVistaOrigen().toString());
 			throw new UnsupportedOperationException("Se ha accedido desde una vista no soportada");
 		}
 		

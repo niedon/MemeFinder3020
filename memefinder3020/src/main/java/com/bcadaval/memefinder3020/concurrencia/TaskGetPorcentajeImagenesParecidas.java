@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.utils.RutasUtils;
 import com.github.kilianB.hash.Hash;
@@ -14,6 +17,8 @@ import javafx.concurrent.Task;
 
 public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 
+	private static final Logger log = LogManager.getLogger(TaskGetPorcentajeImagenesParecidas.class);
+	
 	private RutasUtils rutasUtils;
 	private File imagenNueva;
 	private List<Imagen> listaImagenes;
@@ -26,6 +31,8 @@ public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 	
 	@Override
 	protected List<Double> call() throws Exception {
+		
+		log.debug(".call() - Iniciando cálculo de porcentajes");
 		
 		try {
 			updateProgress(0, 1);
@@ -52,9 +59,11 @@ public class TaskGetPorcentajeImagenesParecidas extends Task<List<Double>> {
 				updateProgress(i, listaImagenes.size());
 			}
 			
+			log.debug(".call() - Finalizado cálculo de porcentajes");
 			return retorna;
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(".call() - Error en cálculo de porcentajes", e);
 			throw e;
 		}
 		

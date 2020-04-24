@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
@@ -39,6 +41,8 @@ import javafx.scene.control.ToggleGroup;
 
 @Controller
 public class CategoriasControlador extends Controlador {
+	
+	private static final Logger log = LogManager.getLogger(CategoriasControlador.class);
 	
 	private ObservableList<Categoria> resultados;
 
@@ -113,6 +117,8 @@ public class CategoriasControlador extends Controlador {
 
 	@Override
 	public void initVisionado() {
+		
+		log.debug(".initVisionado() - Iniciando visionado");
 		
 		limpiarCampos();
 		hacerBusqueda();

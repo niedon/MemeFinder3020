@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
@@ -29,6 +31,8 @@ import javafx.scene.input.KeyEvent;
 
 @Controller
 public class InicioControlador extends Controlador {
+	
+	private static final Logger log = LogManager.getLogger(InicioControlador.class);
 	
 	static final String DATOS_TF_BUSQUEDA = "valorTfBusqueda";
 	
@@ -73,6 +77,8 @@ public class InicioControlador extends Controlador {
 	@Override
 	public void initVisionado() {
 		
+		log.debug(".initVisionado() - Iniciando visionado");
+		
 		switch (getVistaOrigen()) {
 		case INICIO://Viene desde pantalla de carga
 			//TODO comprobar errores
@@ -85,7 +91,8 @@ public class InicioControlador extends Controlador {
 			break;
 			
 		default:
-			throw new RuntimeException("Pantalla no contemplada");
+			log.error(".initVisionado() - Pantalla no contemplada: " + getVistaOrigen().toString());
+			throw new UnsupportedOperationException("Pantalla no contemplada");
 		}
 		
 		ultimasIv.forEach(el -> el.setImage(null));
@@ -95,6 +102,7 @@ public class InicioControlador extends Controlador {
 				ultimasIv.get(i).setImage(new Image(rutasUtils.getURLDeImagen(ultimas.get(i))));
 			}
 		} catch (ConstraintViolationException e) {
+			log.error(".initVisionado() - Error cargando últimas imágenes", e);
 			new Alert(AlertType.ERROR,String.format("No se han podido cargar las últimas imágenes: %s", e.getMensaje(), ButtonType.OK)).showAndWait();
 		}
 

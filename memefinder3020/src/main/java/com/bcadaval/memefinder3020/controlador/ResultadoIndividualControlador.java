@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.controlador.componentes.PaneEtiquetas;
@@ -38,6 +40,8 @@ import javafx.util.StringConverter;
 
 @Controller
 public class ResultadoIndividualControlador extends Controlador {
+	
+	private static final Logger log = LogManager.getLogger(ResultadoIndividualControlador.class);
 	
 	static final String DATOS_HAYCAMBIOS = "hayCambios";
 	private boolean modoEdicion;
@@ -101,6 +105,8 @@ public class ResultadoIndividualControlador extends Controlador {
 	@Override
 	public void initVisionado() {
 		
+		log.debug(".initVisionado() - Iniciando visionado");
+		
 		switch (getVistaOrigen()) {
 		case RESULTADOS:
 			hayCambios = false;
@@ -114,7 +120,8 @@ public class ResultadoIndividualControlador extends Controlador {
 			break;
 			
 		default:
-			throw new RuntimeException("Pantalla no contemplada");
+			log.error(".initVisionado() - Pantalla no contemplada: " + getVistaOrigen().toString());
+			throw new UnsupportedOperationException("Pantalla no contemplada");
 		}
 		
 	}
