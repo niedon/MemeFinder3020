@@ -1,6 +1,7 @@
 package com.bcadaval.memefinder3020.serviciostest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
+import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
+import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations = {"classpath:config/application-test.properties", "classpath:config/hibernate-test.properties"})
+@TestPropertySource(locations = {"classpath:application-test.properties", "classpath:hibernate-test.properties"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServicioEtiquetaTest {
 
@@ -30,9 +33,15 @@ public class ServicioEtiquetaTest {
 	
 	@Autowired private ServicioEtiqueta serv;
 	
+	@Autowired private ServicioCategoria tServCat;
+	@Autowired private ServicioImagen tServIm;
+	
 	@Test
 	public void t01_servicioNoNull() {
 		assertTrue(serv!=null);
+		serv.getAll().forEach(serv::eliminar);
+		tServCat.getAll().forEach(tServCat::eliminar);
+		tServIm.getAll().forEach(tServIm::eliminar);
 	}
 	
 	@Test

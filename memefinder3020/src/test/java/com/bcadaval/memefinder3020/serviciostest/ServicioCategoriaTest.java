@@ -18,10 +18,12 @@ import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
+import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
+import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations = {"classpath:config/application-test.properties", "classpath:config/hibernate-test.properties"})
+@TestPropertySource(locations = {"classpath:application-test.properties", "classpath:hibernate-test.properties"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServicioCategoriaTest {
 
@@ -31,16 +33,25 @@ public class ServicioCategoriaTest {
 	
 	@Autowired ServicioCategoria serv;
 	
+	@Autowired ServicioEtiqueta tServEt;
+	@Autowired ServicioImagen tServIm;
+	
 	@Test
 	public void t01_servicioNoNull() {
 		assertTrue(serv!=null);
+		tServEt.getAll().forEach(tServEt::eliminar);
+		serv.getAll().forEach(serv::eliminar);
+		tServIm.getAll().forEach(tServIm::eliminar);
 	}
 	
 	@Test
 	public void t02_testAnadir() {
 		
 		List<Categoria> primeraVez = serv.getAll();
-		assertTrue("La tabla de categorías no está vacía", primeraVez.isEmpty());
+		//assertTrue("La tabla de categorías no está vacía", primeraVez.isEmpty());
+		if(!primeraVez.isEmpty()) {
+			fail("La tabla de categorías no está vacía: " + primeraVez.get(0).getNombre());
+		}
 		
 		try {
 			serv.anadir(NOMBRECATEGORIA1);

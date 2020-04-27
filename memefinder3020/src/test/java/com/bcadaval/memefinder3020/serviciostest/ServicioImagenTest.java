@@ -30,7 +30,7 @@ import com.bcadaval.memefinder3020.utils.RutasUtils;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations = {"classpath:config/application-test.properties", "classpath:config/hibernate-test.properties"})
+@TestPropertySource(locations = {"classpath:application-test.properties", "classpath:hibernate-test.properties"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServicioImagenTest {
 	

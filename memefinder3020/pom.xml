@@ -11,12 +11,11 @@
 	
 	<groupId>com.bcadaval</groupId>
 	<artifactId>memefinder3020</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<packaging>jar</packaging>
 
 	<name>memefinder3020</name>
-	<description>Buscador de imágenes en base a etiquetas</description>
-	<url>https://www.linkedin.com/in/bcadaval</url>
+	<description>Gestor y biblioteca de imágenes</description>
 	<developers>
 		<developer>
 			<name>Basilio Cadaval Rodríguez</name>
@@ -95,6 +94,10 @@
 	</dependencies>
 	
 	<build>
+	
+		<defaultGoal>package</defaultGoal>
+		<finalName>memefinder3020</finalName>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

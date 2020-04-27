@@ -253,7 +253,7 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		Root<Imagen> root = cq.from(Imagen.class);
 		cq.orderBy(cb.desc(root.get("fecha")));
 		
-		List<Imagen> resultados = em.createQuery(cq).getResultList();
+		List<Imagen> resultados = em.createQuery(cq).setMaxResults(num).getResultList();
 		log.debug(".getUltimas() - Finalizada recuperación de las últimas " + num + " imágenes: " + resultados.size());
 		return resultados;
 		

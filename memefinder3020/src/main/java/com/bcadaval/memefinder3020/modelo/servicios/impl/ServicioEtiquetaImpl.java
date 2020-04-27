@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
+import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.servicios.Servicio;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 
@@ -232,8 +233,11 @@ public class ServicioEtiquetaImpl extends Servicio implements ServicioEtiqueta{
 		
 		log.debug(".eliminar() - Iniciando eliminación de etiqueta");
 		
-		//TODO eliminar etiquetas del set de etiquetas de las imágenes que la contengan, lanza excepción al borrar una con imágenes
-		em.remove(em.contains(etiqueta) ? etiqueta : em.merge(etiqueta));
+		etiqueta = em.contains(etiqueta) ? etiqueta : em.merge(etiqueta);
+		em.remove(etiqueta);
+		for(Imagen img : etiqueta.getImagenes()) {
+			img.getEtiquetas().remove(etiqueta);
+		}
 		
 		log.debug(".eliminar() - Finalizada eliminación de etiqueta");
 		
