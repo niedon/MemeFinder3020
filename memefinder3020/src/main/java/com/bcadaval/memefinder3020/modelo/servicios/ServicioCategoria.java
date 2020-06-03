@@ -5,12 +5,12 @@ import java.util.List;
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
-import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaBusqueda;
+import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaEtiquetaBusqueda;
 
 public interface ServicioCategoria {
 
 	List<Categoria> getAll();
-	List<Categoria> getBusqueda(CategoriaBusqueda busqueda) throws ConstraintViolationException;
+	List<Categoria> getBusqueda(CategoriaEtiquetaBusqueda busqueda) throws ConstraintViolationException;
 	Categoria getPorNombre(String nombre) throws ConstraintViolationException, NotFoundException;
 	Categoria getOCrear(String nombre) throws ConstraintViolationException;
 	

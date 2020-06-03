@@ -7,10 +7,12 @@ import java.util.Map;
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
+import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaEtiquetaBusqueda;
 
 public interface ServicioEtiqueta {
 	
 	List<Etiqueta> getAll();
+	List<Etiqueta> getBusqueda(CategoriaEtiquetaBusqueda busqueda) throws ConstraintViolationException;
 	Etiqueta getPorNombre(String nombreEtiqueta) throws ConstraintViolationException, NotFoundException;
 	Etiqueta getOCrear(String nombreEtiqueta) throws ConstraintViolationException;
 	
@@ -21,5 +23,7 @@ public interface ServicioEtiqueta {
 	Etiqueta anadir(String nombreEtiqueta) throws ConstraintViolationException;
 	Etiqueta editar(Etiqueta etiqueta, String nuevoNombre) throws ConstraintViolationException;
 	void eliminar(Etiqueta etiqueta);
+	
+	void check(Etiqueta etiqueta);
 	
 }

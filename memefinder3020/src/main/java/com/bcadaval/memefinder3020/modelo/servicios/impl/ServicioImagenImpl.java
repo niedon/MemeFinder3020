@@ -12,11 +12,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaDelete;
@@ -55,8 +55,6 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	private static final Logger log = LogManager.getLogger(ServicioImagenImpl.class);
 	
 	@Autowired private RutasUtils rutasUtils;
-	
-	@PersistenceContext private EntityManager em;
 	
 	@Autowired private ServicioEtiqueta servicioEtiqueta;
 	@Autowired private ServicioCategoria servicioCategoria;
@@ -405,8 +403,8 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		
 		log.debug(".fusionarCategorias() - Iniciando fusión de categorías");
 		
-		if(categorias==null || categorias.isEmpty()) {
-			log.error(".fusionarCategorias() - No hay categorías que fusionar");
+		if(categorias==null || categorias.size() < 2) {
+			log.error(".fusionarCategorias() - No hay categorías que fusionar: " + categorias.size());
 			throw new ConstraintViolationException("La lista de categorías no puede estar vacía");
 		}
 		
@@ -452,12 +450,16 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 				servicioCategoria.eliminar(c);
 			}
 		}
+		
+		boolean llamarAlServicio = true;
 		try {
 			nuevoNombre = validarNombre(nuevoNombre);
-			servicioCategoria.editar(categoriaMasAntigua, nuevoNombre);
 		}catch (ConstraintViolationException e) {
-			log.error(".fusionarCategorias() - Error validando o editando nombre de categoría");
-			return;
+			log.error(".fusionarCategorias() - Error validando nombre de categoría");
+			llamarAlServicio = false;
+		}
+		if(llamarAlServicio) {
+			servicioCategoria.editar(categoriaMasAntigua, nuevoNombre);
 		}
 		
 		log.debug(".fusionarCategorias() - Finalizada fusión de categorías");
@@ -506,6 +508,134 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		});
 		
 		log.debug(".borrarPorCategoria() - Finalizado borrado por categoría");
+		
+	}
+	
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void fusionarEtiquetas(List<Etiqueta> etiquetasNoMerge, String nuevoNombre) throws ConstraintViolationException{
+		
+		log.debug(".fusionarEtiquetas() - Iniciando fusión de etiquetas");
+		
+		if(etiquetasNoMerge==null || etiquetasNoMerge.size() < 2) {
+			log.error(".fusionarEtiquetas() - No hay etiquetas que fusionar: " + etiquetasNoMerge.size());
+			throw new ConstraintViolationException("La lista de etiquetas no puede estar vacía");
+		}
+		
+		//Se hace merge a las etiquetas para evitar errores de persistencia
+		List<Etiqueta> etiquetas = new ArrayList<Etiqueta>(etiquetasNoMerge.size());
+		etiquetasNoMerge.forEach(et -> etiquetas.add(em.contains(et) ? et : em.merge(et)));
+		
+		//Se aísla la más antigua para fusionarlas todas en esta
+		Etiqueta etiquetaMasAntigua = etiquetas.get(0);
+		for(Etiqueta et : etiquetas) {
+			if(et.getId() < etiquetaMasAntigua.getId()) {
+				etiquetaMasAntigua = et;
+			}
+		}
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
+		CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
+		Root<Imagen> root = cq.from(Imagen.class);
+		
+		ArrayList<Etiqueta> etiquetasSinLaAntigua = new ArrayList<Etiqueta>(etiquetas);
+		etiquetasSinLaAntigua.remove(etiquetaMasAntigua);
+		
+		ArrayList<Predicate> predicadosOr = new ArrayList<Predicate>(etiquetas.size()-1);
+		
+		etiquetasSinLaAntigua.forEach(et -> predicadosOr.add(cb.isMember(et, root.get("etiquetas"))));
+		
+		Predicate predicateOr;
+		
+		if(predicadosOr.size()==1) {
+			predicateOr = predicadosOr.get(0);
+		}else {
+			predicateOr = cb.or(predicadosOr.toArray(new Predicate[predicadosOr.size()]));
+		}
+		
+		cq.where(predicateOr);
+		
+		//  Todas las imágenes que tienen alguna de las etiquetas menos la antigua
+		//  (se exceptúan las que tienen solo la antigua, ya que esta será
+		//  editada mediante servicioEtiqueta)
+		List<Imagen> resultados = em.createQuery(cq).getResultList();
+		
+		for(Imagen img : resultados) {
+			img.getEtiquetas().removeAll(etiquetasSinLaAntigua);
+			img.getEtiquetas().add(etiquetaMasAntigua);
+		}
+		
+		
+		boolean llamarAlServicio = true;
+		try {
+			nuevoNombre = validarNombre(nuevoNombre);
+		} catch (ConstraintViolationException e) {
+			log.error(".fusionarEtiquetas() - Error validando nombre de etiqueta");
+			llamarAlServicio = false;
+		}
+		
+		if(llamarAlServicio) {
+			servicioEtiqueta.editar(etiquetaMasAntigua, nuevoNombre);
+		}else {
+			//Puedes encontrarte con alguien haciendo caca
+		}
+		
+		log.debug(".fusionarEtiquetas() - Finalizada fusión de etiquetas");
+		
+	}
+	
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void borrarPorEtiqueta(Etiqueta et) throws ConstraintViolationException{
+		
+		log.debug(".borrarPorEtiqueta() - Iniciando borrado por etiqueta");
+		
+		if(et == null) {
+			log.error(".borrarPorEtiqueta() - Etiqueta nula");
+			throw new ConstraintViolationException("Etiqueta nula");
+		}
+		
+		et = em.contains(et) ? et : em.merge(et);
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
+		CriteriaQuery<Imagen> querySelect = cb.createQuery(Imagen.class);
+		Root<Imagen> rootSelect = querySelect.from(Imagen.class);
+		Predicate pSelect = cb.isMember(et, rootSelect.get("etiquetas"));
+		querySelect.where(pSelect);
+		
+		List<Imagen> listaSelect = em.createQuery(querySelect).getResultList();
+		if(listaSelect.isEmpty()) {
+			log.debug(".borrarPorEtiqueta() - Finalizado borrado por etiqueta (no hay imágenes con esta etiqueta)");
+			return;
+		}
+		
+		Set<Etiqueta> setEtiquetasTotales = new HashSet<Etiqueta>(); 
+		
+		CriteriaDelete<Imagen> cd = cb.createCriteriaDelete(Imagen.class);
+		Root<Imagen> root = cd.from(Imagen.class);
+		In<Integer> clausulaIn = cb.in(root.get("id"));
+		for(Imagen img : listaSelect) {
+			clausulaIn = clausulaIn.value(img.getId());
+			setEtiquetasTotales.addAll(img.getEtiquetas());
+		}
+		
+		cd.where(clausulaIn);
+		
+		int borradas = em.createQuery(cd).executeUpdate();
+		log.debug(".borrarPorEtiqueta() - Imágenes borradas: " + borradas);
+		
+		setEtiquetasTotales.forEach(el -> servicioEtiqueta.check(el));
+		
+		listaSelect.forEach(el -> {
+			File f = rutasUtils.getFileDeImagen(el);
+			if( ! FileSystemUtils.deleteRecursively(f)) {
+				log.error(".borrarPorEtiqueta() - No se ha podido borrar archivo: " + f.getAbsolutePath());
+			}
+		});
+		
+		log.debug(".borrarPorEtiqueta() - Finalizado borrado por etiqueta");
 		
 	}
 	

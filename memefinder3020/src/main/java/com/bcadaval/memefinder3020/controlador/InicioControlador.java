@@ -16,7 +16,6 @@ import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.principal.Vistas;
 import com.bcadaval.memefinder3020.utils.Constantes;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -52,8 +51,6 @@ public class InicioControlador extends Controlador {
 	@FXML private ImageView ivUltimas3;
 	@FXML private ImageView ivUltimas4;
 
-	private Alert broma;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -70,7 +67,6 @@ public class InicioControlador extends Controlador {
 		setGraficos(btCategorias, Constantes.SVG_CATEGORIA);
 		setGraficos(btEtiquetas, Constantes.SVG_TAG);
 		setGraficos(btAjustes, Constantes.SVG_AJUSTES);
-		Platform.runLater(() -> broma = new Alert(AlertType.INFORMATION, "No se apuren, vendrá pronto", ButtonType.OK));
 		
 	}
 
@@ -88,6 +84,7 @@ public class InicioControlador extends Controlador {
 		case ANADIR_IMAGEN:
 		case AJUSTES:
 		case CATEGORIAS:
+		case ETIQUETAS:
 			break;
 			
 		default:
@@ -142,7 +139,7 @@ public class InicioControlador extends Controlador {
 	
 	@FXML
 	private void btEtiquetas_click(ActionEvent event) {
-		broma.showAndWait();
+		cambiarEscena(Vistas.ETIQUETAS);
 	}
 	
 	@FXML

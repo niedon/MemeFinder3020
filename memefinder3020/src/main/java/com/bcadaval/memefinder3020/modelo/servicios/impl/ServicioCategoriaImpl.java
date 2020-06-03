@@ -3,10 +3,8 @@ package com.bcadaval.memefinder3020.modelo.servicios.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
@@ -26,7 +24,7 @@ import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
-import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaBusqueda;
+import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaEtiquetaBusqueda;
 import com.bcadaval.memefinder3020.modelo.servicios.Servicio;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 
@@ -34,8 +32,6 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
 public class ServicioCategoriaImpl extends Servicio implements ServicioCategoria {
 	
 	private static final Logger log = LogManager.getLogger(ServicioCategoriaImpl.class);
-
-	@PersistenceContext private EntityManager em;
 	
 	@Override
 	public List<Categoria> getAll(){
@@ -64,7 +60,7 @@ WHERE CATEGORIA.ID IN (
 )
 	*/
 	@Override
-	public List<Categoria> getBusqueda(CategoriaBusqueda busqueda) throws ConstraintViolationException{
+	public List<Categoria> getBusqueda(CategoriaEtiquetaBusqueda busqueda) throws ConstraintViolationException{
 		
 		log.debug(".getBusqueda() - Iniciando recuperación de categorías por búsqueda");
 		

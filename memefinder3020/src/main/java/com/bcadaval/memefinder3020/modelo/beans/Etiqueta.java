@@ -12,14 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Table(name="ETIQUETA")
 public class Etiqueta {
-	
-	@Override
-	public String toString() {
-		return id + "-" + nombre + " (" + imagenes.size()+")";
-	}
 
 	@Id
 	@Column(name="ID")
@@ -34,6 +31,9 @@ public class Etiqueta {
 			fetch = FetchType.LAZY)
 	private Set<Imagen> imagenes = new HashSet<Imagen>();
 	
+	@Formula("(select count(*) from IMAGEN_ETIQUETA imget where imget.IDETIQUETA=id)")
+	private Long countImagenes;
+
 	public Integer getId() {
 		return id;
 	}
@@ -57,7 +57,30 @@ public class Etiqueta {
 	public void setImagenes(Set<Imagen> imagenes) {
 		this.imagenes = imagenes;
 	}
-	
-	
 
+	public Long getCountImagenes() {
+		return countImagenes;
+	}
+
+	public void setCountImagenes(Long countImagenes) {
+		this.countImagenes = countImagenes;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Etiqueta))
+			return false;
+		Etiqueta other = (Etiqueta) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	
+	
+	
 }

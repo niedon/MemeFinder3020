@@ -10,7 +10,7 @@ Aplicación de escritorio para gestionar imágenes. Puedes añadir, clasificarlas (
 ### Prueba
 Descargar o clonar repositorio e importar como proyecto Maven.
 ### Compilación
-En Eclipse, botón derecho sobre el proyecto. Run as -> Maven build... -> escribir "package" en Goals y seleccionar recuadro de "Skip Tests"-> Run.
+En Eclipse, botón derecho sobre el proyecto. Run as -> Maven build...-> Run.
 En la carpeta /target/ de donde tengas el proyecto se habrá generado un jar.
 ### Eliminación
 Si lo has ejecutado, en tu carpeta de usuario se habrá creado una carpeta llamada /memefinder3020/. Ahí se guardan todos los datos del programa y las imágenes. Con borrar la carpeta es suficiente.
@@ -23,14 +23,16 @@ Si lo has ejecutado, en tu carpeta de usuario se habrá creado una carpeta llamad
 * [JUnit](https://junit.org/junit5/) 4 - Test
 
 ## Próximas funcionalidades
-* Administración de etiquetas
 * Ajustes generales
 * Exportar/Importar conjuntos de imágenes
+* Soporte de miniaturas (tumbnails)
 * Análisis profundo de imágenes
 * Sugerencia de etiquetas en búsquedas
 * Estadísticas
 * Más estilos
 * Nueva disposición de los resultados de búsqueda
+* Miniaturas de imágenes
+* ~~Administración de etiquetas~~
 
 
 ## Autor

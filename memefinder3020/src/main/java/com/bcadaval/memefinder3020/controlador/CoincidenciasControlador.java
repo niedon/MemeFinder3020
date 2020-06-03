@@ -205,7 +205,7 @@ public class CoincidenciasControlador extends Controlador {
 		setFit(ivOriginal);
 		
 		elegida.getEtiquetas().forEach( el -> {
-			flowOriginal.getChildren().add(new HBoxEtiqueta((long)el.getImagenes().size(), el.getNombre()));
+			flowOriginal.getChildren().add(new HBoxEtiqueta(el.getCountImagenes(), el.getNombre()));
 		});
 		
 		if(elegida.getNombre()==null || elegida.getNombre().isEmpty()) {

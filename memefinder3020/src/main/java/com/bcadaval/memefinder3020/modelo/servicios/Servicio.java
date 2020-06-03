@@ -3,6 +3,9 @@ package com.bcadaval.memefinder3020.modelo.servicios;
 import java.io.File;
 import java.util.Arrays;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +15,8 @@ import com.bcadaval.memefinder3020.utils.Constantes;
 public abstract class Servicio {
 
 	private static final Logger log = LogManager.getLogger(Servicio.class);
+	
+	@PersistenceContext protected EntityManager em;
 	
 	protected static String validarNombre(String nombre) throws ConstraintViolationException {
 		

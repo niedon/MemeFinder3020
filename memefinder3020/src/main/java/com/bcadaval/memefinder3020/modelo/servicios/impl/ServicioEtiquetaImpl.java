@@ -1,15 +1,15 @@
 package com.bcadaval.memefinder3020.modelo.servicios.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -23,6 +23,7 @@ import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
+import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaEtiquetaBusqueda;
 import com.bcadaval.memefinder3020.modelo.servicios.Servicio;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 
@@ -30,8 +31,6 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 public class ServicioEtiquetaImpl extends Servicio implements ServicioEtiqueta{
 	
 	private static final Logger log = LogManager.getLogger(ServicioEtiquetaImpl.class);
-
-	@PersistenceContext private EntityManager em;
 	
 	@Override
 	public List<Etiqueta> getAll() {
@@ -48,6 +47,60 @@ public class ServicioEtiquetaImpl extends Servicio implements ServicioEtiqueta{
         return resultados;
         
 	}
+	
+	@Override
+	public List<Etiqueta> getBusqueda(CategoriaEtiquetaBusqueda busqueda) throws ConstraintViolationException{
+		
+		log.debug(".getBusqueda() - Iniciando recuperación de etiquetas por búsqueda");
+		
+		if(busqueda==null) {
+			throw new ConstraintViolationException("Objeto de búsqueda nulo");
+		}
+		
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Etiqueta> cq = cb.createQuery(Etiqueta.class);
+		final Root<Etiqueta> root = cq.from(Etiqueta.class);
+		
+		List<Predicate> predicados = new ArrayList<Predicate>();
+		
+		log.debug(".getBusqueda() - ================ CONDICIONES ================");
+		
+		//Condición nombre
+		if(busqueda.getNombre()!=null && !busqueda.getNombre().trim().isEmpty()) {
+			predicados.add(cb.like(cb.upper(root.get("nombre")), '%'+busqueda.getNombre().trim().toUpperCase()+'%'));
+			log.debug(".getBusqueda() - NOMBRE: " + busqueda.getNombre().trim().toUpperCase());
+		}
+		
+		//Condición número
+		if(busqueda.isConNum()) {
+			switch(busqueda.getComparador()) {
+			case IGUAL:
+				predicados.add(cb.equal(root.get("countImagenes"), (long)busqueda.getNum()));
+				break;
+			case MAYOR:
+				predicados.add(cb.greaterThan(root.get("countImagenes"), (long)busqueda.getNum()));
+				break;
+			case MENOR:
+				predicados.add(cb.lessThan(root.get("countImagenes"), (long)busqueda.getNum()));
+				break;
+			}
+			
+			log.debug(".getBusqueda() - NÚM IMG: " + busqueda.getComparador().toString() + " " + busqueda.getNum());
+			
+		}
+		
+		log.debug(".getBusqueda() - =============================================");
+		
+		Predicate[] predicadosArray = predicados.toArray(new Predicate[predicados.size()]);
+		cq.select(root).where(predicadosArray);
+		
+		List<Etiqueta> resultados = em.createQuery(cq).getResultList();
+		log.debug(".getBusqueda() - Finalizada recuperación de categorías por búsqueda: " + resultados.size());
+		return resultados;
+		
+	}
+	
+	
 	
 	@Override
 	public Etiqueta getPorNombre(String nombreEtiqueta) throws ConstraintViolationException, NotFoundException {
@@ -234,13 +287,31 @@ public class ServicioEtiquetaImpl extends Servicio implements ServicioEtiqueta{
 		log.debug(".eliminar() - Iniciando eliminación de etiqueta");
 		
 		etiqueta = em.contains(etiqueta) ? etiqueta : em.merge(etiqueta);
-		em.remove(etiqueta);
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaDelete<Etiqueta> cd = cb.createCriteriaDelete(Etiqueta.class);
+		Root<Etiqueta> root = cd.from(Etiqueta.class);
+		
+		cd.where(cb.equal(root.get("id"), etiqueta.getId()));
+		
+		System.out.println("eliminadas: " + em.createQuery(cd).executeUpdate());
+		
 		for(Imagen img : etiqueta.getImagenes()) {
 			img.getEtiquetas().remove(etiqueta);
 		}
 		
 		log.debug(".eliminar() - Finalizada eliminación de etiqueta");
 		
+	}
+	
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void check(Etiqueta etiqueta) {
+		log.debug(".check() - Iniciando chequeo de etiquetas");
+		if(etiqueta!=null && count(etiqueta)<1) {
+			eliminar(etiqueta);
+		}
+		log.debug(".check() - Finalizado chequeo de etiquetas");
 	}
 	
 }

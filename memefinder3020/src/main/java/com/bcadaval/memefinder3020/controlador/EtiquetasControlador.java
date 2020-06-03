@@ -3,15 +3,13 @@ package com.bcadaval.memefinder3020.controlador;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
-import com.bcadaval.memefinder3020.modelo.beans.Categoria;
-import com.bcadaval.memefinder3020.modelo.beans.Imagen;
+import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.temp.CategoriaEtiquetaBusqueda;
 import com.bcadaval.memefinder3020.principal.Controlador;
 import com.bcadaval.memefinder3020.utils.Constantes;
@@ -40,11 +38,11 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
 
 @Controller
-public class CategoriasControlador extends Controlador {
+public class EtiquetasControlador extends Controlador{
+
+	private static final Logger log = LogManager.getLogger(EtiquetasControlador.class);
 	
-	private static final Logger log = LogManager.getLogger(CategoriasControlador.class);
-	
-	private ObservableList<Categoria> resultados;
+	private ObservableList<Etiqueta> resultados;
 
 	@FXML private TextField tfNombre;
 	@FXML private Button btBuscar;
@@ -54,10 +52,9 @@ public class CategoriasControlador extends Controlador {
 	@FXML private RadioButton rbMas;
 	@FXML private RadioButton rbMenos;
 	@FXML private RadioButton rbIgual;
-	@FXML private TableView<Categoria> tvCategorias;
-	@FXML private TableColumn<Categoria, String> tcCategoria;
+	@FXML private TableView<Etiqueta> tvEtiquetas;
+	@FXML private TableColumn<Etiqueta, String> tcEtiqueta;
 	@FXML private Label lbResultados;
-	@FXML private Button btAnadir;
 	@FXML private Button btRenombrar;
 	@FXML private Button btFusionar;
 	@FXML private Button btEliminar;
@@ -82,26 +79,27 @@ public class CategoriasControlador extends Controlador {
 		lbResultados.textProperty().bind(Bindings.format("%d resultado/s",
 				Bindings.size(resultados)));
 		
-		tcCategoria.setCellValueFactory(el -> {
+		
+		tcEtiqueta.setCellValueFactory(el -> {
 			
 			String caena = String.format("%s (%d %s)",
             		el.getValue().getNombre(),
-            		el.getValue().getImagenes().size(),
-            		el.getValue().getImagenes().size()==1 ? "imagen" : "imágenes");
+            		el.getValue().getCountImagenes(),
+            		el.getValue().getCountImagenes()==1 ? "imagen" : "imágenes");
 		
 			return new SimpleStringProperty(caena);
 			
 		});
-		tvCategorias.setItems(resultados);
-		tvCategorias.setPlaceholder(new Label("No hay resultados"));
-		tvCategorias.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		tvEtiquetas.setItems(resultados);
+		tvEtiquetas.setPlaceholder(new Label("No hay resultados"));
+		tvEtiquetas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
 		spNumero.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
 		
 		spNumero.getValueFactory().setValue(1);
 
 		//Bindings botones
-		ObservableList<Categoria> seleccionTvCategorias = tvCategorias.getSelectionModel().getSelectedItems();
+		ObservableList<Etiqueta> seleccionTvCategorias = tvEtiquetas.getSelectionModel().getSelectedItems();
 		
 		btRenombrar.disableProperty().bind(Bindings.size(seleccionTvCategorias).isNotEqualTo(1));
 		btEliminar.disableProperty().bind(Bindings.size(seleccionTvCategorias).isNotEqualTo(1));
@@ -110,12 +108,11 @@ public class CategoriasControlador extends Controlador {
 		
 		//Gráficos de botones
 		setGraficos(btBuscar, Constantes.SVG_LUPA);
-		setGraficos(btAnadir, Constantes.SVG_PLUS);
 		setGraficos(btEliminar, Constantes.SVG_EQUIS);
 		setGraficos(btVaciar, Constantes.SVG_PAPELERA);
 		setGraficos(btRenombrar, Constantes.SVG_LAPIZ);
 		setGraficos(btFusionar, Constantes.SVG_UNIR);
-
+		
 	}
 
 	@Override
@@ -125,7 +122,7 @@ public class CategoriasControlador extends Controlador {
 		
 		limpiarCampos();
 		hacerBusqueda();
-
+		
 	}
 
 	@Override
@@ -141,37 +138,14 @@ public class CategoriasControlador extends Controlador {
 	}
 	
 	@FXML
-	private void btAnadir_click(ActionEvent event) {
-		
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Añadir categoría");
-		dialog.setHeaderText("Elige el nombre de la nueva categoría");
-		
-		Optional<String> resultado = dialog.showAndWait();
-		if(resultado.isPresent()) {
-			
-			try {
-				servicioCategoria.anadir(resultado.get());
-				new Alert(AlertType.INFORMATION, String.format("Se ha creado la categoría con nombre %s", resultado.get()), ButtonType.OK).showAndWait();
-				hacerBusqueda();
-			} catch (ConstraintViolationException e) {
-				new Alert(AlertType.ERROR,String.format("No se ha podido añadir la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
-				return;
-			}
-			
-		}
-		
-	}
-
-	@FXML
 	private void btEliminar_click(ActionEvent event) {
-		Categoria cat = tvCategorias.getSelectionModel().getSelectedItem();
+		Etiqueta et = tvEtiquetas.getSelectionModel().getSelectedItem();
 		
-		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Borrar la categoría %s?", cat.getNombre()), ButtonType.YES, ButtonType.NO).showAndWait();
+		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Borrar la etiqueta %s?", et.getNombre()), ButtonType.YES, ButtonType.NO).showAndWait();
 		if(respuesta.isPresent() && respuesta.get()==ButtonType.YES) {
 			
-			servicioCategoria.eliminar(cat);
-			new Alert(AlertType.INFORMATION, "Se ha borrado la categoría", ButtonType.OK).showAndWait();
+			servicioEtiqueta.eliminar(et);
+			new Alert(AlertType.INFORMATION, "Se ha borrado la etiqueta", ButtonType.OK).showAndWait();
 			hacerBusqueda();
 			
 		}
@@ -180,30 +154,30 @@ public class CategoriasControlador extends Controlador {
 	
 	@FXML
 	private void btVaciar_click(ActionEvent event) {
-		Categoria cat = tvCategorias.getSelectionModel().getSelectedItem();
+		Etiqueta et = tvEtiquetas.getSelectionModel().getSelectedItem();
 		
-		if(cat.getImagenes().isEmpty()) {
+		if(et.getCountImagenes()<1) {
 			return;
 		}
 	
-		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Vaciar la categoría %s?", cat.getNombre()), ButtonType.YES, ButtonType.NO).showAndWait();
+		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Vaciar la etiqueta %s?", et.getNombre()), ButtonType.YES, ButtonType.NO).showAndWait();
 		
 		if(respuesta.isPresent() && respuesta.get()==ButtonType.YES) {
-			Set<Imagen> imagenes = cat.getImagenes();
+			Long imagenes = et.getCountImagenes();
 			Optional<ButtonType> confirmacion = new Alert(AlertType.WARNING, String.format("Se eliminará%c %d %s, ¿confirmar?",
-					imagenes.size()==1 ? 0 : 'n',
-					imagenes.size(),
-					imagenes.size()==1 ? "imagen" : "imágenes"),
+					imagenes==1 ? 0 : 'n',
+					imagenes,
+					imagenes==1 ? "imagen" : "imágenes"),
 					ButtonType.YES, ButtonType.NO).showAndWait();
 			
 			if(confirmacion.isPresent() && confirmacion.get()==ButtonType.YES) {
 				
 				try {
-					servicioImagen.borrarPorCategoria(cat);
-					new Alert(AlertType.INFORMATION, "La categoría se ha vaciado", ButtonType.OK).showAndWait();
+					servicioImagen.borrarPorEtiqueta(et);
+					new Alert(AlertType.INFORMATION, "La etiqueta se ha vaciado", ButtonType.OK).showAndWait();
 					hacerBusqueda();
 				} catch (ConstraintViolationException e) {
-					new Alert(AlertType.ERROR,String.format("No se ha podido vaciar la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+					new Alert(AlertType.ERROR,String.format("No se ha podido vaciar la etiqueta: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 				}
 				
 			}
@@ -215,25 +189,25 @@ public class CategoriasControlador extends Controlador {
 	@FXML
 	private void btRenombrar_click(ActionEvent event) {
 		
-		Categoria cat = tvCategorias.getSelectionModel().getSelectedItem();
+		Etiqueta et = tvEtiquetas.getSelectionModel().getSelectedItem();
 		
 		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Renombrar categoría");
-		dialog.setHeaderText("Elige el nuevo nombre de la categoría");
+		dialog.setTitle("Renombrar etiqueta");
+		dialog.setHeaderText("Elige el nuevo nombre de la etiqueta");
 		
 		Optional<String> resultado = dialog.showAndWait();
 		if(resultado.isPresent()) {
 			String nuevoNombre = resultado.get().trim().toUpperCase();
 			
-			if(nuevoNombre.equalsIgnoreCase(cat.getNombre())) {
+			if(nuevoNombre.equalsIgnoreCase(et.getNombre())) {
 				return;
 			}
 			
 			try {
-				servicioCategoria.editar(cat, nuevoNombre);
+				servicioEtiqueta.editar(et, nuevoNombre);
 				hacerBusqueda();
 			} catch (ConstraintViolationException e) {
-				new Alert(AlertType.ERROR,String.format("No se ha podido editar la categoría: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+				new Alert(AlertType.ERROR,String.format("No se ha podido editar la etiqueta: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 			}
 			
 		}
@@ -243,20 +217,20 @@ public class CategoriasControlador extends Controlador {
 	@FXML
 	private void btFusionar_click(ActionEvent event) {
 		
-		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Fusionar %d categorías?", tvCategorias.getSelectionModel().getSelectedItems().size()),ButtonType.YES, ButtonType.NO).showAndWait();
+		Optional<ButtonType> respuesta = new Alert(AlertType.CONFIRMATION, String.format("¿Fusionar %d etiquetas?", tvEtiquetas.getSelectionModel().getSelectedItems().size()),ButtonType.YES, ButtonType.NO).showAndWait();
 		if(respuesta.isPresent() && respuesta.get()==ButtonType.YES) {
 			
 			TextInputDialog dialog = new TextInputDialog();
-			dialog.setTitle("Fusionar categorías");
-			dialog.setHeaderText("Elige el nombre de la nueva categoría (o deja vacío para unirlas con el nombre de la más antigua)");
+			dialog.setTitle("Fusionar etiquetas");
+			dialog.setHeaderText("Elige el nombre de la nueva etiqueta (o deja vacío para unirlas con el nombre de la más antigua)");
 			
 			Optional<String> nuevoNombre = dialog.showAndWait();
 			
 			try {
-				servicioImagen.fusionarCategorias(tvCategorias.getSelectionModel().getSelectedItems(), nuevoNombre.isPresent() ? nuevoNombre.get() : null);
+				servicioImagen.fusionarEtiquetas(tvEtiquetas.getSelectionModel().getSelectedItems(), nuevoNombre.isPresent() ? nuevoNombre.get() : null);
 				hacerBusqueda();
 			} catch (ConstraintViolationException e) {
-				new Alert(AlertType.ERROR,String.format("No se han podido fusionar las categorías: %s", e.getMensaje()),ButtonType.OK).showAndWait();
+				new Alert(AlertType.ERROR,String.format("No se han podido fusionar las etiquetas: %s", e.getMensaje()),ButtonType.OK).showAndWait();
 			}
 			
 		}
@@ -301,11 +275,11 @@ public class CategoriasControlador extends Controlador {
 	private void hacerBusqueda() {
 		
 		try {
-			resultados.setAll(servicioCategoria.getBusqueda(getBusqueda()));
+			resultados.setAll(servicioEtiqueta.getBusqueda(getBusqueda()));
 		} catch (ConstraintViolationException e) {
 			new Alert(AlertType.ERROR, "No se ha podido hacer la búsqueda: " + e.getMensaje(), ButtonType.OK).showAndWait();
 		}
 		
 	}
-	
+
 }

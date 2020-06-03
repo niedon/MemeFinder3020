@@ -2,7 +2,7 @@ package com.bcadaval.memefinder3020.modelo.beans.temp;
 
 import com.bcadaval.memefinder3020.utils.enumerados.Comparador;
 
-public class CategoriaBusqueda {
+public class CategoriaEtiquetaBusqueda {
 
 	private String nombre;
 	private boolean conNum;

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.bcadaval.memefinder3020.excepciones.ConstraintViolationException;
 import com.bcadaval.memefinder3020.excepciones.NotFoundException;
 import com.bcadaval.memefinder3020.modelo.beans.Categoria;
+import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
@@ -31,5 +32,7 @@ public interface ServicioImagen {
 	void sustituirImagen(File fNueva, Imagen imgOriginal) throws ConstraintViolationException;
 	void fusionarCategorias(List<Categoria> categorias, String nuevoNombre) throws ConstraintViolationException;
 	void borrarPorCategoria(Categoria cat) throws ConstraintViolationException;
+	void fusionarEtiquetas(List<Etiqueta> etiquetas, String nuevoNombre) throws ConstraintViolationException;
+	void borrarPorEtiqueta(Etiqueta et) throws ConstraintViolationException;
 	
 }
