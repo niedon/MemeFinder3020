@@ -1,8 +1,11 @@
 package com.bcadaval.memefinder3020.principal;
 
+import java.util.ResourceBundle;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -26,6 +29,8 @@ import javafx.stage.Stage;
 public class GestorDeVentanas implements ApplicationContextAware{
 	
 	private static final Logger log = LogManager.getLogger(GestorDeVentanas.class);
+	
+	@Autowired private ResourceBundle resourceBundle;
 	
 	private static final Vistas primeraPantalla = Vistas.INICIO;
 	
@@ -83,10 +88,13 @@ public class GestorDeVentanas implements ApplicationContextAware{
 				cNuevaVista.getStage().setMaximized(true);
 			}
 			
+			setTitulo(cNuevaVista.getStage(), v);
+			
 			cNuevaVista.getStage().show();
 			
 		}else {
 			panePrincipal.getChildren().set(0, cNuevaVista.getVista());
+			setTitulo(stage, v);
 		}
 		
 		eventosControlador(cNuevaVista, v);
@@ -132,6 +140,8 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		vistaActual = primeraPantalla;
 		//TODO añadir datos de información de carga
 		Controlador.datos.put("test", "datos aquí");
+		
+		setTitulo(stage, primeraPantalla);
 		
 		c.initVisionado();
 		c.initFoco();
@@ -197,6 +207,10 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		nodoPrincipalPantallaCarga.setMouseTransparent(true);
 		nodoPrincipalPantallaCarga.setVisible(false);
 		btCancelar.setOnAction(null);
+	}
+	
+	private void setTitulo(Stage stage, Vistas v) {
+		stage.setTitle(resourceBundle.getString("fxml.titulo." + v.getNombre()));
 	}
 
 	@Override

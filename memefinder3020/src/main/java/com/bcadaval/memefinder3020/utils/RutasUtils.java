@@ -13,9 +13,11 @@ public class RutasUtils {
 	
 	private final FileSystem fs;
 	
-	public String DIRECTORIO_BASE_AC;
-	public String RUTA_IMAGENES_AC;
-	public String RUTA_BD_AA;
+	public final String DIRECTORIO_BASE_AC;
+	public final String RUTA_IMAGENES_AC;
+	public final String RUTA_BD_AA;
+	
+	public final File ARCHIVO_AJUSTES;
 
 	public RutasUtils(String arranqueTest) {
 		
@@ -30,6 +32,8 @@ public class RutasUtils {
 			RUTA_IMAGENES_AC = fs.getPath(DIRECTORIO_BASE_AC, "img").toString();
 			RUTA_BD_AA = "bdtest";
 		}
+		
+		ARCHIVO_AJUSTES = fs.getPath(DIRECTORIO_BASE_AC, "ajustes.xml").toFile();
 		
 	}
 	

@@ -149,7 +149,7 @@ public class AnadirImagenControlador extends Controlador {
 	@FXML
 	private void btExaminar_click(ActionEvent event) {
 
-		File f = fileChooser.showOpenDialog(gestorDeVentanas.getStage());
+		File f = fileChooser.showOpenDialog(getStage());
 		
 		if(f!=null && f.exists()) {
 			

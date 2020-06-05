@@ -1,8 +1,12 @@
 package com.bcadaval.memefinder3020.principal;
 
+import java.util.ResourceBundle;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,15 +20,17 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.bcadaval.memefinder3020.modelo.beans.xml.Ajustes;
+import com.bcadaval.memefinder3020.utils.AjustesUtils;
 import com.bcadaval.memefinder3020.utils.RutasUtils;
 
 @Configuration
 @EnableTransactionManagement
 @PropertySources(value = { @PropertySource("application.properties"),@PropertySource("hibernate.properties")  })
 public class SpringConfig {
-
-	@Autowired
-	private Environment env;
+	
+	@Autowired private Environment env;
+	@Autowired AjustesUtils ajustesUtils;
 	
 	@Bean
 	public RutasUtils rutasUtils() {
@@ -62,5 +68,20 @@ public class SpringConfig {
 	      em.afterPropertiesSet();
 	      return em.getObject();
 	   }
+	
+	@Bean
+	public JAXBContext contextoXml() throws JAXBException {
+		return JAXBContext.newInstance(Ajustes.class);
+	}
+	
+	@Bean
+	public AjustesUtils ajustesUtils() throws JAXBException {
+		return new AjustesUtils(rutasUtils(), contextoXml());
+	}
+	
+	@Bean
+	public ResourceBundle resourceBundle() throws JAXBException {
+		return ResourceBundle.getBundle("txt/textos", ajustesUtils().getLocale());
+	}
 	
 }

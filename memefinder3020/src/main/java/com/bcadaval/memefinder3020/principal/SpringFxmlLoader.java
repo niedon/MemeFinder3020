@@ -17,7 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 @Component
 public class SpringFxmlLoader implements ApplicationContextAware{
@@ -42,12 +41,12 @@ public class SpringFxmlLoader implements ApplicationContextAware{
 			
 			FXMLLoader load = new FXMLLoader(getClass().getResource(String.format(Constantes.RUTA_FXML_RFE, v.getNombre())));
 			load.setControllerFactory(ctx::getBean);
-			load.setControllerFactory(new Callback<Class<?>, Object>() {
-				@Override
-				public Object call(Class<?> clazz) {
-					return ctx.getBean(clazz);
-				}
-			});
+//			load.setControllerFactory(new Callback<Class<?>, Object>() {
+//				@Override
+//				public Object call(Class<?> clazz) {
+//					return ctx.getBean(clazz);
+//				}
+//			});
 			Parent p = load.load();
 			
 			URL cssEspecifico = getClass().getResource(String.format(Constantes.RUTA_CSSESPECIFICO_RFE, v.getNombre()));

@@ -3,6 +3,7 @@ package com.bcadaval.memefinder3020.principal;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,8 +36,9 @@ public abstract class Controlador implements Initializable{
 	static final String VISTA_ORIGEN = "vistaOrigen";
 	
 	@Autowired protected RutasUtils rutasUtils;
+	@Autowired protected ResourceBundle resourceBundle;
 	
-	@Autowired protected GestorDeVentanas gestorDeVentanas;
+	@Autowired private GestorDeVentanas gestorDeVentanas;
 	
 	@Autowired protected ServicioImagen servicioImagen;
 	@Autowired protected ServicioEtiqueta servicioEtiqueta;
@@ -52,7 +54,7 @@ public abstract class Controlador implements Initializable{
 		return vista;
 	}
 	
-	final Stage getStage() {
+	final protected Stage getStage() {
 		return (Stage)vista.getScene().getWindow();
 	}
 	
