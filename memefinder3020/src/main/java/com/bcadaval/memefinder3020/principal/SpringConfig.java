@@ -21,6 +21,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bcadaval.memefinder3020.modelo.beans.xml.Ajustes;
+import com.bcadaval.memefinder3020.modelo.beans.xml.Paquete;
 import com.bcadaval.memefinder3020.utils.AjustesUtils;
 import com.bcadaval.memefinder3020.utils.RutasUtils;
 
@@ -71,7 +72,9 @@ public class SpringConfig {
 	
 	@Bean
 	public JAXBContext contextoXml() throws JAXBException {
-		return JAXBContext.newInstance(Ajustes.class);
+		return JAXBContext.newInstance(
+				Ajustes.class, Paquete.class
+				);
 	}
 	
 	@Bean

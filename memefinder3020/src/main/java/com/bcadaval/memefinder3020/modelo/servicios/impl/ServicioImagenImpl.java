@@ -41,6 +41,7 @@ import com.bcadaval.memefinder3020.modelo.beans.Categoria;
 import com.bcadaval.memefinder3020.modelo.beans.Etiqueta;
 import com.bcadaval.memefinder3020.modelo.beans.Imagen;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusqueda;
+import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenBusquedaExportar;
 import com.bcadaval.memefinder3020.modelo.beans.temp.ImagenTemp;
 import com.bcadaval.memefinder3020.modelo.servicios.Servicio;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioCategoria;
@@ -205,6 +206,101 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 		Page<Imagen> resultados = new PageImpl<>(resultado, pageable, count);
 		log.debug(".getBusqueda() - Finalizada recuperación de imágenes por búsqueda: " + count);
 		return resultados;
+		
+	}
+	
+	@Override
+	public List<Imagen> getBusquedaExportar(ImagenBusquedaExportar busqueda) throws ConstraintViolationException {
+		
+		log.debug(".getBusquedaExportar() - Iniciando recuperación de imágenes para exportar");
+		
+		if(busqueda==null) {
+			log.error(".getBusquedaExportar() - ImagenBusqueda null");
+			throw new ConstraintViolationException("Objeto de búsqueda nulo");
+		}
+		
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Imagen> cq = cb.createQuery(Imagen.class);
+		final Root<Imagen> root = cq.from(Imagen.class);
+		
+		List<Predicate> predicados = new ArrayList<Predicate>();
+		
+		log.debug(".getBusquedaExportar() - ================ CONDICIONES ================");
+		if(busqueda.isTodasMenos()) {
+			log.debug(".getBusquedaExportar() - TODOS LOS RESULTADOS EXCEPTO:");
+		}else {
+			log.debug(".getBusquedaExportar() - SOLO RESULTADOS QUE COINCIDAN CON:");
+		}
+		
+		//Etiquetas
+		if(busqueda.getEtiquetas()!=null && ! busqueda.getEtiquetas().isEmpty()) {
+			
+			ArrayList<String> etiquetasLog = new ArrayList<String>(busqueda.getEtiquetas().size());
+			
+			for(String s : busqueda.getEtiquetas()) {
+				
+				try {
+					Etiqueta et = servicioEtiqueta.getPorNombre(s);
+					
+					if(busqueda.isTodasMenos()) {
+						predicados.add(cb.isNotMember(et, root.get("etiquetas")));
+					}else {
+						predicados.add(cb.isMember(et,  root.get("etiquetas")));
+					}
+					
+					etiquetasLog.add(et.getNombre());
+				} catch (ConstraintViolationException | NotFoundException e) {
+					log.error(".getBusquedaExportar() - Etiqueta no encontrada: " + s, e.getMessage());
+					continue;
+				}
+			}
+			
+			log.debug(".getBusquedaExportar() - ETIQUETAS: " + etiquetasLog);
+			
+		}
+		
+		//Categoría
+		if(busqueda.getCategoria()!=null) {
+			
+			if(busqueda.isTodasMenos()) {
+				predicados.add(cb.notEqual(root.get("categoria"), busqueda.getCategoria().getId()));
+			}else {
+				predicados.add(cb.equal(root.get("categoria"), busqueda.getCategoria().getId()));
+			}
+			
+			log.debug(".getBusquedaExportar() - CATEGORÍA: " + busqueda.getCategoria().getNombre());
+		}
+		
+		//Después de X
+		if(busqueda.getDespuesDe() != null) {
+			
+			if(busqueda.isTodasMenos()) {
+				predicados.add(cb.not(cb.greaterThan(root.get("fecha"), busqueda.getDespuesDe())));
+			}else {
+				predicados.add(cb.greaterThan(root.get("fecha"), busqueda.getDespuesDe()));
+			}
+			
+			log.debug(".getBusqueda() - DESPUÉS DE: " + busqueda.getDespuesDe().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
+		}
+		
+		//Antes de X
+		if(busqueda.getAntesDe() != null) {
+			
+			if(busqueda.isTodasMenos()) {
+				predicados.add(cb.not(cb.lessThan(root.get("fecha"), busqueda.getAntesDe())));
+			}else {
+				predicados.add(cb.lessThan(root.get("fecha"), busqueda.getAntesDe()));
+			}
+			log.debug(".getBusqueda() - ANTES DE: " + busqueda.getAntesDe().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DDMMYYHHMM)));
+		}
+		
+		Predicate[] predicadosArray = predicados.toArray(new Predicate[predicados.size()]);
+		
+		cq.select(root).where(predicadosArray);
+		List<Imagen> resultado =  em.createQuery(cq).getResultList();
+		
+		log.debug(".getBusqueda() - Finalizada recuperación de imágenes por búsqueda: " + resultado.size());
+		return resultado;
 		
 	}
 	
@@ -399,12 +495,38 @@ public class ServicioImagenImpl extends Servicio implements ServicioImagen {
 	
 	@Override
 	@Transactional(rollbackOn = Exception.class)
+	public void borrarPorId(Collection<Integer> ids) throws ConstraintViolationException {
+		
+		log.debug(".borrarPorId() - Iniciando eliminación de imágenes");
+		
+		if(ids==null || ids.isEmpty()) {
+			log.error(".borrarPorId() - Lista null");
+			throw new ConstraintViolationException("La lista de imágenes no puede estar vacía");
+		}
+		
+		log.debug(".borrarPorId() - ID de imágenes a borrar: " + ids);
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		
+		CriteriaDelete<Imagen> cd = cb.createCriteriaDelete(Imagen.class);
+		Root<Imagen> root = cd.from(Imagen.class);
+		
+		cd.where(root.get("id").in(ids));
+		
+		int borradas = em.createQuery(cd).executeUpdate();
+		
+		log.debug(".borrarPorId() - Finalizada eliminación de imágenes: " + borradas);
+		
+	}
+	
+	@Override
+	@Transactional(rollbackOn = Exception.class)
 	public void fusionarCategorias(List<Categoria> categorias, String nuevoNombre) throws ConstraintViolationException {
 		
 		log.debug(".fusionarCategorias() - Iniciando fusión de categorías");
 		
 		if(categorias==null || categorias.size() < 2) {
-			log.error(".fusionarCategorias() - No hay categorías que fusionar: " + categorias.size());
+			log.error(".fusionarCategorias() - No hay categorías que fusionar");
 			throw new ConstraintViolationException("La lista de categorías no puede estar vacía");
 		}
 		

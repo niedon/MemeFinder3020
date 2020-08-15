@@ -15,6 +15,10 @@ En la carpeta /target/ de donde tengas el proyecto se habrá generado un jar.
 ### Eliminación
 Si lo has ejecutado, en tu carpeta de usuario se habrá creado una carpeta llamada /memefinder3020/. Ahí se guardan todos los datos del programa y las imágenes. Con borrar la carpeta es suficiente.
 
+### Posibles errores
+* COMPILATION ERROR: No compiler is provided in this environment. Perhaps you are running on a JRE rather than a JDK?
+En [esta respuesta](https://stackoverflow.com/a/21279068/11835818) se puede solucionar.
+
 ## Tecnologías usadas
 * [SpringBoot](https://spring.io/projects/spring-boot) 2 - Inversión de control
 * [Hibernate](https://hibernate.org/) 5 - Mapeo relacional y servicios
@@ -31,7 +35,7 @@ Si lo has ejecutado, en tu carpeta de usuario se habrá creado una carpeta llamad
 * Estadísticas
 * Más estilos
 * Nueva disposición de los resultados de búsqueda
-* Miniaturas de imágenes
+* Soporte de *Drag & Drop*
 * ~~Administración de etiquetas~~
 
 

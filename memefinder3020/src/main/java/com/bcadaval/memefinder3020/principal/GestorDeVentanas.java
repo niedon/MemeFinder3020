@@ -14,6 +14,7 @@ import com.bcadaval.memefinder3020.excepciones.GUIException;
 import com.bcadaval.memefinder3020.utils.Constantes;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -76,7 +77,7 @@ public class GestorDeVentanas implements ApplicationContextAware{
 		
 		Controlador cNuevaVista = ctx.getBean(v.getClaseControlador());
 		if(v.esModal()) {
-			
+			//escenaPrincipal.getStylesheets().add(getClass().getResource(String.format(Constantes.RUTA_CSS_RFE, "principal")).toExternalForm());
 			cNuevaVista.setVistaPadre(vistaActual);
 			
 			if(cNuevaVista.getStage().getOwner()==null) {
@@ -84,8 +85,14 @@ public class GestorDeVentanas implements ApplicationContextAware{
 				cNuevaVista.getStage().initModality(Modality.WINDOW_MODAL);
 			}
 			
+			//TODO [SOLUCIÓN TEMPORAL] aplicar cascadas o refactorizar la aplicación de CSS
+			ObservableList<String> estilosModal = cNuevaVista.getStage().getScene().getStylesheets();
+			
+			//El visor se trata por separado
 			if(v==Vistas.VISORIMAGEN) {
 				cNuevaVista.getStage().setMaximized(true);
+			}else {
+				estilosModal.add(getClass().getResource(String.format(Constantes.RUTA_CSS_RFE, "principal")).toExternalForm());
 			}
 			
 			setTitulo(cNuevaVista.getStage(), v);

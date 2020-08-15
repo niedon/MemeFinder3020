@@ -28,6 +28,12 @@
             <Button fx:id="btCategorias" contentDisplay="TOP" mnemonicParsing="false" onAction="#btCategorias_click" prefHeight="130.0" prefWidth="100.0" text="Categorías" />
             <Button fx:id="btEtiquetas" contentDisplay="TOP" maxWidth="-1.0" mnemonicParsing="false" onAction="#btEtiquetas_click" prefHeight="130.0" prefWidth="100.0" text="Etiquetas" />
             <Button fx:id="btAjustes" contentDisplay="TOP" mnemonicParsing="false" onAction="#btAjustes_click" prefHeight="130.0" prefWidth="100.0" text="Ajustes" />
+            <VBox alignment="CENTER" prefHeight="130.0" prefWidth="100.0" spacing="10.0">
+              <children>
+                <Button fx:id="btImportar" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btImportar_click" prefHeight="60.0" prefWidth="100.0" text="Importar" />
+                <Button fx:id="btExportar" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btExportar_click" prefHeight="60.0" prefWidth="100.0" text="Exportar" />
+              </children>
+            </VBox>
           </children>
           <padding>
             <Insets bottom="20.0" top="20.0" fx:id="x1" />

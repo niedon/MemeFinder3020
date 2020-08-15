@@ -15,6 +15,8 @@ import com.bcadaval.memefinder3020.modelo.servicios.ServicioEtiqueta;
 import com.bcadaval.memefinder3020.modelo.servicios.ServicioImagen;
 import com.bcadaval.memefinder3020.utils.Constantes;
 import com.bcadaval.memefinder3020.utils.RutasUtils;
+import com.bcadaval.memefinder3020.utils.XmlUtils;
+import com.bcadaval.memefinder3020.utils.ZipUtils;
 
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
@@ -36,6 +38,8 @@ public abstract class Controlador implements Initializable{
 	static final String VISTA_ORIGEN = "vistaOrigen";
 	
 	@Autowired protected RutasUtils rutasUtils;
+	@Autowired protected XmlUtils xmlUtils;
+	@Autowired protected ZipUtils zipUtils;
 	@Autowired protected ResourceBundle resourceBundle;
 	
 	@Autowired private GestorDeVentanas gestorDeVentanas;

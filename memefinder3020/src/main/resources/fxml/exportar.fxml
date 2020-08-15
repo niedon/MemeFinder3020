@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bcadaval.memefinder3020.controlador.ExportarControlador">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="350.0" prefWidth="600.0">
+               <children>
+                  <VBox prefHeight="350.0" prefWidth="300.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                           <children>
+                              <RadioButton fx:id="rbTodasMenos" mnemonicParsing="false" text="Todas menos:" />
+                              <RadioButton fx:id="rbSolo" mnemonicParsing="false" text="Solo:" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="300.0" spacing="10.0">
+                           <children>
+                              <TextField fx:id="tfEtiquetas" prefWidth="245.0" />
+                              <Button fx:id="btAnadirEtiqueta" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btAnadirEtiqueta_click" prefHeight="25.0" prefWidth="25.0" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding></HBox>
+                        <AnchorPane fx:id="apEtiquetas" prefHeight="100.0" prefWidth="300.0" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="300.0" spacing="10.0">
+                           <children>
+                              <ChoiceBox fx:id="cbCategorias" prefWidth="245.0" />
+                              <Button fx:id="btBorrarCategoria" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btBorrarCategoria_click" prefHeight="25.0" prefWidth="25.0" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                        <GridPane alignment="CENTER" prefHeight="80.0" prefWidth="300.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="60.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <CheckBox fx:id="cbDespuesDe" mnemonicParsing="false" text="Después de:" GridPane.valignment="CENTER">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </CheckBox>
+                              <CheckBox fx:id="cbAntesDe" mnemonicParsing="false" text="Antes de:" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </CheckBox>
+                              <DatePicker fx:id="dpDespuesDe" GridPane.columnIndex="1" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></DatePicker>
+                              <DatePicker fx:id="dpAntesDe" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets right="10.0" />
+                                 </GridPane.margin></DatePicker>
+                           </children>
+                        </GridPane>
+                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="300.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="btLimpiar" mnemonicParsing="false" onAction="#btLimpiar_click" prefHeight="35.0" prefWidth="120.0" text="Limpiar" />
+                              <Button fx:id="btBuscar" mnemonicParsing="false" onAction="#btBuscar_click" prefHeight="35.0" prefWidth="120.0" text="Buscar" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Separator maxHeight="330.0" orientation="VERTICAL" />
+                  <VBox prefHeight="350.0" prefWidth="294.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="294.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="btAnterior" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btAnterior_click" prefHeight="40.0" prefWidth="60.0" />
+                              <Label fx:id="lbMarcador" alignment="CENTER" prefWidth="50.0" />
+                              <Button fx:id="btSiguiente" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btSiguiente_click" prefHeight="40.0" prefWidth="60.0" />
+                           </children>
+                        </HBox>
+                        <BorderPane prefHeight="250.0" prefWidth="294.0">
+                           <center>
+                              <ImageView fx:id="ivImagen" fitHeight="230.0" fitWidth="274.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="294.0" spacing="15.0">
+                           <children>
+                              <Button fx:id="btExportarNo" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#btExportarNo_click" prefHeight="40.0" prefWidth="40.0" />
+                              <Label fx:id="lbExportarNo" text="Label" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="50.0" prefWidth="600.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="450.0">
+                     <children>
+                        <CheckBox fx:id="cbConservarImagenes" mnemonicParsing="false" text="Conservar imágenes" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="150.0">
+                     <children>
+                        <Button fx:id="btExportar" mnemonicParsing="false" onAction="#btExportar_click" prefHeight="40.0" prefWidth="100.0" text="Exportar" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

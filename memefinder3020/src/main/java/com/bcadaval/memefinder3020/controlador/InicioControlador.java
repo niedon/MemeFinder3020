@@ -45,6 +45,8 @@ public class InicioControlador extends Controlador {
 	@FXML private Button btCategorias;
 	@FXML private Button btEtiquetas;
 	@FXML private Button btAjustes;
+	@FXML private Button btImportar;
+	@FXML private Button btExportar;
 	
 	@FXML private ImageView ivUltimas1;
 	@FXML private ImageView ivUltimas2;
@@ -67,6 +69,8 @@ public class InicioControlador extends Controlador {
 		setGraficos(btCategorias, Constantes.SVG_CATEGORIA);
 		setGraficos(btEtiquetas, Constantes.SVG_TAG);
 		setGraficos(btAjustes, Constantes.SVG_AJUSTES);
+		setGraficos(btImportar, Constantes.SVG_IMPORTAR);
+		setGraficos(btExportar, Constantes.SVG_EXPORTAR);
 		
 	}
 
@@ -85,6 +89,7 @@ public class InicioControlador extends Controlador {
 		case AJUSTES:
 		case CATEGORIAS:
 		case ETIQUETAS:
+		case EXPORTAR:
 			break;
 			
 		default:
@@ -145,6 +150,16 @@ public class InicioControlador extends Controlador {
 	@FXML
 	private void btAjustes_click(ActionEvent event) {
 		cambiarEscena(Vistas.AJUSTES);
+	}
+	
+	@FXML
+	private void btImportar_click(ActionEvent event) {
+		
+	}
+	
+	@FXML
+	private void btExportar_click(ActionEvent event) {
+		cambiarEscena(Vistas.EXPORTAR);
 	}
 
 }

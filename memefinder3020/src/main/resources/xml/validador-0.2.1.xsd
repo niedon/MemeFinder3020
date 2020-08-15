@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" 
+           vc:minVersion="1.1">
+			
+	<xs:element name="paquete">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="version" type="xs:string"/>
+				<xs:element name="nombre" type="xs:string"/>
+				<xs:element ref="imagenes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="imagenes">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="imagen"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="imagen">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="fecha"/>
+				<xs:element name="nombre" type="xs:string" minOccurs="0"/>
+				<xs:element name="nombrearchivo" type="xs:positiveInteger"/>
+				<xs:element name="extension" type="xs:string"/>
+				<xs:element name="categoria" type="xs:string" minOccurs="0"/>
+				<xs:element name="etiquetas" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="fecha">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[1-9]{1}[0-9]{3}-(0[1-9]{1}|1[0-2]{1})-([0-2]{1}[1-9]{1}|3[0-1]{1}) ([0-1]{1}[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+</xs:schema>
